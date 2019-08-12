@@ -106,14 +106,16 @@ class TracktTvMoviesAPI {
     return MovieTrackTV.fromJson(response);
   }
 
-  Future<List<MovieTrackTV>> getRecomendedMovies({accessToken}) async {
-    Uri uri = Uri.parse(Constants.apiUrl + 'recomendations/movies');
+  Future<List<MovieTrackTV>> getRecomendedMovies(
+      {String accessToken, page = 0, pageLimit = 10}) async {
+    Uri uri = Uri.parse(Constants.apiUrl +
+        'recomendations/movies?&page=$page&limit=$pageLimit');
 
     var response = await client
         .get(
           uri,
           headers: {
-            'Authorization': '$accessToken',
+            'Authorization': accessToken,
             'Content-Type': 'application/json',
             'trakt-api-version': Constants.apiVersionHeaderKey,
             'trakt-api-key': Constants.apiClientIdHeaderKey

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/home/bloc.dart';
 import 'package:ninjanga3/service_locator.dart';
-import 'package:ninjanga3/ui/login/alert_login.dart';
+import 'package:ninjanga3/ui/components/alert_dispatcher.dart';
 
 import 'home_list_view.dart';
 
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
         if (state is HomeLoaded) {
           return HomeListView(homePageModel: state.model);
         } else if (state is HomeError) {
-          return AlertLogin(
+          return AlertDispather(
             dispatch: () => sl.get<HomeBloc>().dispatch(FetchHomePage()),
           );
         } else {

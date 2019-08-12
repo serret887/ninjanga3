@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AlertLogin extends StatelessWidget {
+class AlertDispather extends StatelessWidget {
   final Function dispatch;
   final String message;
-  const AlertLogin(
+
+  const AlertDispather(
       {this.dispatch,
       this.message = "Looks like the system is unavaliable, please try again"});
   @override

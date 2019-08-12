@@ -30,7 +30,7 @@ class MovieDetailsPage extends StatefulWidget {
 
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
   MovieView get movie => widget.movie;
-  RelatedBloc _bloc;
+  RelatedBloc _relatedMoviesBloc;
   MovieDetailsBloc _movieDetailsBloc;
 
   @override
@@ -38,8 +38,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     super.initState();
 
     var repo = sl.get<RelatedRepository>();
-    _bloc = RelatedBloc(repo, movie.ids.slug);
-    _bloc.dispatch(FetchRelatedMoviesEvent());
+    _relatedMoviesBloc = RelatedBloc(repo, movie.ids.slug);
+    _relatedMoviesBloc.dispatch(FetchRelatedMoviesEvent());
 
     var moviesRepository = sl.get<MoviesRepository>();
     _movieDetailsBloc = MovieDetailsBloc(movie.ids.slug, moviesRepository);
@@ -51,43 +51,73 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     var topImageHeight = MediaQuery.of(context).size.width * 0.7;
 
     return BlocBuilder(
-        bloc: _bloc,
+        bloc: _movieDetailsBloc,
         builder: (context, state) {
-          final isPortraitMode =
-              MediaQuery.of(context).orientation == Orientation.portrait;
+          if (state is MovieDetailsStateLoaded) {
+            final isPortraitMode =
+                MediaQuery
+                    .of(context)
+                    .orientation == Orientation.portrait;
 
-          return Scaffold(
-              backgroundColor: Color(0xff26262d),
-              appBar: AppBar(
+            return Scaffold(
                 backgroundColor: Color(0xff26262d),
-                title: Text('${movie.title}'),
+                appBar: AppBar(
+                  backgroundColor: Color(0xff26262d),
+                  title: Text('${movie.title}'),
+                ),
+                body: SafeArea(
+                    child: Stack(
+                      children: <Widget>[
+                        Align(
+                            alignment: Alignment.topCenter,
+                            child: _buildImageView(
+                                context: context, height: topImageHeight)),
+                        SizedBox(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height,
+                            child: ListView(
+                              padding: EdgeInsets.only(
+                                  top:
+                                  isPortraitMode ? (topImageHeight - 160) : 30),
+                              children: <Widget>[
+                                _buildInfoRow(context),
+                                _buildControlsRow(context),
+                                Container(
+                                  child: _buildTrailerRow(context),
+                                ),
+                                BlocBuilder(
+                                  bloc: _relatedMoviesBloc,
+                                  builder: (BuildContext context, state) {
+                                    return Container(
+                                      child: _buildRelatedRow(state: state),
+                                    );
+                                  },
+                                )
+                              ],
+                            ))
+                      ],
+                    )));
+          } else if (state is MovieDetailsStateLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is MovieDetailsStateError) {
+            return Container(
+              child: Center(
+                child: Text("There was an error loading the movie details"),
               ),
-              body: SafeArea(
-                  child: Stack(
-                children: <Widget>[
-                  Align(
-                      alignment: Alignment.topCenter,
-                      child: _buildImageView(
-                          context: context, height: topImageHeight)),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView(
-                        padding: EdgeInsets.only(
-                            top: isPortraitMode ? (topImageHeight - 160) : 30),
-                        children: <Widget>[
-                          _buildInfoRow(context),
-                          _buildControlsRow(context),
-                          Container(
-                            child: _buildTrailerRow(context),
-                          ),
-                          Container(
-                            child: _buildRelatedRow(state: state),
-                          )
-                        ],
-                      ))
-                ],
-              )));
+            );
+          } else {
+            return Container(
+              child: Center(
+                child: Text('this is not good $state'),
+              ),
+            );
+          }
         });
   }
 
@@ -262,7 +292,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   Widget _ratingText(String value) {
-    return (value == null) ? null : ClipRRect(
+    return (value == null)
+        ? null
+        : ClipRRect(
         borderRadius: BorderRadius.circular(2.0),
         child: Container(
             color: Color(0xff474747),
@@ -270,7 +302,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 padding: EdgeInsets.all(6),
                 child: Text(
                   value,
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                  style:
+                  TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
                 ))));
   }
 
@@ -336,7 +369,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   @override
   void dispose() {
     super.dispose();
-    _bloc.dispose();
+    _relatedMoviesBloc.dispose();
     _movieDetailsBloc.dispose();
   }
 }

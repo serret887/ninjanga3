@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:ninjanga3/repositories/related_repository.dart';
+
 import './bloc.dart';
 
 class RelatedBloc extends Bloc<RelatedEvent, RelatedState> {
@@ -16,6 +18,16 @@ class RelatedBloc extends Bloc<RelatedEvent, RelatedState> {
   Stream<RelatedState> mapEventToState(
     RelatedEvent event,
   ) async* {
-    // TODO: Add Logic
+    if (event is FetchRelatedMoviesEvent) {
+      yield RelatedLoading();
+
+      try {
+        final movies = await repository.getRelatedMovies(slug: id);
+        yield RelatedLoaded(movies: movies);
+      } catch (e) {
+        print(e);
+        yield RelatedError(error: e);
+      }
+    }
   }
 }

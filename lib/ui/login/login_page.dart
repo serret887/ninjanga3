@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_state.dart';
 import 'package:ninjanga3/blocs/authentication/bloc.dart';
-import 'package:ninjanga3/ui/login/alert_login.dart';
+import 'package:ninjanga3/ui/components/alert_dispatcher.dart';
 import 'package:ninjanga3/ui/login/login_component.dart';
 
 import '../../service_locator.dart';
@@ -18,12 +18,12 @@ class _LoginPageState extends State<LoginPage> {
     if (state is AuthenticationCodeReceived) {
       return LoginComponent(state.code);
     } else if (state is AuthenticationFailed) {
-      return AlertLogin(
+      return AlertDispather(
           dispatch: () => sl.get<AuthenticationBloc>().dispatch(AppStarted()));
     } else if (state is InitialAuthenticationState) {
       return Container();
     } else {
-      return AlertLogin(
+      return AlertDispather(
         dispatch: () {},
       );
     }

@@ -53,7 +53,7 @@ class ImagesTmdb {
     if (size == PosterSize.original) {
       sizeUrl = 'original';
     }
-    return 'https://image.tmdb.org/t/p/$sizeUrl/${this.backdrops.first
+    return 'https://image.tmdb.org/t/p/$sizeUrl/${this.posters.first
         .filePath}';
   }
 

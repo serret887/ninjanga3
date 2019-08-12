@@ -32,6 +32,16 @@ class AuthenticationRepository {
     await storage.write(key: "refresh_token", value: token.refreshToken);
   }
 
+
+  Future<String> getRefreshToken() async {
+    return await storage.read(key: "refresh_token",);
+  }
+
+
+  Future<String> getAccessToken() async {
+    return await storage.read(key: "access_token");
+  }
+
   Future<AccessToken> retrieveAccessToken(DeviceCodeOauth code) async {
     return await oauthDevice.getAccessToken(code);
   }
