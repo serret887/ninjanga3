@@ -1,8 +1,9 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_event.dart';
 import 'package:ninjanga3/service_locator.dart';
-import 'package:bloc/bloc.dart';
+
 import 'ui/app.dart';
 
 void main() {

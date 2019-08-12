@@ -1,6 +1,7 @@
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/device_code_oauth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginComponent extends StatefulWidget {
   final DeviceCodeOauth code;
@@ -12,6 +13,20 @@ class LoginComponent extends StatefulWidget {
 
 class _LoginComponentState extends State<LoginComponent> {
   bool copiedToClipboard = false;
+  String verificationURL;
+
+
+  _launchURL() {
+    print(verificationURL);
+    canLaunch(verificationURL).then((can) {
+      if (can) {
+        launch(verificationURL);
+      } else {
+        throw 'Could not launch $verificationURL';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.code.userCode.isNotEmpty && copiedToClipboard == false) {
@@ -24,6 +39,7 @@ class _LoginComponentState extends State<LoginComponent> {
       });
       copiedToClipboard = true;
     }
+    verificationURL = widget.code.verificationUrl;
     return new Scaffold(
         backgroundColor: Colors.white,
         body: new Stack(fit: StackFit.expand, children: <Widget>[
@@ -44,7 +60,12 @@ class _LoginComponentState extends State<LoginComponent> {
                   width: 120.0,
                 ),
                 Text("Go to the following URL"),
-                Text('${widget.code.verificationUrl}'),
+                GestureDetector(
+                  child: Text(
+                    '${widget.code.verificationUrl}',
+                  ),
+                  onTap: _launchURL,
+                ),
                 Text("Insert the following code"),
                 Text('${widget.code.userCode}'),
               ],

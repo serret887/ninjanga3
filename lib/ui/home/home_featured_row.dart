@@ -100,6 +100,7 @@ class _PageItemView extends StatelessWidget {
                       Align(
                           alignment: Alignment.bottomRight,
                           child: RichText(
+
                               text: TextSpan(
                             text: '${currentPage + 1}',
                             style: TextStyle(
