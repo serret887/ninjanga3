@@ -109,7 +109,7 @@ class TracktTvMoviesAPI {
   Future<List<MovieTrackTV>> getRecomendedMovies(
       {String accessToken, page = 0, pageLimit = 10}) async {
     Uri uri = Uri.parse(Constants.apiUrl +
-        'recomendations/movies?&page=$page&limit=$pageLimit');
+        'recommendations/movies?limit=$pageLimit');
 
     var response = await client
         .get(
@@ -121,10 +121,17 @@ class TracktTvMoviesAPI {
             'trakt-api-key': Constants.apiClientIdHeaderKey
           },
         )
-        .then(((resp) => json.decode(resp.body)))
+        .then(
+            (resp) => resp)
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    return response.map((model) => MovieTrackTV.fromJson(model)).toList();
+    if (response.statusCode != 200) {
+      throw Exception(
+          "Can't fetch recomended movies ${response.statusCode}  ${response
+              .body}");
+    }
+    var resp = json.decode(response.body);
+    return resp.map((model) => MovieTrackTV.fromJson(model)).toList();
   }
 
   Future<List<MovieTrackTV>> getRelatedMovies(
