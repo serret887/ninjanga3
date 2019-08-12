@@ -29,11 +29,12 @@ class MoviesRepository {
   Future<List<MovieView>> getgMoviesList(String type) async {
     if (type == "Popular") return await getPopularMovies();
     if (type == "Trending") return await getTrendingMovies();
+    return await getPopularMovies();
   }
 
   Future<HomePageModel> getHomePageModel() async {
     //TODO is only fetching popular movies 2 times
-    var futures = ["Popular", "Trending"]
+    var futures = ["Popular", "Trending", "Watching Now",]
         .map((type) async => {type: await getgMoviesList(type)})
         .toList();
 

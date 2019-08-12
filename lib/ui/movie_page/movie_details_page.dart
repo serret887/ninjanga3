@@ -149,7 +149,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         SizedBox(height: 30),
                         (movie.year > 0
                             ? Text(
-                                '(${movie.year}) · ${movie.duration}\n${movie.genres.join()} ',
+                            '(${movie.year}) · ${movie.duration}\n${movie.genres
+                                ?.join()} ',
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 12))
                             : Text(''))
@@ -260,7 +261,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   Widget _ratingText(String value) {
-    return ClipRRect(
+    return (value == null) ? null : ClipRRect(
         borderRadius: BorderRadius.circular(2.0),
         child: Container(
             color: Color(0xff474747),
