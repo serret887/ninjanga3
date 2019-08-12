@@ -86,7 +86,7 @@ class TracktTvMoviesAPI {
         .map((mov) => mov.movie).toList();
   }
 
-  Future<MovieTrackTV> getMovieData({slug, extended = false}) async {
+  Future<MovieTrackTV> getMovieData({slug, extended = true}) async {
     final parameter = (extended == true) ? '$slug?extended=full' : '$slug';
 
     Uri uri = Uri.parse(Constants.apiUrl + 'movies/$parameter');

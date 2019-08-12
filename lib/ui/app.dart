@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_state.dart';
+import 'package:ninjanga3/blocs/home/bloc.dart';
 import 'package:ninjanga3/ui/bottom_navigation_bar.dart';
 import 'package:ninjanga3/ui/login/login_page.dart';
 
@@ -16,6 +17,12 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   int _currentTab = TabType.home;
   final navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    sl.get<HomeBloc>().dispatch(FetchHomePage());
+    super.initState();
+  }
 
   /// keys for each tab
   final Map<int, GlobalKey<NavigatorState>> navigatorKeys = {

@@ -26,7 +26,7 @@ class MoviesRepository {
         moviesTrackt, tmdbClient);
   }
 
-  Future<List<MovieView>> getgMoviesList(String type) async {
+  Future<List<MovieView>> getMoviesList(String type) async {
     if (type == "Popular") return await getPopularMovies();
     if (type == "Trending") return await getTrendingMovies();
     return await getPopularMovies();
@@ -35,7 +35,7 @@ class MoviesRepository {
   Future<HomePageModel> getHomePageModel() async {
     //TODO is only fetching popular movies 2 times
     var futures = ["Popular", "Trending", "Watching Now",]
-        .map((type) async => {type: await getgMoviesList(type)})
+        .map((type) async => {type: await getMoviesList(type)})
         .toList();
 
     var movies = await Future.wait(futures);

@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
+
 import './bloc.dart';
 
 class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
@@ -15,7 +17,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   Stream<MovieDetailsState> mapEventToState(
     MovieDetailsEvent event,
   ) async* {
-    if (event is MovieDetailsStateLoading) {
+    if (event is MovieDetailsEventFetch) {
       yield MovieDetailsStateLoading();
 
       try {

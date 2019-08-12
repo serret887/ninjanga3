@@ -202,6 +202,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
                       if (currentState is MovieDetailsStateLoaded) {
                         var theMovie = currentState.data;
+
                         _showAlertDialog(context,
                             title: 'Playing',
                             message:

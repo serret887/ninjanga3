@@ -8,7 +8,7 @@ import 'home_list_view.dart';
 
 class HomePage extends StatefulWidget {
   HomePage() {
-    sl.get<HomeBloc>().dispatch(FetchHomePage());
+
   }
   @override
   _HomePageState createState() => _HomePageState();
