@@ -1,14 +1,60 @@
+enum BackdropSize {
+  w300,
+  w780,
+  w1280,
+  original,
+}
+
+enum PosterSize { w92, w154, w185, w342, w500, w780, original }
+
 class ImagesTmdb {
   int id;
   List<Backdrops> backdrops;
   List<Posters> posters;
 
-  getBestBackdrop() {
-    return 'https://image.tmdb.org/t/p/w780/${this.backdrops.first.filePath}';
+  getBestBackdrop({BackdropSize size = BackdropSize.w780}) {
+    String sizeUrl = "";
+    if (size == BackdropSize.w300) {
+      sizeUrl = 'w300';
+    }
+    if (size == BackdropSize.w780) {
+      sizeUrl = 'w780';
+    }
+    if (size == BackdropSize.w1280) {
+      sizeUrl = 'w1280';
+    }
+    if (size == BackdropSize.original) {
+      sizeUrl = 'original';
+    }
+    return 'https://image.tmdb.org/t/p/$sizeUrl/${this.backdrops.first
+        .filePath}';
   }
 
-  getBestPoster() {
-    return 'https://image.tmdb.org/t/p/w342/${this.backdrops.first.filePath}';
+  getBestPoster({PosterSize size = PosterSize.w185}) {
+    String sizeUrl = "";
+    if (size == PosterSize.w92) {
+      sizeUrl = 'w92';
+    }
+    if (size == PosterSize.w154) {
+      sizeUrl = 'w154';
+    }
+    if (size == PosterSize.w185) {
+      sizeUrl = 'w185';
+    }
+    if (size == PosterSize.w342) {
+      sizeUrl = 'w342';
+    }
+    if (size == PosterSize.w500) {
+      sizeUrl = 'w500';
+    }
+    if (size == PosterSize.w780) {
+      sizeUrl = 'w780';
+    }
+    if (size == PosterSize.original) {
+      sizeUrl = 'original';
+    }
+    return 'https://image.tmdb.org/t/p/$sizeUrl/${this.backdrops.first
+        .filePath}';
   }
 
   ImagesTmdb({this.id, this.backdrops, this.posters});
