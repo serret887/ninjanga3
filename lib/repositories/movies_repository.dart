@@ -18,10 +18,23 @@ class MoviesRepository {
         moviesTrackt, tmdbClient);
   }
 
+  Future<List<MovieView>> getTrendingMovies(
+      {int page = 0, int pageLimit = 10, extended: false}) async {
+    var moviesTrackt = await tracktTvClient.getTrendingMoviesList(
+        extended: extended, page: page, pageLimit: pageLimit);
+    return await Common.completeMovieDataFromTracktList(
+        moviesTrackt, tmdbClient);
+  }
+
+  Future<List<MovieView>> getgMoviesList(String type) async {
+    if (type == "Popular") return await getPopularMovies();
+    if (type == "Trending") return await getTrendingMovies();
+  }
+
   Future<HomePageModel> getHomePageModel() async {
     //TODO is only fetching popular movies 2 times
-    var futures = Iterable.generate(2)
-        .map((i) async => {i.toString(): await getPopularMovies()})
+    var futures = ["Popular", "Trending"]
+        .map((type) async => {type: await getgMoviesList(type)})
         .toList();
 
     var movies = await Future.wait(futures);

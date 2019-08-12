@@ -1,13 +1,11 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/credits.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/id.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/movie_api.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/movie_trackt_tv.dart';
-import '../models/genre.dart';
 
 import '../config_constants.dart';
+import '../models/genre.dart';
 
 enum GenreType { shows, movies }
 
@@ -65,7 +63,7 @@ class TracktTvMoviesAPI {
 
   /// type can be changed for
   /// played, watched, popular, trending, boxOffice
-  Future<List<MovieApi>> getTrendingMoviesList(
+  Future<List<MovieTrackTV>> getTrendingMoviesList(
       {int page = 0, int pageLimit = 10, bool extended = false}) async {
     final parameter = (extended == true)
         ? 'movies/trending?extended=full&page=$page&limit=$pageLimit'
@@ -84,7 +82,8 @@ class TracktTvMoviesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    return response.map((model) => MovieApi.fromJson(model)).toList();
+    return response.map((model) => MovieApi.fromJson(model))
+        .map((mov) => mov.movie).toList();
   }
 
   Future<MovieTrackTV> getMovieData({slug, extended = false}) async {
