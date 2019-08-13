@@ -20,13 +20,9 @@ var summaryRouteHandler = Handler(
   },
 );
 var detailRouteHandler = Handler(
-handlerFunc: (
-
-BuildContext context, Map
-<
-String, List<String>> params,) {
+    handlerFunc: (BuildContext context, Map<String, List<String>> params,) {
 return MovieDetailsPage(movieSlug: 'hell',);
-);
+    });
 var trailerRouteHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params,
       [dynamic object]) {
