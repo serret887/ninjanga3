@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/models/movie_view.dart';
 
-import 'home_control.dart';
+import 'home_buttons.dart';
 import 'home_feature.dart';
 
 class HomeFeaturedRow extends StatefulWidget {
@@ -44,8 +44,10 @@ class _HomeFeaturedRowState extends State<HomeFeaturedRow>
     return Container(
         child: Stack(children: <Widget>[
       pageView,
-      Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-        HomeControll(
+          Column(mainAxisAlignment: MainAxisAlignment.end,
+
+              children: <Widget>[
+                HomeButtons(
           slug: movies[_currentPage].ids.slug,
         )
       ]),

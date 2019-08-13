@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class HomeControll extends StatelessWidget {
+class HomeButtons extends StatelessWidget {
   final String slug;
 
-  const HomeControll({Key key, this.slug}) : super(key: key);
+  const HomeButtons({Key key, this.slug}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.0),
+      margin: EdgeInsets.only(bottom: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

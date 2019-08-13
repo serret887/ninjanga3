@@ -41,7 +41,6 @@ class HomeFeature extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    print('From ${screenSize.height}');
     //TODO I don't like where the moview title lye
     return Stack(
       fit: StackFit.expand,
@@ -52,7 +51,7 @@ class HomeFeature extends StatelessWidget {
             gradient: LinearGradient(
               begin: FractionalOffset.topCenter,
               end: FractionalOffset.bottomCenter,
-              stops: [0.1, 0.6, 1.0],
+              stops: [0.1, 0.5, 1.0],
               colors: [Colors.black54, Colors.transparent, Colors.black],
             ),
           ),
