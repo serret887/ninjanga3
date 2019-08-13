@@ -3,12 +3,23 @@ import 'package:flutter/material.dart';
 
 class HomeFeature extends StatelessWidget {
   final String imageUrl;
-  final String name;
+  String name;
   final List<String> genres;
 
   HomeFeature({Key key, this.imageUrl, this.name, this.genres})
       : super(key: key) {
     //TODO I don't like the way the title looks and is trimming words
+
+    List<String> words = this.name.split(" ");
+    if (words.length >= 4) {
+      int half = (words.length / 2).round();
+      String first = words.take(half).join(" ").trim();
+      final newName =
+          first + "\n" + words.skip(half).join(" ").trim();
+      print(newName);
+      this.name = newName;
+      print(this.name);
+    }
   }
 
   List<Widget> renderMainGenres() {
@@ -63,7 +74,7 @@ class HomeFeature extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      name.replaceAll(' ', '\n'),
+                      name,
                       maxLines: 3,
                       textAlign: TextAlign.center,
                       style: TextStyle(

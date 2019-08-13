@@ -32,7 +32,7 @@ class HomeControll extends StatelessWidget {
               children: <Widget>[
                 Icon(Icons.play_arrow),
                 Text(
-                  'Reproducir',
+                  'Reproducir Trailer',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
