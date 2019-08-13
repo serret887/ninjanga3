@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_state.dart';
 import 'package:ninjanga3/blocs/home/bloc.dart';
-import 'package:ninjanga3/ui/bottom_navigation_bar.dart';
 import 'package:ninjanga3/ui/login/login_page.dart';
 
 import '../route_navigation.dart';
 import '../service_locator.dart';
+import 'home2/home.dart';
 
 class App extends StatefulWidget {
   @override
@@ -45,7 +45,7 @@ class _AppState extends State<App> {
         theme: ThemeData(
             fontFamily: 'Vaud',
             brightness: Brightness.dark,
-            primaryColor: Color(0xff26262d),
+            primaryColor: Colors.blue, //(0xff26262d),
             backgroundColor: Color(0xff26262d)),
         home: BlocBuilder(
           bloc: sl.get<AuthenticationBloc>(),
@@ -58,18 +58,20 @@ class _AppState extends State<App> {
   Widget _buildGateKeeper(AuthenticationState state) {
     if (state is AuthenticationAuthenticated) {
       return Scaffold(
-          backgroundColor: Color(0xff26262d),
-          body: Stack(
-            children: <Widget>[
-              _buildOffstageNavigator(TabType.home),
-              _buildOffstageNavigator(TabType.browse),
-              _buildOffstageNavigator(TabType.search),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigation(
-            currentTab: _currentTab,
-            onSelectedTab: _tabBarItemOnTap,
-          ));
+          backgroundColor: Colors.black,
+          body: Home()
+//          Stack(
+//            children: <Widget>[
+//              _buildOffstageNavigator(TabType.home),
+//              _buildOffstageNavigator(TabType.browse),
+//              _buildOffstageNavigator(TabType.search),
+//            ],
+//          ),
+//          bottomNavigationBar: BottomNavigation(
+//            currentTab: _currentTab,
+//            onSelectedTab: _tabBarItemOnTap,
+//          )
+      );
     } else {
       return LoginPage();
     }

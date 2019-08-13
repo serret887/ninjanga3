@@ -1,6 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ninjanga3/models/movie_view.dart';
 import 'package:ninjanga3/ui/movie_page/movie_details_page.dart';
 
@@ -22,14 +22,23 @@ class MovieScrollRow extends StatelessWidget {
               return Padding(
                   padding: EdgeInsets.only(right: 6.0),
                   child: GestureDetector(
-                      child: _ScrollItemView(movie: movie),
+                      child: CachedNetworkImage(
+                          placeholder: (context, url) {
+                            return AspectRatio(
+                                aspectRatio: .68,
+                                child: Image.asset(
+                                    "assets/icons/placeholder.png",
+                                    fit: BoxFit.cover));
+                          },
+                          imageUrl: movie.posterImage,
+                          fit: BoxFit.cover),
                       onTap: () {
                         Navigator.pushNamed(
                             context, MovieDetailsPageArguments.routeName,
                             arguments: MovieDetailsPageArguments(movie));
                       }));
             },
-            padding: EdgeInsets.only(left: 16.0),
+            padding: EdgeInsets.only(left: 14.0),
             scrollDirection: Axis.horizontal,
             physics: BouncingScrollPhysics()));
   }

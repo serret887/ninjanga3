@@ -16,7 +16,7 @@ class MoviesRepository {
 
 
   Future<List<MovieView>> getPopularMovies(
-      {int page = 0, int pageLimit = 10, extended: false}) async {
+      {int page = 0, int pageLimit = 10, extended: true}) async {
     var moviesTrackt = await tracktTvClient.getPopularMoviesList(
         extended: extended, page: page, pageLimit: pageLimit);
     return await Common.completeMovieDataFromTracktList(
@@ -24,7 +24,7 @@ class MoviesRepository {
   }
 
   Future<List<MovieView>> getTrendingMovies(
-      {int page = 0, int pageLimit = 10, extended: false}) async {
+      {int page = 0, int pageLimit = 10, extended: true}) async {
     var moviesTrackt = await tracktTvClient.getTrendingMoviesList(
         extended: extended, page: page, pageLimit: pageLimit);
     return await Common.completeMovieDataFromTracktList(
@@ -45,7 +45,7 @@ class MoviesRepository {
   Future<List<MovieView>> getMoviesList(String type) async {
     if (type == "Popular") return await getPopularMovies();
     if (type == "Trending") return await getTrendingMovies();
-    if (type == "Recomended for you") return await getRecomendedMovies();
+    // if (type == "Recomended for you") return await getRecomendedMovies();
 
     return await getPopularMovies();
   }
