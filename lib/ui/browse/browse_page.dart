@@ -1,12 +1,8 @@
-import 'package:flutter/material.dart';
-
-class BrowsePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
+//import 'package:flutter/material.dart';
+//import 'package:flutter_bloc/flutter_bloc.dart';
+//import 'package:ninjanga3/blocs/home/bloc.dart';
+//import 'package:ninjanga3/models/home_page_model.dart';
+//
 //
 //class BrowsePage extends StatefulWidget {
 //  final HomeBloc homeBloc;
@@ -16,7 +12,7 @@ class BrowsePage extends StatelessWidget {
 //    return _BrowsePageState(homeBloc: homeBloc);
 //  }
 //}
-
+//
 //class _BrowsePageState extends State<BrowsePage> {
 //  final HomeBloc homeBloc;
 //

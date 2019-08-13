@@ -93,7 +93,8 @@ class _ListSectionTitleView extends StatelessWidget {
       minWidth: 20,
       child: Image.asset("assets/icons/iconOverflow.png"),
       onPressed: () {
-        print("Create route for me");
+        print(
+            "Create route for me for filtering and see all the movies from that category");
 //        Navigator.pushNamed(context, MovieCategoryPageArguments.routeName,
 //            arguments: MovieCategoryPageArguments(
 //                movies: movieList.value, title: movieList.key));

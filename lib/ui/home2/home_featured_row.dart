@@ -74,8 +74,8 @@ class _PageItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-//          Navigator.pushNamed(context, MovieDetailsPageArguments.routeName,
-//              arguments: MovieDetailsPageArguments(movie));
+
+
         },
         child: Stack(children: <Widget>[
           HomeFeature(

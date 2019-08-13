@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:ninjanga3/models/movie_view.dart';
-import 'package:ninjanga3/ui/movie_page/movie_details_page.dart';
+
+import '../../service_locator.dart';
+import '../route/routes.dart';
 
 class MovieScrollRow extends StatelessWidget {
   final List<MovieView> movies;
@@ -33,9 +36,15 @@ class MovieScrollRow extends StatelessWidget {
                           imageUrl: movie.posterImage,
                           fit: BoxFit.cover),
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, MovieDetailsPageArguments.routeName,
-                            arguments: MovieDetailsPageArguments(movie));
+                        sl.get<Router>().navigateTo(context,
+                          Routes.detail,
+                          transition: TransitionType.nativeModal,
+                          transitionDuration: const Duration(milliseconds: 200),
+
+                        );
+//                        Navigator.pushNamed(
+//                            context, MovieDetailsPageArguments.routeName,
+//                            arguments: MovieDetailsPageArguments(movie));
                       }));
             },
             padding: EdgeInsets.only(left: 14.0),

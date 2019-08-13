@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_bloc.dart';
 import 'package:ninjanga3/blocs/authentication/authentication_event.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        onGenerateRoute: sl
+            .get<Router>()
+            .generator,
         debugShowCheckedModeBanner: false,
         darkTheme: ThemeData.dark(),
         theme: ThemeData(

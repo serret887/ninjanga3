@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +11,7 @@ import 'package:ninjanga3/repositories/related_repository.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'infrastructure/tracktv/services/oauth_device.dart';
 import 'repositories/authentication_repository.dart';
+import 'ui/route/routes.dart';
 
 GetIt sl = new GetIt();
 
@@ -40,4 +42,11 @@ void setup() {
   sl.registerSingleton<RelatedRepository>(
       RelatedRepository(sl.get<TracktTvMoviesAPI>(), sl.get<TmdbClient>()));
 //end related
+
+// Routing
+  final router = Router();
+  Routes.configureRoutes(router);
+  sl.registerSingleton<Router>(router);
+
+// end routing
 }

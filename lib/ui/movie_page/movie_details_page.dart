@@ -10,17 +10,11 @@ import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
 
 import '../../service_locator.dart';
 
-class MovieDetailsPageArguments {
-  static final routeName = "movies";
-  final MovieView movie;
-
-  MovieDetailsPageArguments(this.movie);
-}
 
 class MovieDetailsPage extends StatefulWidget {
-  final MovieView movie;
+  final String movieSlug;
 
-  const MovieDetailsPage({Key key, @required this.movie}) : super(key: key);
+  const MovieDetailsPage({Key key, @required this.movieSlug}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -29,7 +23,7 @@ class MovieDetailsPage extends StatefulWidget {
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
-  MovieView get movie => widget.movie;
+  String get movieSlug => widget.movieSlug;
   RelatedBloc _relatedMoviesBloc;
   MovieDetailsBloc _movieDetailsBloc;
 
@@ -38,11 +32,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     super.initState();
 
     var repo = sl.get<RelatedRepository>();
-    _relatedMoviesBloc = RelatedBloc(repo, movie.ids.slug);
+    _relatedMoviesBloc = RelatedBloc(repo, movieSlug);
     _relatedMoviesBloc.dispatch(FetchRelatedMoviesEvent());
 
     var moviesRepository = sl.get<MoviesRepository>();
-    _movieDetailsBloc = MovieDetailsBloc(movie.ids.slug, moviesRepository);
+    _movieDetailsBloc = MovieDetailsBloc(movieSlug, moviesRepository);
     _movieDetailsBloc.dispatch(MovieDetailsEventFetch());
   }
 
@@ -58,7 +52,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 MediaQuery
                     .of(context)
                     .orientation == Orientation.portrait;
-
+            final movie = state.data;
             return Scaffold(
                 backgroundColor: Color(0xff26262d),
                 appBar: AppBar(
@@ -71,7 +65,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         Align(
                             alignment: Alignment.topCenter,
                             child: _buildImageView(
-                                context: context, height: topImageHeight)),
+                                context: context, height: topImageHeight
+                                , imageUrl: movie.backdrop
+                            )),
                         SizedBox(
                             width: MediaQuery
                                 .of(context)
@@ -86,7 +82,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                   top:
                                   isPortraitMode ? (topImageHeight - 160) : 30),
                               children: <Widget>[
-                                _buildInfoRow(context),
+                                _buildInfoRow(context, movie),
                                 _buildControlsRow(context),
                                 Container(
                                   child: _buildTrailerRow(context),
@@ -121,14 +117,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         });
   }
 
-  Widget _buildImageView({BuildContext context, double height}) {
+  Widget _buildImageView(
+      {BuildContext context, double height, String imageUrl}) {
     return SizedBox(
         child: Stack(children: <Widget>[
       Container(
           height: height,
           width: MediaQuery.of(context).size.width,
           child: CachedNetworkImage(
-              imageUrl: movie.backdrop,
+              imageUrl: imageUrl,
               placeholder: (context, url) {
                 return Center(
                     child: SizedBox(
@@ -151,7 +148,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     ]));
   }
 
-  Widget _buildInfoRow(BuildContext context) {
+  Widget _buildInfoRow(BuildContext context, MovieView movie) {
     return Container(
         padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
         child: Stack(

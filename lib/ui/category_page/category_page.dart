@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/models/movie_view.dart';
-import 'package:ninjanga3/ui/movie_page/movie_details_page.dart';
 
 class MovieCategoryPageArguments {
   static final routeName = "movieCategory";
@@ -67,8 +66,10 @@ class _MovieCategoryPageState extends State<MovieCategoryPage> {
   Widget _buildGridItem(BuildContext context, MovieView movie) {
     return InkWell(
         onTap: () {
-          Navigator.pushNamed(context, MovieDetailsPageArguments.routeName,
-              arguments: MovieDetailsPageArguments(movie));
+          print("fix me ");
+          //TODO fix me
+//          Navigator.pushNamed(context, MovieDetailsPageArguments.routeName,
+//              arguments: MovieDetailsPageArguments(movie));
         },
         child: SizedBox(
             child: Column(
