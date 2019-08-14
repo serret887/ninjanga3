@@ -89,12 +89,12 @@ class _MovieDetailsState extends State<MovieDetails> {
           child: Padding(
             padding: EdgeInsets.only(left: 16, top: 16),
             child: Text('You May Also Like',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           ),
         ),
         Container(
             margin: EdgeInsets.only(top: 20),
-            height: 270,
+            height: 200,
             child: MovieScrollRow(movies: state.movies, key: UniqueKey()))
       ]);
     }
@@ -102,7 +102,13 @@ class _MovieDetailsState extends State<MovieDetails> {
     if (state is RelatedError) {
       return Container(
         child: Center(
-          child: Text("There was an error loading related titles try later"),
+          child: Text(
+            "There was an error loading related titles try later",
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18.0,
+            ),
+          ),
         ),
       );
     }

@@ -7,14 +7,14 @@ class MovieApi {
 
   MovieApi({this.watchers, this.movie});
 
-  MovieApi.fromJson(Map<String, dynamic> json) {
+  MovieApi.fromJson(Map<String, dynamic> json, {bool movieType = true}) {
     watchers = json['watchers'];
-    movie =
-        json['movie'] != null ? new MovieTrackTV.fromJson(json['movie']) : null;
+    var type = movieType ? "movie" : "show";
+    movie = json[type] != null ? MovieTrackTV.fromJson(json[type]) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['watchers'] = this.watchers;
     if (this.movie != null) {
       data['movie'] = this.movie.toJson();

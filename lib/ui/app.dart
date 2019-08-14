@@ -15,7 +15,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with SingleTickerProviderStateMixin {
-
   final navigatorKey = GlobalKey<NavigatorState>();
   TabController controller;
 
@@ -25,7 +24,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
         .copyWith(statusBarColor: Colors.transparent));
-    controller = TabController(length: 5, initialIndex: 0, vsync: this);
+    controller = TabController(length: 3, initialIndex: 0, vsync: this);
   }
 
   @override
@@ -41,9 +40,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
   Widget _buildGateKeeper(AuthenticationState state) {
     if (state is AuthenticationAuthenticated) {
       return Scaffold(
-        backgroundColor: Theme
-            .of(context)
-            .backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         bottomNavigationBar: TabBar(
           labelStyle: TextStyle(fontSize: 10.0),
           indicatorWeight: 0.1,
@@ -51,17 +48,13 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
           tabs: <Widget>[
             Tab(text: 'Inicio', icon: Icon(Icons.home)),
             Tab(text: 'Buscar', icon: Icon(Icons.search)),
-            Tab(text: 'Próximamente', icon: Icon(Icons.ondemand_video)),
             Tab(text: 'Descargas', icon: Icon(Icons.file_download)),
-            Tab(text: 'Más', icon: Icon(Icons.menu)),
           ],
         ),
         body: TabBarView(
           controller: controller,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            Home(),
-            Home(),
             Home(),
             Home(),
             Home(),

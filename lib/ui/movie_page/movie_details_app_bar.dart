@@ -102,7 +102,7 @@ class MovieDetailsAppBar extends StatelessWidget {
                     borderColor: Colors.green,
                     spacing: 0.0),
                 Text(
-                  'year: ${movie.year}',
+                  '${movie.duration} min',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(255, 255, 255, 0.3),
@@ -111,7 +111,7 @@ class MovieDetailsAppBar extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${movie.duration} min',
+                  'year: ${movie.year}',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(255, 255, 255, 0.3),
@@ -189,7 +189,7 @@ class MovieDetailsAppBar extends StatelessWidget {
                                 size: 32.0,
                               ),
                               Text(
-                                'Mi Lista',
+                                'Add',
                                 style: TextStyle(fontSize: 10.0),
                               )
                             ],
@@ -198,18 +198,18 @@ class MovieDetailsAppBar extends StatelessWidget {
                       ),
                       FlatButton(
                         textColor: Colors.white70,
-                        onPressed: () => print('calificar'),
+                        onPressed: () => print('Not watched'),
                         child: Container(
                           height: 50.0,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               Icon(
-                                Icons.thumb_up,
+                                Icons.visibility,
                                 size: 24.0,
                               ),
                               Text(
-                                'Calificar',
+                                'Not watched',
                                 style: TextStyle(fontSize: 10.0),
                               )
                             ],
@@ -230,6 +230,26 @@ class MovieDetailsAppBar extends StatelessWidget {
                               ),
                               Text(
                                 'Compartir',
+                                style: TextStyle(fontSize: 10.0),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        textColor: Colors.white70,
+                        onPressed: () => print('Descargar'),
+                        child: Container(
+                          height: 50.0,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Icon(
+                                Icons.file_download,
+                                size: 20.0,
+                              ),
+                              Text(
+                                'Descargar',
                                 style: TextStyle(fontSize: 10.0),
                               )
                             ],
