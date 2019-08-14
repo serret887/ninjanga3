@@ -48,6 +48,8 @@ class HomeListView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               renderTypeShowTitle('Series', 'Series'),
+
+              renderTypeShowTitle('Series', 'Series'),
               renderTypeShowTitle('Películas', 'Películas'),
               renderTypeShowTitle('Mi-lista', 'Mi lista'),
             ],

@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:ninjanga3/infrastructure/tracktv/models/episode.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/movie_api.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/movie_trackt_tv.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/season.dart';
 
 import '../config_constants.dart';
-import 'trackt_tv_movies.dart';
 
 class TracktTvSeriesAPI {
   final http.Client client;
@@ -77,8 +78,6 @@ class TracktTvSeriesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    //TODO save the state of the pagination
-    print(response);
     return MovieTrackTV.fromJson(response);
   }
 
@@ -127,6 +126,52 @@ class TracktTvSeriesAPI {
     return response.map((model) => MovieTrackTV.fromJson(model)).toList();
   }
 
+  Future<List<SeasonTracktv>> getAllSeasonsForShow(
+      {String slug, extended = false}) async {
+    final parameter =
+    (extended == true) ? '$slug/seasons?extended=full' : '$slug/seasons';
+    Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
+    Iterable response = await client
+        .get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'trakt-api-version': Constants.apiVersionHeaderKey,
+        'trakt-api-key': Constants.apiClientIdHeaderKey
+      },
+    )
+        .then(((resp) => json.decode(resp.body)))
+        .catchError((err) => print(err));
+    return response.map((model) => SeasonTracktv.fromJson(model)).toList();
+  }
+
+  Future<SeasonTracktv> getAllEpisodesOfSeason(
+      {SeasonTracktv seasonTracktv, extended = false}) async {
+    final parameter = (extended == true) ? '?extended=full' : '';
+    var uris = seasonTracktv.episodes.map((episode) =>
+        Uri.parse(Constants.apiUrl +
+            'shows/${seasonTracktv.ids.slug}/seasons/${seasonTracktv
+                .number}/episodes/${episode.number}$parameter'));
+
+    var futures = uris.map((uri) async =>
+    await client
+        .get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'trakt-api-version': Constants.apiVersionHeaderKey,
+        'trakt-api-key': Constants.apiClientIdHeaderKey
+      },
+    )
+        .then(((resp) => json.decode(resp.body)))
+        .catchError((err) => print(err)));
+    var response = await Future.wait(futures);
+    seasonTracktv.episodes =
+        response.map((model) => Episode.fromJson(model)).toList();
+//todo not like because is mutable
+    return seasonTracktv;
+  }
+
   Future<MovieTrackTV> fillCrewData(MovieTrackTV movieTrackTV) {}
 }
 
@@ -137,7 +182,7 @@ main(List<String> args) async {
   //   slug: 'tron-legacy-2010',
   //   extended: true,
   // );
-  var resp = await a.getRelatedShows(slug: 'elementary', extended: true);
-  //print(resp);
-  resp.forEach((f) => print(f.toJson()));
+  var resp = await a.getShowData(slug: 'elementary', extended: true);
+  print(resp);
+//  resp.forEach((f) => print(f.toJson()));
 }

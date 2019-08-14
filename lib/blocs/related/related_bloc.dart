@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:ninjanga3/repositories/related_repository.dart';
+import 'package:ninjanga3/repositories/movies_repository.dart';
 
 import './bloc.dart';
 
@@ -11,7 +11,7 @@ class RelatedBloc extends Bloc<RelatedEvent, RelatedState> {
   @override
   RelatedState get initialState => RelatedUninitialized();
 
-  final RelatedRepository repository;
+  final MoviesRepository repository;
   final String id;
 
   @override

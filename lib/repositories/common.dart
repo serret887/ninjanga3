@@ -21,7 +21,7 @@ class Common {
         duration: trackt.runtime);
   }
 
-  static Future<List<ImagesTmdb>> getImagesFromIds(
+  static Future<List<ImagesTmdb>> getImagesForMoviesFromIds(
       Iterable<int> tmdbIds, TmdbClient tmdbClient) async {
     var futures = tmdbIds.map((ids) => tmdbClient.getImagesFromMovieId(ids));
     return await Future.wait(futures);
@@ -40,4 +40,12 @@ class Common {
     var tmdbMovies = await tmdbClient.getImagesFromMovieId(tmdbId);
     return Common.convertFrom(movieTrackt, tmdbMovies);
   }
+
+//  static Future<MovieView> completeSeasonDataFromTrackt(
+//      SeasonTracktv seasonTrackt, TmdbClient tmdbClient) async {
+//    var tmdbMovies = await tmdbClient.getImagesForSeason(
+//        seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
+//
+//    return Common.convertFrom(seasonTrackt, tmdbMovies);
+//  }
 }

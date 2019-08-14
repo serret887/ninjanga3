@@ -7,7 +7,7 @@ import 'package:ninjanga3/blocs/home/bloc.dart';
 import 'package:ninjanga3/ui/login/login_page.dart';
 
 import '../service_locator.dart';
-import 'home2/home.dart';
+import 'home/home.dart';
 
 class App extends StatefulWidget {
   @override

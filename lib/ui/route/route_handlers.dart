@@ -1,8 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/ui/home2/home.dart';
+import 'package:ninjanga3/ui/home/home.dart';
 import 'package:ninjanga3/ui/movie_page/movie_details.dart';
-import 'package:ninjanga3/ui/movie_page/movie_details_page.dart';
 
 import 'routes.dart';
 

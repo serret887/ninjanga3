@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/home/bloc.dart';
 import 'package:ninjanga3/ui/components/alert_dispatcher.dart';
-import 'package:ninjanga3/ui/home2/home_list_view.dart';
 
 import '../../service_locator.dart';
+import 'home_list_view.dart';
 
 class Home extends StatefulWidget {
   @override

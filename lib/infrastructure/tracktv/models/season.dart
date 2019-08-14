@@ -1,22 +1,30 @@
+import 'episode.dart';
 import 'id.dart';
 
-class Season {
+class SeasonTracktv {
+
   int number;
   Ids ids;
+  List<Episode> episodes;
 
-  Season({this.number, this.ids});
+  SeasonTracktv({
+    this.number,
+    this.ids,
+    this.episodes,
+  });
 
-  Season.fromJson(Map<String, dynamic> json) {
-    number = json['number'];
-    ids = json['ids'] != null ? new Ids.fromJson(json['ids']) : null;
-  }
+  factory SeasonTracktv.fromJson(Map<String, dynamic> json) =>
+      new SeasonTracktv(
+        number: json["number"],
+        ids: Ids.fromJson(json["ids"]),
+        episodes: new List<Episode>.from(
+            json["episodes"].map((x) => Episode.fromJson(x))),
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['year'] = this.number;
-    if (this.ids != null) {
-      data['ids'] = this.ids.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() =>
+      {
+        "number": number,
+        "ids": ids.toJson(),
+        "episodes": new List<dynamic>.from(episodes.map((x) => x.toJson())),
+      };
 }

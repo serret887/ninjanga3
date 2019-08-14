@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/movie_details/bloc.dart';
 import 'package:ninjanga3/blocs/related/bloc.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
-import 'package:ninjanga3/repositories/related_repository.dart';
 import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
 import 'package:ninjanga3/ui/movie_page/movie_details_app_bar.dart';
 
@@ -26,12 +25,11 @@ class _MovieDetailsState extends State<MovieDetails> {
   void initState() {
     super.initState();
 
-    var repo = sl.get<RelatedRepository>();
+    var repo = sl.get<MoviesRepository>();
     _relatedMoviesBloc = RelatedBloc(repo, movieSlug);
     _relatedMoviesBloc.dispatch(FetchRelatedMoviesEvent());
 
-    var moviesRepository = sl.get<MoviesRepository>();
-    _movieDetailsBloc = MovieDetailsBloc(movieSlug, moviesRepository);
+    _movieDetailsBloc = MovieDetailsBloc(movieSlug, repo);
     _movieDetailsBloc.dispatch(MovieDetailsEventFetch());
   }
 
