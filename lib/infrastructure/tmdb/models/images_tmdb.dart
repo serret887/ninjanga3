@@ -26,7 +26,8 @@ class ImagesTmdb {
     if (size == BackdropSize.original) {
       sizeUrl = 'original';
     }
-    return 'https://image.tmdb.org/t/p/$sizeUrl/${this.backdrops?.first?.filePath}';
+    return 'https://image.tmdb.org/t/p/$sizeUrl/${this?.backdrops?.first
+        ?.filePath}';
   }
 
   getBestPoster({PosterSize size = PosterSize.w185}) {
@@ -52,7 +53,8 @@ class ImagesTmdb {
     if (size == PosterSize.original) {
       sizeUrl = 'original';
     }
-    return 'https://image.tmdb.org/t/p/$sizeUrl/${this.posters?.first?.filePath}';
+    return 'https://image.tmdb.org/t/p/$sizeUrl/${this?.posters?.first
+        ?.filePath}';
   }
 
   ImagesTmdb({this.id, this.backdrops, this.posters});

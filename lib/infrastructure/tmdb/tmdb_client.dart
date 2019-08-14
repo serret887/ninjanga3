@@ -15,7 +15,26 @@ class TmdbClient extends ResilientService {
         'https://api.themoviedb.org/3/movie/$movieId/images?api_key=${Constants.tmdbKey}');
     var response = await getWithResilience(uri);
     if (response.statusCode != 200) {
-      print('status code: ${response.statusCode} - url:$uri');
+      print(
+          'retrieving images for movie status code: ${response
+              .statusCode} - url:$uri');
+      return ImagesTmdb();
+    }
+    //TODO when the response is not 200
+    return ImagesTmdb.fromJson(json.decode(response.body));
+  }
+
+  Future<ImagesTmdb> getImagesForShow({
+    int tvId,
+  }) async {
+    var uri = Uri.parse(
+        'https://api.themoviedb.org/3/tv/$tvId/images?api_key=${Constants
+            .tmdbKey}');
+    var response = await getWithResilience(uri);
+    if (response.statusCode != 200) {
+      print(
+          'retrieving images for episode status code: ${response
+              .statusCode} - url:$uri');
       return ImagesTmdb();
     }
     //TODO when the response is not 200
@@ -29,7 +48,9 @@ class TmdbClient extends ResilientService {
             .tmdbKey}');
     var response = await getWithResilience(uri);
     if (response.statusCode != 200) {
-      print('status code: ${response.statusCode} - url:$uri');
+      print(
+          'retrieving images for episode status code: ${response
+              .statusCode} - url:$uri');
       return ImagesTmdb();
     }
     //TODO when the response is not 200
@@ -42,12 +63,12 @@ class TmdbClient extends ResilientService {
             .tmdbKey}');
     var response = await getWithResilience(uri);
     if (response.statusCode != 200) {
-      print('status code: ${response.statusCode} - url:$uri');
+      print(
+          'retrieving images for season status code: ${response
+              .statusCode} - url:$uri');
       return ImagesTmdb();
     }
     //TODO when the response is not 200
     return ImagesTmdb.fromJson(json.decode(response.body));
   }
-
-
 }

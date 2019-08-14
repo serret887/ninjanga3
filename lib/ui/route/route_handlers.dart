@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/ui/home/home.dart';
 import 'package:ninjanga3/ui/movie_page/movie_details.dart';
+import 'package:ninjanga3/ui/tvshow_details/tv_show_details.dart';
 
 import 'routes.dart';
 
@@ -27,9 +28,15 @@ var detailRouteHandler = Handler(handlerFunc: (
   BuildContext context,
   Map<String, List<String>> params,
 ) {
-  return MovieDetails(
-    movieSlug: Routes.getDetailRouter(params),
-  );
+  print(params);
+  if (Routes.getDetailRouterIsMovie(params) == true) {
+    return MovieDetails(
+      movieSlug: Routes.getDetailRouterSlug(params),
+    );
+  }
+  else {
+    return TvShowDetails(slug: Routes.getDetailRouterSlug(params));
+  }
 });
 
 var trailerRouteHandler = Handler(

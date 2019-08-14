@@ -5,8 +5,9 @@ import 'package:ninjanga3/ui/components/poster_item.dart';
 
 class MovieScrollRow extends StatelessWidget {
   final List<MovieView> movies;
+  final bool isMovie;
 
-  const MovieScrollRow({@required Key key, @required this.movies})
+  const MovieScrollRow({@required Key key, @required this.movies, this.isMovie})
       : super(key: key);
 
   @override
@@ -19,9 +20,10 @@ class MovieScrollRow extends StatelessWidget {
             itemBuilder: (context, index) {
               var movie = movies[index];
               return PosterItem(
-                movieSlug: movie.ids.slug,
+                slug: movie.ids.slug,
                 posterImage: movie.posterImage,
                 rating: movie.rating,
+                isMovie: isMovie,
               );
             },
             padding: EdgeInsets.only(left: 14.0),

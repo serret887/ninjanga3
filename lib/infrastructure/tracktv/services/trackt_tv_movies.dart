@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/movie_api.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/movie_trackt_tv.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Common/genre.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Movie/trending_movies.dart';
 
 import '../config_constants.dart';
-import '../models/genre.dart';
 
 enum GenreType { shows, movies }
 
@@ -82,7 +82,7 @@ class TracktTvMoviesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    return response.map((model) => MovieApi.fromJson(model))
+    return response.map((model) => TrendingMovies.fromJson(model))
         .map((mov) => mov.movie).toList();
   }
 

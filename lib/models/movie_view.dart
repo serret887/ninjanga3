@@ -1,5 +1,4 @@
-import 'package:ninjanga3/infrastructure/tmdb/models/images_tmdb.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/id.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Common/id.dart';
 
 class MovieView {
   final String title;

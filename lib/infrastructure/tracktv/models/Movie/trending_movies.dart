@@ -1,13 +1,12 @@
-import 'id.dart';
-import 'movie_trackt_tv.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
 
-class MovieApi {
+class TrendingMovies {
   int watchers;
   MovieTrackTV movie;
 
-  MovieApi({this.watchers, this.movie});
+  TrendingMovies({this.watchers, this.movie});
 
-  MovieApi.fromJson(Map<String, dynamic> json, {bool movieType = true}) {
+  TrendingMovies.fromJson(Map<String, dynamic> json, {bool movieType = true}) {
     watchers = json['watchers'];
     var type = movieType ? "movie" : "show";
     movie = json[type] != null ? MovieTrackTV.fromJson(json[type]) : null;

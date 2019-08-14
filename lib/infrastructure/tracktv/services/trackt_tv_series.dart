@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/episode.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/movie_api.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/movie_trackt_tv.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/season.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Movie/trending_movies.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/episode.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/season.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/show.dart';
 
 import '../config_constants.dart';
 
@@ -13,7 +14,7 @@ class TracktTvSeriesAPI {
 
   TracktTvSeriesAPI(this.client);
 
-  Future<List<MovieTrackTV>> getPopularTvShowList(
+  Future<List<Show>> getPopularTvShowList(
       {int page = 0, int pageLimit = 10, bool extended = false}) async {
     final parameter = (extended == true)
         ? 'shows/popular?extended=full&page=$page&limit=$pageLimit'
@@ -57,7 +58,7 @@ class TracktTvSeriesAPI {
         .catchError((err) => print(err));
     //TODO save the state of the pagination
     return response
-        .map((model) => MovieApi.fromJson(model, movieType: false))
+        .map((model) => TrendingMovies.fromJson(model, movieType: false))
         .map((mov) => mov.movie)
         .toList();
   }
@@ -81,7 +82,7 @@ class TracktTvSeriesAPI {
     return MovieTrackTV.fromJson(response);
   }
 
-  Future<List<MovieTrackTV>> getRecomendedShows(
+  Future<List<MovieTrackTV>> getRecommendedShows(
       {String accessToken, page = 0, pageLimit = 10}) async {
     Uri uri =
         Uri.parse(Constants.apiUrl + 'recommendations/shows?limit=$pageLimit');

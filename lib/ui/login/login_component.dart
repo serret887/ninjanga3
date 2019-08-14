@@ -1,6 +1,6 @@
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/device_code_oauth.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/OAuth/device_code_oauth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginComponent extends StatefulWidget {

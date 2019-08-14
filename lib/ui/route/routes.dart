@@ -6,17 +6,21 @@ import 'route_handlers.dart';
 class Routes {
   static String root = '/';
   static String summary = '/summary';
-  static String detail = '/detail/:movieSlug';
+  static String detail = '/detail/:isMovie/:slug';
   static String filter = '/filter';
   static String video = '/trailer';
 
-  static String setDetailRouter(String movieSlug) {
+  static String setDetailRouter(String slug, bool isMovie) {
     final route = detail.split(':')[0];
-    return '$route$movieSlug';
+    return '$route$isMovie/$slug';
   }
 
-  static String getDetailRouter(Map<String, List<String>> params) {
-    return params['movieSlug'][0];
+  static String getDetailRouterSlug(Map<String, List<String>> params) {
+    return params['slug'][0];
+  }
+
+  static bool getDetailRouterIsMovie(Map<String, List<dynamic>> params) {
+    return params['isMovie'][0];
   }
 
   static void configureRoutes(Router router) {

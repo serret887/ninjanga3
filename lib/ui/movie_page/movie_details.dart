@@ -11,7 +11,7 @@ import '../../service_locator.dart';
 class MovieDetails extends StatefulWidget {
   final String movieSlug;
 
-  const MovieDetails({Key key, this.movieSlug}) : super(key: key);
+  const MovieDetails({Key key, this.movieSlug,}) : super(key: key);
   @override
   _MovieDetailsState createState() => _MovieDetailsState();
 }

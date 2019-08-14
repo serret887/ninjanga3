@@ -1,5 +1,5 @@
-import 'episode.dart';
-import 'id.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Common/id.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/episode.dart';
 
 class SeasonTracktv {
 

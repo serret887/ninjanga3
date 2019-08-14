@@ -1,22 +1,19 @@
-import 'id.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Common/id.dart';
 
-class Show {
-  String title;
-  int year;
+class Person {
+  String name;
   Ids ids;
 
-  Show({this.title, this.year, this.ids});
+  Person({this.name, this.ids});
 
-  Show.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    year = json['year'];
+  Person.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
     ids = json['ids'] != null ? new Ids.fromJson(json['ids']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['year'] = this.year;
+    data['name'] = this.name;
     if (this.ids != null) {
       data['ids'] = this.ids.toJson();
     }
