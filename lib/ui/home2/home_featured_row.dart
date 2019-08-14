@@ -3,6 +3,7 @@ import 'package:ninjanga3/models/movie_view.dart';
 
 import 'home_buttons.dart';
 import 'home_feature.dart';
+import 'home_feature_title.dart';
 
 class HomeFeaturedRow extends StatefulWidget {
   final List<MovieView> movies;
@@ -44,10 +45,12 @@ class _HomeFeaturedRowState extends State<HomeFeaturedRow>
     return Container(
         child: Stack(children: <Widget>[
       pageView,
-          Column(mainAxisAlignment: MainAxisAlignment.end,
-
-              children: <Widget>[
-                HomeButtons(
+      Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+        HomeFeatureTitle(
+          genres: movies[_currentPage].genres,
+          name: movies[_currentPage].title,
+        ),
+        HomeButtons(
           slug: movies[_currentPage].ids.slug,
         )
       ]),
@@ -73,15 +76,10 @@ class _PageItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-
-
-        },
+        onTap: () {},
         child: Stack(children: <Widget>[
           HomeFeature(
             imageUrl: movie.backdrop,
-            genres: movie.genres,
-            name: movie.title,
           ),
           Align(
               alignment: Alignment.bottomCenter,

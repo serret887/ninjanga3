@@ -10,7 +10,6 @@ import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
 
 import '../../service_locator.dart';
 
-
 class MovieDetailsPage extends StatefulWidget {
   final String movieSlug;
 
@@ -49,56 +48,44 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         builder: (context, state) {
           if (state is MovieDetailsStateLoaded) {
             final isPortraitMode =
-                MediaQuery
-                    .of(context)
-                    .orientation == Orientation.portrait;
+                MediaQuery.of(context).orientation == Orientation.portrait;
             final movie = state.data;
             return Scaffold(
                 backgroundColor: Color(0xff26262d),
-                appBar: AppBar(
-                  backgroundColor: Color(0xff26262d),
-                  title: Text('${movie.title}'),
-                ),
                 body: SafeArea(
                     child: Stack(
-                      children: <Widget>[
-                        Align(
-                            alignment: Alignment.topCenter,
-                            child: _buildImageView(
-                                context: context, height: topImageHeight
-                                , imageUrl: movie.backdrop
-                            )),
-                        SizedBox(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height,
-                            child: ListView(
-                              padding: EdgeInsets.only(
-                                  top:
+                  children: <Widget>[
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: _buildImageView(
+                            context: context,
+                            height: topImageHeight,
+                            imageUrl: movie.backdrop)),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: ListView(
+                          padding: EdgeInsets.only(
+                              top:
                                   isPortraitMode ? (topImageHeight - 160) : 30),
-                              children: <Widget>[
-                                _buildInfoRow(context, movie),
-                                _buildControlsRow(context),
-                                Container(
-                                  child: _buildTrailerRow(context),
-                                ),
-                                BlocBuilder(
-                                  bloc: _relatedMoviesBloc,
-                                  builder: (BuildContext context, state) {
-                                    return Container(
-                                      child: _buildRelatedRow(state: state),
-                                    );
-                                  },
-                                )
-                              ],
-                            ))
-                      ],
-                    )));
+                          children: <Widget>[
+                            _buildInfoRow(context, movie),
+                            _buildControlsRow(context),
+                            Container(
+                              child: _buildTrailerRow(context),
+                            ),
+                            BlocBuilder(
+                              bloc: _relatedMoviesBloc,
+                              builder: (BuildContext context, state) {
+                                return Container(
+                                  child: _buildRelatedRow(state: state),
+                                );
+                              },
+                            )
+                          ],
+                        ))
+                  ],
+                )));
           } else if (state is MovieDetailsStateLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is MovieDetailsStateError) {
@@ -176,8 +163,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         SizedBox(height: 30),
                         (movie.year > 0
                             ? Text(
-                            '(${movie.year}) · ${movie.duration}\n${movie.genres
-                                ?.join()} ',
+                                '(${movie.year}) · ${movie.duration}\n${movie.genres?.join()} ',
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 12))
                             : Text(''))
@@ -292,16 +278,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     return (value == null)
         ? null
         : ClipRRect(
-        borderRadius: BorderRadius.circular(2.0),
-        child: Container(
-            color: Color(0xff474747),
-            child: Padding(
-                padding: EdgeInsets.all(6),
-                child: Text(
-                  value,
-                  style:
-                  TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-                ))));
+            borderRadius: BorderRadius.circular(2.0),
+            child: Container(
+                color: Color(0xff474747),
+                child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Text(
+                      value,
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                    ))));
   }
 
   Widget _buildRelatedRow({@required RelatedState state}) {

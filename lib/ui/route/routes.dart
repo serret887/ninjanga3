@@ -6,14 +6,24 @@ import 'route_handlers.dart';
 class Routes {
   static String root = '/';
   static String summary = '/summary';
-  static String detail = '/detail';
+  static String detail = '/detail/:movieSlug';
   static String filter = '/filter';
   static String video = '/trailer';
 
+  static String setDetailRouter(String movieSlug) {
+    final route = detail.split(':')[0];
+    return '$route$movieSlug';
+  }
+
+  static String getDetailRouter(Map<String, List<String>> params) {
+    return params['movieSlug'][0];
+  }
+
   static void configureRoutes(Router router) {
-    router.notFoundHandler = Handler(handlerFunc:
-        (BuildContext context, Map<String, List<String>> params,
-            [dynamic object]) {
+    router.notFoundHandler = Handler(handlerFunc: (
+      BuildContext context,
+      Map<String, List<String>> params,
+    ) {
       print('ROUTE WAS NOT FOUND !!!');
       return Container(
         child: Text("Route not found"),

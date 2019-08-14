@@ -1,11 +1,16 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/ui/home2/home.dart';
+import 'package:ninjanga3/ui/movie_page/movie_details.dart';
 import 'package:ninjanga3/ui/movie_page/movie_details_page.dart';
 
+import 'routes.dart';
+
 var rootHandler = Handler(
-  handlerFunc: (BuildContext context, Map<String, List<String>> params,
-      [dynamic object]) {
+  handlerFunc: (
+    BuildContext context,
+    Map<String, List<String>> params,
+  ) {
     return Home();
   },
 );
@@ -19,10 +24,15 @@ var summaryRouteHandler = Handler(
     ); //Summary();;
   },
 );
-var detailRouteHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params,) {
-return MovieDetailsPage(movieSlug: 'hell',);
-    });
+var detailRouteHandler = Handler(handlerFunc: (
+  BuildContext context,
+  Map<String, List<String>> params,
+) {
+  return MovieDetails(
+    movieSlug: Routes.getDetailRouter(params),
+  );
+});
+
 var trailerRouteHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params,
       [dynamic object]) {

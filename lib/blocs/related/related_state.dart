@@ -27,7 +27,7 @@ class RelatedLoaded extends RelatedState {
 }
 
 class RelatedError extends RelatedState {
-  final Error error;
+  final Exception error;
   RelatedError({@required this.error});
 
   @override
