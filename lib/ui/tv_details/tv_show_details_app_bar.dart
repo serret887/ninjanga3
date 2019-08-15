@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/View/SeasonView.dart';
+import 'package:ninjanga3/models/View/seasonView.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class TvShowDetailsAppBar extends StatelessWidget {

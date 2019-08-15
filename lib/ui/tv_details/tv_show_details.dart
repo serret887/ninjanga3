@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/movie_details/bloc.dart';
-import 'package:ninjanga3/blocs/related/bloc.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
 
 import '../../service_locator.dart';
@@ -21,7 +20,6 @@ class TvShowDetails extends StatefulWidget {
 
 class _TvShowDetailsState extends State<TvShowDetails> {
   String get movieSlug => widget.slug;
-  RelatedBloc _relatedMoviesBloc;
   MovieDetailsBloc _movieDetailsBloc;
 
   @override
@@ -29,8 +27,6 @@ class _TvShowDetailsState extends State<TvShowDetails> {
     super.initState();
 
     var repo = sl.get<MoviesRepository>();
-    _relatedMoviesBloc = RelatedBloc(repo, movieSlug);
-    _relatedMoviesBloc.dispatch(FetchRelatedMoviesEvent());
 
     _movieDetailsBloc = MovieDetailsBloc(movieSlug, repo);
     _movieDetailsBloc.dispatch(MovieDetailsEventFetch());
