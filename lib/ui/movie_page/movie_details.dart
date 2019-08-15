@@ -9,18 +9,18 @@ import 'package:ninjanga3/ui/movie_page/movie_details_app_bar.dart';
 import '../../service_locator.dart';
 
 class MovieDetails extends StatefulWidget {
-  final String movieSlug;
+  final String slug;
 
   const MovieDetails({
     Key key,
-    this.movieSlug,
+    this.slug,
   }) : super(key: key);
   @override
   _MovieDetailsState createState() => _MovieDetailsState();
 }
 
 class _MovieDetailsState extends State<MovieDetails> {
-  String get movieSlug => widget.movieSlug;
+  String get movieSlug => widget.slug;
   RelatedBloc _relatedMoviesBloc;
   MovieDetailsBloc _movieDetailsBloc;
 
@@ -38,7 +38,6 @@ class _MovieDetailsState extends State<MovieDetails> {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,

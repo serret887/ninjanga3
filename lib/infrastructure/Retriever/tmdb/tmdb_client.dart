@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tmdb/models/images_tmdb.dart';
-import 'package:ninjanga3/infrastructure/tracktv/config_constants.dart';
-import 'package:ninjanga3/infrastructure/utils/resilient_service.dart';
+
+import '../tmdb/models/images_tmdb.dart';
+import '../tracktv/config_constants.dart';
+import '../utils/resilient_service.dart';
 
 class TmdbClient extends ResilientService {
   final http.Client client;

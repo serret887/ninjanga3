@@ -1,4 +1,4 @@
-import 'package:ninjanga3/infrastructure/tracktv/models/Common/id.dart';
+import '../Common/id.dart';
 
 class Episode {
   int season;

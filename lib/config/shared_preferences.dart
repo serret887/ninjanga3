@@ -9,8 +9,8 @@ class Preferences {
     return value == "" ? DateTime(1900) : DateTime.parse(value);
   }
 
-  setLastRefresh(DateTime time) async {
+  setLastRefresh() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, time.toIso8601String());
+    prefs.setString(key, DateTime.now().toIso8601String());
   }
 }

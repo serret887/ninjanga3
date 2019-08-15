@@ -44,6 +44,8 @@ class AppDatabase {
 
     final database = await databaseFactoryIo.openDatabase(dbPath);
     // Any code awaiting the Completer's future will now start executing
+    print("DB opening");
+
     _dbOpenCompleter.complete(database);
   }
 }

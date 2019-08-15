@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/OAuth/access_token.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/OAuth/device_code_oauth.dart';
 
 import '../config_constants.dart';
+import '../models/OAuth/access_token.dart';
+import '../models/OAuth/device_code_oauth.dart';
 
 class OauthDevice {
   final http.Client client;

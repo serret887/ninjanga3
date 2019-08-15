@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/OAuth/device_code_oauth.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/OAuth/device_code_oauth.dart';
 import 'package:ninjanga3/repositories/authentication_repository.dart';
 
 import './bloc.dart';

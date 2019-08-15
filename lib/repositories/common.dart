@@ -1,11 +1,11 @@
-import 'package:ninjanga3/infrastructure/tmdb/models/images_tmdb.dart';
-import 'package:ninjanga3/infrastructure/tmdb/tmdb_client.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/season.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tmdb/models/images_tmdb.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Movie/movie_trackt_tv.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
 
 class Common {
-  static MovieView convertFrom(MovieTrackTV trackt, ImagesTmdb tmdb) {
+  static MovieView convertFrom(MovieTrackTV trackt, ImagesTmdb tmdb,
+      String origin) {
     return MovieView(
         backdrop: tmdb.getBestBackdrop(),
         certification: trackt.certification,
@@ -19,7 +19,8 @@ class Common {
         trailer: trackt.trailer,
         year: trackt.year,
         duration: trackt.runtime,
-        isMovie: true);
+        isMovie: true,
+        origin: origin);
   }
 
   static Future<List<ImagesTmdb>> getImagesForMoviesFromIds(
@@ -29,38 +30,40 @@ class Common {
   }
 
   static Future<List<MovieView>> completeMovieDataFromTracktList(
-      Iterable<MovieTrackTV> moviesTrackt, TmdbClient tmdbClient) async {
+      Iterable<MovieTrackTV> moviesTrackt, TmdbClient tmdbClient,
+      String origin) async {
     var futures =
-        moviesTrackt.map((mov) => completeMovieDataFromTrackt(mov, tmdbClient));
+    moviesTrackt.map((mov) =>
+        completeMovieDataFromTrackt(mov, tmdbClient, origin));
     return Future.wait(futures);
   }
 
-  static Future<MovieView> completeMovieDataFromTrackt(
-      MovieTrackTV movieTrackt, TmdbClient tmdbClient) async {
+  static Future<MovieView> completeMovieDataFromTrackt(MovieTrackTV movieTrackt,
+      TmdbClient tmdbClient, String origin) async {
     var tmdbId = movieTrackt.ids.tmdb;
     var tmdbMovies = await tmdbClient.getImagesFromMovieId(tmdbId);
-    return Common.convertFrom(movieTrackt, tmdbMovies);
+    return Common.convertFrom(movieTrackt, tmdbMovies, origin);
   }
 
-  static Future<MovieView> completeSerieDataFromTrackt(
-      MovieTrackTV movieTrackt, TmdbClient tmdbClient) async {
-    var tmdbId = movieTrackt.ids.tmdb;
-    var tmdbMovies = await tmdbClient.getImagesForShow(tvId: tmdbId);
-    return Common.convertFrom(movieTrackt, tmdbMovies);
-  }
-
-  static Future<List<MovieView>> completeSerieDataFromTracktList(
-      Iterable<MovieTrackTV> moviesTrackt, TmdbClient tmdbClient) async {
-    var futures =
-        moviesTrackt.map((mov) => completeSerieDataFromTrackt(mov, tmdbClient));
-    return Future.wait(futures);
-  }
-
-  static Future<MovieView> completeSeasonDataFromTrackt(
-      SeasonTracktv seasonTrackt, TmdbClient tmdbClient) async {
-    var tmdbMovies = await tmdbClient.getImagesForSeason(
-        seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
-    return MovieView();
-    //   return Common.convertFrom(seasonTrackt, tmdbMovies);
-  }
+//  static Future<MovieView> completeSerieDataFromTrackt(
+//      MovieTrackTV movieTrackt, TmdbClient tmdbClient) async {
+//    var tmdbId = movieTrackt.ids.tmdb;
+//    var tmdbMovies = await tmdbClient.getImagesForShow(tvId: tmdbId);
+//    return Common.convertFrom(movieTrackt, tmdbMovies, origin);
+//  }
+//
+//  static Future<List<MovieView>> completeSerieDataFromTracktList(
+//      Iterable<MovieTrackTV> moviesTrackt, TmdbClient tmdbClient) async {
+//    var futures =
+//        moviesTrackt.map((mov) => completeSerieDataFromTrackt(mov, tmdbClient));
+//    return Future.wait(futures);
+//  }
+//
+//  static Future<MovieView> completeSeasonDataFromTrackt(
+//      SeasonTracktv seasonTrackt, TmdbClient tmdbClient) async {
+//    var tmdbMovies = await tmdbClient.getImagesForSeason(
+//        seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
+//    return MovieView();
+//    //   return Common.convertFrom(seasonTrackt, tmdbMovies);
+//  }
 }

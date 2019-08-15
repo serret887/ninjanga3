@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/OAuth/device_code_oauth.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/OAuth/device_code_oauth.dart';
 
 @immutable
 abstract class AuthenticationState extends Equatable {

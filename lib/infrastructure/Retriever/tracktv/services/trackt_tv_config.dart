@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/Common/genre.dart';
 
 import '../config_constants.dart';
+import '../models/Common/genre.dart';
 
 enum GenreType { shows, movies }
 

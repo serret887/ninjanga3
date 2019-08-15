@@ -19,13 +19,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async* {
     if (event is FetchHomePage) {
       yield HomeLoading();
-//      try {
+      try {
         final HomePageModel homePageModel = await repo.getHomePageModel();
         yield HomeLoaded(model: homePageModel);
-//      } catch (e) {
-//        print(e);
-//        yield HomeError(error: e);
-//      }
+      } catch (e) {
+        print(e);
+        yield HomeError(error: e);
+      }
     }
   }
 }

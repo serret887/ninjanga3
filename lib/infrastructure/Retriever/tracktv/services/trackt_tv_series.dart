@@ -1,23 +1,23 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/Common/trending.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
 
 import '../config_constants.dart';
+import '../models/Common/trending.dart';
+import '../models/TvShow/episode.dart';
+import '../models/TvShow/season.dart';
+import '../models/TvShow/show.dart';
 
-enum GenreType { shows, movies }
-
-class TracktTvMoviesAPI {
+class TracktTvSeriesAPI {
   final http.Client client;
 
-  TracktTvMoviesAPI(this.client);
+  TracktTvSeriesAPI(this.client);
 
-  Future<List<MovieTrackTV>> getPopularMoviesList(
+  Future<List<Show>> getPopularTvShowList(
       {int page = 0, int pageLimit = 10, bool extended = false}) async {
     final parameter = (extended == true)
-        ? 'movies/popular?extended=full&page=$page&limit=$pageLimit'
-        : 'movies/popular?page=$page&limit=$pageLimit';
+        ? 'shows/popular?extended=full&page=$page&limit=$pageLimit'
+        : 'shows/popular?page=$page&limit=$pageLimit';
 
     Uri uri = Uri.parse(Constants.apiUrl + '$parameter');
     Iterable response = await client
@@ -32,16 +32,16 @@ class TracktTvMoviesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    return response.map((model) => MovieTrackTV.fromJson(model)).toList();
+    return response.map((model) => Show.fromJson(model)).toList();
   }
 
   /// type can be changed for
   /// played, watched, popular, trending, boxOffice
-  Future<List<MovieTrackTV>> getTrendingMoviesList(
+  Future<List<Show>> getTrendingTvShowList(
       {int page = 0, int pageLimit = 10, bool extended = false}) async {
     final parameter = (extended == true)
-        ? 'movies/trending?extended=full&page=$page&limit=$pageLimit'
-        : 'movies/trending?page=$page&limit=$pageLimit';
+        ? 'shows/trending?extended=full&page=$page&limit=$pageLimit'
+        : 'shows/trending?page=$page&limit=$pageLimit';
 
     Uri uri = Uri.parse(Constants.apiUrl + '$parameter');
     Iterable response = await client
@@ -57,15 +57,15 @@ class TracktTvMoviesAPI {
         .catchError((err) => print(err));
     //TODO save the state of the pagination
     return response
-        .map((model) => Trending.fromJson(model))
+        .map((model) => Trending.fromJson(model, movieType: false))
         .map((mov) => mov.movie)
         .toList();
   }
 
-  Future<MovieTrackTV> getMovieData({slug, extended = true}) async {
+  Future<Show> getShowData({slug, extended = true}) async {
     final parameter = (extended == true) ? '$slug?extended=full' : '$slug';
 
-    Uri uri = Uri.parse(Constants.apiUrl + 'movies/$parameter');
+    Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
 
     var response = await client
         .get(
@@ -78,14 +78,13 @@ class TracktTvMoviesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    //TODO save the state of the pagination
-    return MovieTrackTV.fromJson(response);
+    return Show.fromJson(response);
   }
 
-  Future<List<MovieTrackTV>> getRecomendedMovies(
+  Future<List<Show>> getRecommendedShows(
       {String accessToken, page = 0, pageLimit = 10}) async {
     Uri uri =
-        Uri.parse(Constants.apiUrl + 'recommendations/movies?limit=$pageLimit');
+        Uri.parse(Constants.apiUrl + 'recommendations/shows?limit=$pageLimit');
 
     var response = await client
         .get(
@@ -105,14 +104,13 @@ class TracktTvMoviesAPI {
           "Can't fetch recomended movies ${response.statusCode}  ${response.body}");
     }
     var resp = json.decode(response.body);
-    return resp.map((model) => MovieTrackTV.fromJson(model)).toList();
+    return resp.map((model) => Show.fromJson(model)).toList();
   }
 
-  Future<List<MovieTrackTV>> getRelatedMovies(
-      {String slug, extended = false}) async {
+  Future<List<Show>> getRelatedShows({String slug, extended = false}) async {
     final parameter =
         (extended == true) ? '$slug/related?extended=full' : '$slug/related';
-    Uri uri = Uri.parse(Constants.apiUrl + 'movies/$parameter');
+    Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
     Iterable response = await client
         .get(
           uri,
@@ -124,19 +122,58 @@ class TracktTvMoviesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    return response.map((model) => MovieTrackTV.fromJson(model)).toList();
+    return response.map((model) => Show.fromJson(model)).toList();
   }
 
-  Future<MovieTrackTV> fillCrewData(MovieTrackTV movieTrackTV) {}
+  Future<List<SeasonTracktv>> getAllSeasonsForShow(
+      {String slug, extended = false}) async {
+    final parameter =
+        (extended == true) ? '$slug/seasons?extended=full' : '$slug/seasons';
+    Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
+    Iterable response = await client
+        .get(
+          uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'trakt-api-version': Constants.apiVersionHeaderKey,
+            'trakt-api-key': Constants.apiClientIdHeaderKey
+          },
+        )
+        .then(((resp) => json.decode(resp.body)))
+        .catchError((err) => print(err));
+    return response.map((model) => SeasonTracktv.fromJson(model)).toList();
+  }
+
+  Future<List<Episode>> getAllEpisodesOfSeason(
+      {String slug, int number, extended = false}) async {
+    final parameter = (extended == true) ? '?extended=full' : '';
+    var uri =
+        Uri.parse(Constants.apiUrl + 'shows/$slug/seasons/$number$parameter');
+
+    var response = await client
+        .get(
+          uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'trakt-api-version': Constants.apiVersionHeaderKey,
+            'trakt-api-key': Constants.apiClientIdHeaderKey
+          },
+        )
+        .then((resp) => json.decode(resp.body))
+        .catchError((err) => print(err));
+
+    return response.map((model) => Episode.fromJson(model)).toList();
+  }
 }
 
 main(List<String> args) async {
-  var a = TracktTvMoviesAPI(http.Client());
+  var a = TracktTvSeriesAPI(http.Client());
 
-  var resp = await a.getRelatedMovies(
-    slug: 'tron-legacy-2010',
-    extended: true,
-  );
-
-  resp.forEach((f) => print(f.toJson()));
+  // var resp = await a.getRelatedMovies(
+  //   slug: 'tron-legacy-2010',
+  //   extended: true,
+  // );
+  var resp = await a.getShowData(slug: 'elementary', extended: true);
+  print(resp);
+//  resp.forEach((f) => print(f.toJson()));
 }

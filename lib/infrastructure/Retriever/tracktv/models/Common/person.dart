@@ -1,4 +1,4 @@
-import 'package:ninjanga3/infrastructure/tracktv/models/Common/id.dart';
+import 'id.dart';
 
 class Person {
   String name;

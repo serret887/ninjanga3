@@ -1,5 +1,5 @@
-import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/show.dart';
+import '../Movie/movie_trackt_tv.dart';
+import '../TvShow/show.dart';
 
 class Trending<T> {
   int watchers;

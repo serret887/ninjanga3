@@ -1,5 +1,4 @@
-import 'package:ninjanga3/infrastructure/tracktv/models/Common/id.dart';
-
+import '../Common/id.dart';
 import 'airs.dart';
 
 
@@ -70,9 +69,9 @@ class Show {
         commentCount: json["comment_count"],
         updatedAt: DateTime.parse(json["updated_at"]),
         language: json["language"],
-        availableTranslations: new List<String>.from(
+        availableTranslations: List<String>.from(
             json["available_translations"].map((x) => x)),
-        genres: new List<String>.from(json["genres"].map((x) => x)),
+        genres: List<String>.from(json["genres"].map((x) => x)),
         airedEpisodes: json["aired_episodes"],
       );
 

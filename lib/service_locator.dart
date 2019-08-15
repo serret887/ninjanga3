@@ -3,16 +3,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:ninjanga3/blocs/home/home_bloc.dart';
-import 'package:ninjanga3/infrastructure/tmdb/tmdb_client.dart';
-import 'package:ninjanga3/infrastructure/tracktv/services/trackt_tv_movies.dart';
-import 'package:ninjanga3/infrastructure/tracktv/services/trackt_tv_series.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_movies.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_series.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
 import 'package:sembast/sembast.dart';
 
 import 'blocs/authentication/authentication_bloc.dart';
 import 'config/database.dart';
 import 'config/shared_preferences.dart';
-import 'infrastructure/tracktv/services/oauth_device.dart';
+import 'infrastructure/Retriever/tracktv/services/oauth_device.dart';
 import 'repositories/authentication_repository.dart';
 import 'ui/route/routes.dart';
 

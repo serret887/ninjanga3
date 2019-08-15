@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/OAuth/access_token.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/OAuth/device_code_oauth.dart';
-import 'package:ninjanga3/infrastructure/tracktv/services/oauth_device.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/OAuth/access_token.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/OAuth/device_code_oauth.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/oauth_device.dart';
 
 class AuthenticationRepository {
   final OauthDevice oauthDevice;
