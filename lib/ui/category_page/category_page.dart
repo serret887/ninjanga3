@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/movie_view.dart';
+import 'package:ninjanga3/models/View/movie_view.dart';
 
 class MovieCategoryPageArguments {
   static final routeName = "movieCategory";

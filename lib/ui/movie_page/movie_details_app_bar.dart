@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/movie_view.dart';
+import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class MovieDetailsAppBar extends StatelessWidget {

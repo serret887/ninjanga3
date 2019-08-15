@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/home_page_model.dart';
-import 'package:ninjanga3/models/movie_view.dart';
 import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
 
 import '../constant_ui.dart';
@@ -69,13 +69,14 @@ class HomeListView extends StatelessWidget {
   }
 
   Widget _buildRowView(MapEntry<String, List<MovieView>> movieList) {
+    var posters = movieList.value.map((mov) => mov.getPosterView()).toList();
     return Column(children: <Widget>[
       _ListSectionTitleView(movieList: movieList),
       Container(
           height: 140.0,
           child: MovieScrollRow(
             key: PageStorageKey(movieList.key),
-            movies: movieList.value,
+            posters: posters,
           )),
     ]);
   }

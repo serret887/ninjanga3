@@ -20,8 +20,10 @@ class Routes {
   }
 
   static bool getDetailRouterIsMovie(Map<String, List<dynamic>> params) {
-    return params['isMovie'][0];
+    return toBool(params['isMovie'][0]);
   }
+
+  static bool toBool(String val) => val.toLowerCase() == 'true';
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(handlerFunc: (

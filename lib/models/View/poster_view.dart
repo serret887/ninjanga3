@@ -4,5 +4,5 @@ class PosterView {
   final double rating;
   final bool isMovie;
 
-  PosterView(this.posterImage, this.slug, this.rating, this.isMovie);
+  PosterView({this.posterImage, this.slug, this.rating, this.isMovie});
 }

@@ -11,7 +11,10 @@ import '../../service_locator.dart';
 class MovieDetails extends StatefulWidget {
   final String movieSlug;
 
-  const MovieDetails({Key key, this.movieSlug,}) : super(key: key);
+  const MovieDetails({
+    Key key,
+    this.movieSlug,
+  }) : super(key: key);
   @override
   _MovieDetailsState createState() => _MovieDetailsState();
 }
@@ -81,6 +84,7 @@ class _MovieDetailsState extends State<MovieDetails> {
       if (state.movies.isEmpty) {
         return Container();
       }
+      var posters = state.movies.map((mov) => mov.getPosterView()).toList();
       return Column(children: <Widget>[
         Align(
           alignment: Alignment.topLeft,
@@ -93,7 +97,7 @@ class _MovieDetailsState extends State<MovieDetails> {
         Container(
             margin: EdgeInsets.only(top: 20),
             height: 200,
-            child: MovieScrollRow(movies: state.movies, key: UniqueKey()))
+            child: MovieScrollRow(posters: posters, key: UniqueKey()))
       ]);
     }
 

@@ -7,8 +7,11 @@ import 'package:ninjanga3/infrastructure/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/tracktv/services/trackt_tv_movies.dart';
 import 'package:ninjanga3/infrastructure/tracktv/services/trackt_tv_series.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
+import 'package:sembast/sembast.dart';
 
 import 'blocs/authentication/authentication_bloc.dart';
+import 'config/database.dart';
+import 'config/shared_preferences.dart';
 import 'infrastructure/tracktv/services/oauth_device.dart';
 import 'repositories/authentication_repository.dart';
 import 'ui/route/routes.dart';
@@ -16,8 +19,13 @@ import 'ui/route/routes.dart';
 GetIt sl = new GetIt();
 
 void setup() {
+// Config
   sl.allowReassignment = true;
   sl.registerSingleton<http.Client>(http.Client());
+  sl.registerLazySingleton<Future<Database>>(
+      () async => await AppDatabase.instance.database);
+  sl.registerSingleton(Preferences());
+// end Config
 
 // authentication
   sl.registerSingleton<OauthDevice>(OauthDevice(sl.get<http.Client>()));
@@ -37,7 +45,9 @@ void setup() {
       sl.get<TracktTvMoviesAPI>(),
       sl.get<TracktTvSeriesAPI>(),
       sl.get<TmdbClient>(),
-      sl.get<AuthenticationRepository>()));
+      sl.get<AuthenticationRepository>(),
+      sl.get<Preferences>(),
+      sl.get<Future<Database>>()));
   sl.registerSingleton<HomeBloc>(HomeBloc(sl.get<MoviesRepository>()));
 
 // end home

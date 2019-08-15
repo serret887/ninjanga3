@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/movie_details/bloc.dart';
 import 'package:ninjanga3/blocs/related/bloc.dart';
-import 'package:ninjanga3/models/movie_view.dart';
+import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
 import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
 
@@ -293,6 +293,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       if (state.movies.isEmpty) {
         return Container();
       }
+      var posters = state.movies.map((mov) => mov.getPosterView()).toList();
+
       return Column(children: <Widget>[
         Align(
           alignment: Alignment.topLeft,
@@ -305,7 +307,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         Container(
             margin: EdgeInsets.only(top: 20),
             height: 270,
-            child: MovieScrollRow(movies: state.movies, key: UniqueKey()))
+            child: MovieScrollRow(posters: posters, key: UniqueKey()))
       ]);
     }
 

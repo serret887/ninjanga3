@@ -2,7 +2,7 @@ import 'package:ninjanga3/infrastructure/tmdb/models/images_tmdb.dart';
 import 'package:ninjanga3/infrastructure/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/season.dart';
-import 'package:ninjanga3/models/movie_view.dart';
+import 'package:ninjanga3/models/View/movie_view.dart';
 
 class Common {
   static MovieView convertFrom(MovieTrackTV trackt, ImagesTmdb tmdb) {
@@ -14,12 +14,12 @@ class Common {
         overview: trackt.overview,
         posterImage: tmdb.getBestPoster(),
         rating: trackt.rating,
-        released: trackt.released,
         tagline: trackt.tagline,
         title: trackt.title,
         trailer: trackt.trailer,
         year: trackt.year,
-        duration: trackt.runtime);
+        duration: trackt.runtime,
+        isMovie: true);
   }
 
   static Future<List<ImagesTmdb>> getImagesForMoviesFromIds(
@@ -42,9 +42,8 @@ class Common {
     return Common.convertFrom(movieTrackt, tmdbMovies);
   }
 
-
-  static Future<MovieView> completeSerieDataFromTrackt(MovieTrackTV movieTrackt,
-      TmdbClient tmdbClient) async {
+  static Future<MovieView> completeSerieDataFromTrackt(
+      MovieTrackTV movieTrackt, TmdbClient tmdbClient) async {
     var tmdbId = movieTrackt.ids.tmdb;
     var tmdbMovies = await tmdbClient.getImagesForShow(tvId: tmdbId);
     return Common.convertFrom(movieTrackt, tmdbMovies);
@@ -53,7 +52,7 @@ class Common {
   static Future<List<MovieView>> completeSerieDataFromTracktList(
       Iterable<MovieTrackTV> moviesTrackt, TmdbClient tmdbClient) async {
     var futures =
-    moviesTrackt.map((mov) => completeSerieDataFromTrackt(mov, tmdbClient));
+        moviesTrackt.map((mov) => completeSerieDataFromTrackt(mov, tmdbClient));
     return Future.wait(futures);
   }
 

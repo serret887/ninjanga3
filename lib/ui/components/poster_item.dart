@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/poster_view.dart';
+import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/ui/route/routes.dart';
 
 import '../../service_locator.dart';

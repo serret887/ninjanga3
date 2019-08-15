@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/movie_view.dart';
+import 'package:ninjanga3/models/View/movie_view.dart';
 
 import 'home_buttons.dart';
 import 'home_feature.dart';

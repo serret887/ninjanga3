@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:ninjanga3/models/movie_view.dart';
+import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/ui/components/poster_item.dart';
 
 class MovieScrollRow extends StatelessWidget {
-  final List<MovieView> movies;
+  final List<PosterView> posters;
   final bool isMovie;
 
-  const MovieScrollRow({@required Key key, @required this.movies, this.isMovie})
+  const MovieScrollRow(
+      {@required Key key, @required this.posters, this.isMovie})
       : super(key: key);
 
   @override
@@ -16,15 +17,9 @@ class MovieScrollRow extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: ListView.builder(
             key: key,
-            itemCount: movies.length,
+            itemCount: posters.length,
             itemBuilder: (context, index) {
-              var movie = movies[index];
-              return PosterItem(
-                slug: movie.ids.slug,
-                posterImage: movie.posterImage,
-                rating: movie.rating,
-                isMovie: isMovie,
-              );
+              return PosterItem(model: posters[index]);
             },
             padding: EdgeInsets.only(left: 14.0),
             scrollDirection: Axis.horizontal,
