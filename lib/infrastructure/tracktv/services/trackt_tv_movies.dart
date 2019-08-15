@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/Common/genre.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Common/trending.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/Movie/trending_movies.dart';
 
 import '../config_constants.dart';
 
@@ -13,31 +12,6 @@ class TracktTvMoviesAPI {
   final http.Client client;
 
   TracktTvMoviesAPI(this.client);
-
-  /// The type in this function could be
-  /// movies or shows
-  Future<List<Genre>> getGenres(GenreType type) async {
-    String parameter = '';
-    if (type == GenreType.shows)
-      parameter = 'shows';
-    else
-      parameter = 'movies';
-
-    Uri uri = Uri.parse(Constants.apiUrl + 'genres/$parameter');
-
-    var response = await client
-        .get(
-          uri,
-          headers: {
-            'Content-Type': 'application/json',
-            'trakt-api-version': Constants.apiVersionHeaderKey,
-            'trakt-api-key': Constants.apiClientIdHeaderKey
-          },
-        )
-        .then(((resp) => json.decode(resp.body)))
-        .catchError((err) => print(err));
-    return response.map((r) => Genre.fromJson(r));
-  }
 
   Future<List<MovieTrackTV>> getPopularMoviesList(
       {int page = 0, int pageLimit = 10, bool extended = false}) async {
@@ -82,8 +56,10 @@ class TracktTvMoviesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    return response.map((model) => TrendingMovies.fromJson(model))
-        .map((mov) => mov.movie).toList();
+    return response
+        .map((model) => Trending.fromJson(model))
+        .map((mov) => mov.movie)
+        .toList();
   }
 
   Future<MovieTrackTV> getMovieData({slug, extended = true}) async {
@@ -108,8 +84,8 @@ class TracktTvMoviesAPI {
 
   Future<List<MovieTrackTV>> getRecomendedMovies(
       {String accessToken, page = 0, pageLimit = 10}) async {
-    Uri uri = Uri.parse(Constants.apiUrl +
-        'recommendations/movies?limit=$pageLimit');
+    Uri uri =
+        Uri.parse(Constants.apiUrl + 'recommendations/movies?limit=$pageLimit');
 
     var response = await client
         .get(
@@ -121,14 +97,12 @@ class TracktTvMoviesAPI {
             'trakt-api-key': Constants.apiClientIdHeaderKey
           },
         )
-        .then(
-            (resp) => resp)
+        .then((resp) => resp)
         .catchError((err) => print(err));
     //TODO save the state of the pagination
     if (response.statusCode != 200) {
       throw Exception(
-          "Can't fetch recomended movies ${response.statusCode}  ${response
-              .body}");
+          "Can't fetch recomended movies ${response.statusCode}  ${response.body}");
     }
     var resp = json.decode(response.body);
     return resp.map((model) => MovieTrackTV.fromJson(model)).toList();

@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/tracktv/models/Movie/movie_trackt_tv.dart';
-import 'package:ninjanga3/infrastructure/tracktv/models/Movie/trending_movies.dart';
+import 'package:ninjanga3/infrastructure/tracktv/models/Common/trending.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/episode.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/season.dart';
 import 'package:ninjanga3/infrastructure/tracktv/models/TvShow/show.dart';
@@ -33,12 +32,12 @@ class TracktTvSeriesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    return response.map((model) => MovieTrackTV.fromJson(model)).toList();
+    return response.map((model) => Show.fromJson(model)).toList();
   }
 
   /// type can be changed for
   /// played, watched, popular, trending, boxOffice
-  Future<List<MovieTrackTV>> getTrendingTvShowList(
+  Future<List<Show>> getTrendingTvShowList(
       {int page = 0, int pageLimit = 10, bool extended = false}) async {
     final parameter = (extended == true)
         ? 'shows/trending?extended=full&page=$page&limit=$pageLimit'
@@ -58,12 +57,12 @@ class TracktTvSeriesAPI {
         .catchError((err) => print(err));
     //TODO save the state of the pagination
     return response
-        .map((model) => TrendingMovies.fromJson(model, movieType: false))
+        .map((model) => Trending.fromJson(model, movieType: false))
         .map((mov) => mov.movie)
         .toList();
   }
 
-  Future<MovieTrackTV> getShowData({slug, extended = true}) async {
+  Future<Show> getShowData({slug, extended = true}) async {
     final parameter = (extended == true) ? '$slug?extended=full' : '$slug';
 
     Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
@@ -79,10 +78,10 @@ class TracktTvSeriesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    return MovieTrackTV.fromJson(response);
+    return Show.fromJson(response);
   }
 
-  Future<List<MovieTrackTV>> getRecommendedShows(
+  Future<List<Show>> getRecommendedShows(
       {String accessToken, page = 0, pageLimit = 10}) async {
     Uri uri =
         Uri.parse(Constants.apiUrl + 'recommendations/shows?limit=$pageLimit');
@@ -105,11 +104,10 @@ class TracktTvSeriesAPI {
           "Can't fetch recomended movies ${response.statusCode}  ${response.body}");
     }
     var resp = json.decode(response.body);
-    return resp.map((model) => MovieTrackTV.fromJson(model)).toList();
+    return resp.map((model) => Show.fromJson(model)).toList();
   }
 
-  Future<List<MovieTrackTV>> getRelatedShows(
-      {String slug, extended = false}) async {
+  Future<List<Show>> getRelatedShows({String slug, extended = false}) async {
     final parameter =
         (extended == true) ? '$slug/related?extended=full' : '$slug/related';
     Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
@@ -124,56 +122,48 @@ class TracktTvSeriesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    return response.map((model) => MovieTrackTV.fromJson(model)).toList();
+    return response.map((model) => Show.fromJson(model)).toList();
   }
 
   Future<List<SeasonTracktv>> getAllSeasonsForShow(
       {String slug, extended = false}) async {
     final parameter =
-    (extended == true) ? '$slug/seasons?extended=full' : '$slug/seasons';
+        (extended == true) ? '$slug/seasons?extended=full' : '$slug/seasons';
     Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
     Iterable response = await client
         .get(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'trakt-api-version': Constants.apiVersionHeaderKey,
-        'trakt-api-key': Constants.apiClientIdHeaderKey
-      },
-    )
+          uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'trakt-api-version': Constants.apiVersionHeaderKey,
+            'trakt-api-key': Constants.apiClientIdHeaderKey
+          },
+        )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     return response.map((model) => SeasonTracktv.fromJson(model)).toList();
   }
 
-  Future<SeasonTracktv> getAllEpisodesOfSeason(
-      {SeasonTracktv seasonTracktv, extended = false}) async {
+  Future<List<Episode>> getAllEpisodesOfSeason(
+      {String slug, int number, extended = false}) async {
     final parameter = (extended == true) ? '?extended=full' : '';
-    var uris = seasonTracktv.episodes.map((episode) =>
-        Uri.parse(Constants.apiUrl +
-            'shows/${seasonTracktv.ids.slug}/seasons/${seasonTracktv
-                .number}/episodes/${episode.number}$parameter'));
+    var uri =
+        Uri.parse(Constants.apiUrl + 'shows/$slug/seasons/$number$parameter');
 
-    var futures = uris.map((uri) async =>
-    await client
+    var response = await client
         .get(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'trakt-api-version': Constants.apiVersionHeaderKey,
-        'trakt-api-key': Constants.apiClientIdHeaderKey
-      },
-    )
-        .then(((resp) => json.decode(resp.body)))
-        .catchError((err) => print(err)));
-    var response = await Future.wait(futures);
-    seasonTracktv.episodes =
-        response.map((model) => Episode.fromJson(model)).toList();
-//todo not like because is mutable
-    return seasonTracktv;
-  }
+          uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'trakt-api-version': Constants.apiVersionHeaderKey,
+            'trakt-api-key': Constants.apiClientIdHeaderKey
+          },
+        )
+        .then((resp) => json.decode(resp.body))
+        .catchError((err) => print(err));
 
-  Future<MovieTrackTV> fillCrewData(MovieTrackTV movieTrackTV) {}
+    return response.map((model) => Episode.fromJson(model)).toList();
+  }
 }
 
 main(List<String> args) async {
