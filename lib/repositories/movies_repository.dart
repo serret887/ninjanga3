@@ -52,14 +52,14 @@ class MoviesRepository {
 
   // database
 
-  Future _fetchRelatedMovies({
+  Future<List<PosterView>> getRelatedMovies({
     String slug,
   }) async {
     final moviesTrackt =
         await tracktTvMovieClient.getRelatedMovies(slug: slug, extended: false);
     var related = await Common.completeMovieDataFromTracktList(
         moviesTrackt, tmdbClient, "related");
-    insertAll(related);
+    return related.map((mov) => mov.getPosterView());
   }
 
   Future _fetchPopularMovies(

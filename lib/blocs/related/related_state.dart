@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
+import 'package:ninjanga3/models/View/poster_view.dart';
 
 @immutable
 abstract class RelatedState extends Equatable {
@@ -18,7 +19,7 @@ class RelatedLoading extends RelatedState {
 }
 
 class RelatedLoaded extends RelatedState {
-  final List<MovieView> movies;
+  final List<PosterView> movies;
 
   RelatedLoaded({this.movies}) : super([movies]);
 

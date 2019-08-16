@@ -20,21 +20,21 @@ class Repository<T extends BaseDb> {
     return DateTime.now().difference(lastRefresh) > Duration(days: 1);
   }
 
-  Future insert(T movie) async =>
-      await _store.record(movie.ids.slug).add(await db, movie.toJson());
+  // Future insert(T movie) async =>
+  //     await _store.record(movie.ids.slug).add(await db, movie.toJson());
 
-  Future insertAll(List<T> movies) async {
-    await (await db).transaction((txn) async {
-      var futures = movies.map((mov) async => await _store
-          .record(mov.ids.slug)
-          .add(txn, mov.toJson())
-          .catchError((error) => print(error)));
-      await Future.wait(futures);
-    });
-  }
+  // Future insertAll(List<T> movies) async {
+  //   await (await db).transaction((txn) async {
+  //     var futures = movies.map((mov) async => await _store
+  //         .record(mov.ids.slug)
+  //         .add(txn, mov.toJson())
+  //         .catchError((error) => print(error)));
+  //     await Future.wait(futures);
+  //   });
+  // }
 
-  Future<List<T>> read([Finder finder]) async {
-    var data = await _store.find(await db, finder: finder);
-    return data.map((mov) => mov.fromJson(mov.value)).toList();
-  }
+  // Future<List<T>> read([Finder finder]) async {
+  //   var data = await _store.find(await db, finder: finder);
+  //   return data.map((mov) => mov.fromJson(mov.value)).toList();
+  // }
 }
