@@ -7,7 +7,7 @@ class HomeFeature extends StatelessWidget {
   HomeFeature({
     Key key,
     this.imageUrl,
-  }) : super(key: key) {}
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

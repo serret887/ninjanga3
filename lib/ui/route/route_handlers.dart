@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ninjanga3/ui/home/home.dart';
 import 'package:ninjanga3/ui/movie_page/movie_details.dart';
 import 'package:ninjanga3/ui/tv_details/tv_show_details.dart';
+import 'package:ninjanga3/ui/video/video.dart';
 
 import 'routes.dart';
 
@@ -33,20 +34,17 @@ var detailRouteHandler = Handler(handlerFunc: (
     return MovieDetails(
       slug: Routes.getDetailRouterSlug(params),
     );
-  }
-  else {
+  } else {
     return TvShowDetails(slug: Routes.getDetailRouterSlug(params));
   }
 });
 
 var trailerRouteHandler = Handler(
-  handlerFunc: (BuildContext context, Map<String, List<String>> params,
-      [dynamic object]) {
-    return Container(
-      child: Center(
-        child: Text("trailer of movie"),
-      ),
-    ); // Video(title: object['title']);
+  handlerFunc: (BuildContext context,
+      Map<String, List<String>> params,) {
+    return Video(
+        title: Routes.getVideoRouterTitle(params),
+        url: Routes.getVideoRouterUrl(params));
   },
 );
 var filterRouteHandler = Handler(
@@ -57,6 +55,5 @@ var filterRouteHandler = Handler(
         child: Text("Retrieve all movie or series depending of the filter"),
       ),
     );
-    ;
   },
 );

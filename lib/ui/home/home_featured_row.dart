@@ -53,6 +53,8 @@ class _HomeFeaturedRowState extends State<HomeFeaturedRow>
         ),
         HomeButtons(
           slug: widget.movies[_currentPage].poster.slug,
+          title: widget.movies[_currentPage].title,
+          trailer: widget.movies[_currentPage].trailer,
         )
       ]),
     ]));

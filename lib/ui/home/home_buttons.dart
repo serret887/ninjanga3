@@ -1,9 +1,17 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:ninjanga3/ui/route/routes.dart';
+
+import '../../service_locator.dart';
 
 class HomeButtons extends StatelessWidget {
   final String slug;
+  final String trailer;
+  final String title;
 
-  const HomeButtons({Key key, this.slug}) : super(key: key);
+  const HomeButtons({Key key, this.slug, this.trailer, this.title})
+      : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,23 +35,25 @@ class HomeButtons extends StatelessWidget {
             onPressed: () => print('mi lista'),
           ),
           RaisedButton(
-            textColor: Colors.black,
-            color: Colors.white,
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.play_arrow),
-                Text(
-                  'Reproducir Trailer',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
+              textColor: Colors.black,
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.play_arrow),
+                  Text(
+                    'Reproducir Trailer',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            onPressed: () {
-              print("I need to show trailer");
-            },
+                ],
+              ),
+              onPressed: () =>
+                  sl.get<Router>().navigateTo(context,
+                    Routes.setVideoRouter(title, trailer),
+                    transition: TransitionType.inFromBottom,
+                    transitionDuration: const Duration(milliseconds: 200),)
           ),
           FlatButton(
             textColor: Colors.white,

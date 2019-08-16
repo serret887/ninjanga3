@@ -47,35 +47,35 @@ class Common {
 
 // end movie
 // show
-  // static Future<SeasonView> retriveShowImagesFromTrackt(
-  //     Season seasonTracktv, TmdbClient tmdbClient, String origin) async {
-  //   var tmdbId = seasonTracktv.ids.tmdb;
-  //   var tmdbImages = await tmdbClient.getImagesForShow(tvId: tmdbId);
-  //   return Common.convertFrom(seasonTracktv, tmdbImages, origin);
-  // }
-
-  // static Future<List<SeasonView>> completeSeasonImagesFromTracktList(
-  //     Iterable<Season> season, TmdbClient tmdbClient, String origin) async {
-  //   var futures = season
-  //       .map((mov) => retriveShowImagesFromTrackt(mov, tmdbClient, origin));
-  //   return Future.wait(futures);
-  // }
-
-  // static Future<SeasonView> completeSeasonImagesFromTrackt(
-  //     Season seasonTrackt, TmdbClient tmdbClient) async {
-  //   var tmdbMovies = await tmdbClient.getImagesForSeason(
-  //       seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
-  //   return Common.convertFrom(seasonTrackt, tmdbMovies);
-  // }
-
-  // static convertFromSeasonToSeasonView(
-  //         Season season, ImagesTmdb tmdb, String origin) =>
-  //     SeasonView(
-  //         backdrop: tmdb.getBestBackdrop(),
-  //         ids: season.ids,
-  //         posterImage: tmdb.getBestPoster(),
-  //         isMovie: true,
-  //         origin: origin);
+//   static Future<SeasonView> retriveShowImagesFromTrackt(
+//       Season seasonTracktv, TmdbClient tmdbClient, String origin) async {
+//     var tmdbId = seasonTracktv.ids.tmdb;
+//     var tmdbImages = await tmdbClient.getImagesForShow(tvId: tmdbId);
+//     return Common.convertFrom(seasonTracktv, tmdbImages, origin);
+//   }
+//
+//   static Future<List<SeasonView>> completeSeasonImagesFromTracktList(
+//       Iterable<Season> season, TmdbClient tmdbClient, String origin) async {
+//     var futures = season
+//         .map((mov) => retriveShowImagesFromTrackt(mov, tmdbClient, origin));
+//     return Future.wait(futures);
+//   }
+//
+//   static Future<SeasonView> completeSeasonImagesFromTrackt(
+//       Season seasonTrackt, TmdbClient tmdbClient) async {
+//     var tmdbMovies = await tmdbClient.getImagesForSeason(
+//         seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
+//     return Common.convertFrom(seasonTrackt, tmdbMovies);
+//   }
+//
+//   static convertFromSeasonToSeasonView(
+//           Season season, ImagesTmdb tmdb, String origin) =>
+//       SeasonView(
+//           backdrop: tmdb.getBestBackdrop(),
+//           ids: season.ids,
+//           posterImage: tmdb.getBestPoster(),
+//           isMovie: true,
+//           origin: origin);
 
   // end show
 }
