@@ -6,7 +6,6 @@ class SeasonView {
   final String title;
   final int year;
   final Ids ids;
-  final String tagline; //TODO put it below the title
   final String overview;
   final String certification;
   final double rating;
@@ -22,7 +21,6 @@ class SeasonView {
       {this.title,
       this.year,
       this.ids,
-      this.tagline,
       this.overview,
       this.certification,
       this.rating,
@@ -47,7 +45,6 @@ class SeasonView {
       title: map['title'],
       year: map['year'],
       ids: Ids.fromJson(map['ids']),
-      tagline: map['tagline'],
       overview: map['overview'],
       certification: map['certification'],
       rating: map['rating'],
@@ -68,7 +65,6 @@ class SeasonView {
       'title': title,
       'year': year,
       'ids': ids.toJson(),
-      'tagline': tagline,
       'overview': overview,
       'certification': certification,
       'rating': rating,

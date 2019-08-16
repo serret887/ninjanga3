@@ -50,112 +50,47 @@ class SeriesRepository {
 
   // database
 
-  Future<List<SeasonView>> getRelatedMovies(
+  Future<List<SeasonView>> getRelatedSeries(
       {String slug, extended = false}) async {
-    final moviesTrackt = await tracktTvMovieClient.getRelatedMovies(
+    final shows = await tracktTvSerieClient.getRelatedShows(
         slug: slug, extended: extended);
-    return await Common.completeMovieDataFromTracktList(
-        moviesTrackt, tmdbClient, "related");
+    return await Common.completeSerieDataFromTracktList(
+        moviesTrackt, tmdbClient);
   }
 
-  Future<List<SeasonView>> getPopularMovies(
+  Future<List<Show>> getPopularShows(
       {int page = 0, int pageLimit = 10, extended: true}) async {
-    if (await _needsRefresh()) {
-      var moviesTrackt = await tracktTvMovieClient.getPopularMoviesList(
-          extended: extended, page: page, pageLimit: pageLimit);
-      var movies = await Common.completeMovieDataFromTracktList(
-          moviesTrackt, tmdbClient, "popular");
-      await insertAll(movies);
-    }
-
-    return await read(Finder(
-      filter: Filter.equals("origin", "popular"),
-      //   sortOrders: [SortOrder('rating')]
-    ));
-  }
-
-  Future<List<SeasonView>> getTrendingMovies(
-      {int page = 0, int pageLimit = 10, extended: true}) async {
-    var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
+    var moviesTrackt = await tracktTvSerieClient.getPopularTvShowList(
         extended: extended, page: page, pageLimit: pageLimit);
-    return await Common.completeMovieDataFromTracktList(
-        moviesTrackt, tmdbClient, "trending");
+    return await Common.completeSerieDataFromTracktList(
+        moviesTrackt, tmdbClient);
   }
 
-  Future<List<SeasonView>> getRecommendedMovies(
+  Future<List<SeasonView>> getTrendingSeries(
+      {int page = 0, int pageLimit = 10, extended: true}) async {
+    var moviesTrackt = await tracktTvSerieClient.getTrendingTvShowList(
+        extended: extended, page: page, pageLimit: pageLimit);
+    return await Common.completeSerieDataFromTracktList(
+        moviesTrackt, tmdbClient);
+  }
+
+  Future<List<SeasonView>> getRecommendedSeries(
       {int page = 0, int pageLimit = 10, extended: false}) async {
     var _accessToken = await authRepo.getAccessToken();
 
-    var moviesTrackt = await tracktTvMovieClient.getRecomendedMovies(
+    var moviesTrackt = await tracktTvSerieClient.getRecommendedShows(
         accessToken: _accessToken, page: page, pageLimit: pageLimit);
     return await Common.completeMovieDataFromTracktList(
-        moviesTrackt, tmdbClient, "recommended");
+        moviesTrackt, tmdbClient);
   }
-
-//
-//  Future<List<SeasonView>> getRelatedSeries(
-//      {String slug, extended = false}) async {
-//    final moviesTrackt = await tracktTvSerieClient.getRelatedShows(
-//        slug: slug, extended: extended);
-//    return await Common.completeSerieDataFromTracktList(
-//        moviesTrackt, tmdbClient);
-//  }
-//
-//  Future<List<Show>> getPopularShows(
-//      {int page = 0, int pageLimit = 10, extended: true}) async {
-//    var moviesTrackt = await tracktTvSerieClient.getPopularTvShowList(
-//        extended: extended, page: page, pageLimit: pageLimit);
-//    return await Common.completeSerieDataFromTracktList(
-//        moviesTrackt, tmdbClient);
-//  }
-//
-//  Future<List<SeasonView>> getTrendingSeries(
-//      {int page = 0, int pageLimit = 10, extended: true}) async {
-//    var moviesTrackt = await tracktTvSerieClient.getTrendingTvShowList(
-//        extended: extended, page: page, pageLimit: pageLimit);
-//    return await Common.completeSerieDataFromTracktList(
-//        moviesTrackt, tmdbClient);
-//  }
-//
-//  Future<List<SeasonView>> getRecommendedSeries(
-//      {int page = 0, int pageLimit = 10, extended: false}) async {
-//    var _accessToken = await authRepo.getAccessToken();
-//
-//    var moviesTrackt = await tracktTvSerieClient.getRecommendedShows(
-//        accessToken: _accessToken, page: page, pageLimit: pageLimit);
-//    return await Common.completeMovieDataFromTracktList(
-//        moviesTrackt, tmdbClient);
-//  }
-
-  Future<List<SeasonView>> getMoviesList(String type) async {
-//    if (type.contains("Popular")) return await getPopularMovies();
-//    if (type == "Trending") return await getTrendingMovies();
-    // if (type == "Recomended for you") return await getRecomendedMovies();
-
-    return await getPopularMovies();
-  }
-
-//
-//  Future<List<SeasonView>> getSeriesList(String type) async {
-//    if (type.contains("Popular")) return await getPopularShows();
-//    if (type.contains("Trending")) return await getTrendingSeries();
-//    // if (type == "Recomended for you") return await getRecomendedMovies();
-//
-//    return await getPopularShows();
-//  }
 
   Future<HomePageModel> getHomePageModel() async {
     if (await _needsRefresh()) {
       var futures = [
-        "Recomended movies for you",
-        "Popular movies",
-        "Trending movies",
-      ].map((type) async => {type: await getMoviesList(type)}).toList();
-//    var futures2 = [
-//      "Recomended shows for you",
-//      "Popular shows",
-//      "Trending shows",
-//    ].map((type) async => {type: await getSeriesList(type)}).toList();
+        "Recomended shows for you",
+        "Popular shows",
+        "Trending shows",
+      ].map((type) async => {type: await getSeriesList(type)}).toList();
 //    var watchingNow = Future.wait(
 //            [getMoviesList("Watching now"), getSeriesList("Watching now")])
 //        .then((val) => {"watching now": val.expand((mov) => mov).toList()})
@@ -170,7 +105,7 @@ class SeriesRepository {
       return HomePageModel(model);
     }
 
-    Future<SeasonView> getMovieDetails(String slug) async {
+    Future<SeasonView> getSeriesDetails(String slug) async {
       var movieTrackt = await tracktTvMovieClient.getMovieData(slug: slug);
       return await Common.completeMovieDataFromTrackt(
           movieTrackt, tmdbClient, "details");

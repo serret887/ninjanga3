@@ -1,17 +1,17 @@
-import 'package:ninjanga3/models/View/movie_view.dart';
+import 'package:ninjanga3/models/View/featured_view.dart';
+import 'package:ninjanga3/models/View/poster_view.dart';
 
 class HomePageModel {
-  final Map<String, List<MovieView>> movies;
+  final Map<String, List<PosterView>> movies;
+  final List<FeaturedView> featuredMovies;
 
-  HomePageModel(
-    this.movies,
-  );
+  HomePageModel(this.movies, this.featuredMovies);
 
-  List<MovieView> getFeaturedMovies() {
-    return movies.values.expand((i) => i).take(10).toList();
+  List<FeaturedView> getFeaturedMovies() {
+    return featuredMovies;
   }
 
-  Iterable<MapEntry<String, List<MovieView>>> getAllMovies() {
+  Iterable<MapEntry<String, List<PosterView>>> getAllMovies() {
     return movies.entries.toList();
   }
 }

@@ -125,7 +125,7 @@ class TracktTvSeriesAPI {
     return response.map((model) => Show.fromJson(model)).toList();
   }
 
-  Future<List<SeasonTracktv>> getAllSeasonsForShow(
+  Future<List<Season>> getAllSeasonsForShow(
       {String slug, extended = false}) async {
     final parameter =
         (extended == true) ? '$slug/seasons?extended=full' : '$slug/seasons';
@@ -141,7 +141,7 @@ class TracktTvSeriesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    return response.map((model) => SeasonTracktv.fromJson(model)).toList();
+    return response.map((model) => Season.fromJson(model)).toList();
   }
 
   Future<List<Episode>> getAllEpisodesOfSeason(
