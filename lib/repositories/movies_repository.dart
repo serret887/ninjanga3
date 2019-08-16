@@ -2,6 +2,7 @@ import 'package:ninjanga3/config/shared_preferences.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_movies.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_series.dart';
+import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/db/movieDb.dart';
@@ -29,7 +30,7 @@ class MoviesRepository {
 
   Future<bool> _needsRefresh() async {
     var lastRefresh = await preferences.getLastRefresh();
-    return DateTime.now().difference(lastRefresh) > Duration(days: 1);
+    return DateTime.now().difference(lastRefresh) > Duration(hours: 6);
   }
 
   Future update(MovieDb movie) async =>
@@ -43,7 +44,7 @@ class MoviesRepository {
       var futures = movies.map((mov) async => await _movieStore
           .record(mov.ids.slug)
           .add(txn, mov.toJson())
-          .catchError((error) => print(error)));
+          .catchError((error) => print('inserting movies in DB - $error')));
       await Future.wait(futures);
     });
   }
@@ -67,56 +68,58 @@ class MoviesRepository {
 
   Future _fetchPopularMovies(
       {int page = 0, int pageLimit = 10, extended: true}) async {
-    if (await _needsRefresh()) {
       var moviesTrackt = await tracktTvMovieClient.getPopularMoviesList(
           extended: extended, page: page, pageLimit: pageLimit);
       var movies = await Common.completeMovieDataFromTracktList(
           moviesTrackt, tmdbClient, "popular");
       await insertAll(movies);
-    }
   }
 
   Future _fetchTrendingMovies(
       {int page = 0, int pageLimit = 10, extended: true}) async {
-    if (await _needsRefresh()) {
       var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
           extended: extended, page: page, pageLimit: pageLimit);
       var movies = await Common.completeMovieDataFromTracktList(
           moviesTrackt, tmdbClient, "trending");
       await insertAll(movies);
-    }
   }
 
-  Future _fetchRecommendedMovies(
-      {int page = 0, int pageLimit = 10, extended: false}) async {
-    var _accessToken = await authRepo.getAccessToken();
-
-    var moviesTrackt = await tracktTvMovieClient.getRecomendedMovies(
-        accessToken: _accessToken, page: page, pageLimit: pageLimit);
-    return await Common.completeMovieDataFromTracktList(
-        moviesTrackt, tmdbClient, "recommended");
-  }
+//  Future _fetchRecommendedMovies(
+//      {int page = 0, int pageLimit = 10, extended: false}) async {
+//    var _accessToken = await authRepo.getAccessToken();
+//
+//    var moviesTrackt = await tracktTvMovieClient.getRecomendedMovies(
+//        accessToken: _accessToken, page: page, pageLimit: pageLimit);
+//    return await Common.completeMovieDataFromTracktList(
+//        moviesTrackt, tmdbClient, "recommended");
+//  }
 
   Future _fetchFeaturesMovies(
       {int page = 0, int pageLimit = 10, extended: true}) async {
-    if (await _needsRefresh()) {
+
       var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
           extended: extended, page: page, pageLimit: pageLimit);
       var movies = await Common.completeMovieDataFromTracktList(
           moviesTrackt, tmdbClient, "featured");
       await insertAll(movies);
-    }
+
   }
 
   Future _fetchMoviesList(String type) async {
-    if (type.contains("Popular")) return await _fetchPopularMovies();
-    if (type.contains("Trending")) return await _fetchTrendingMovies();
-    if (type.contains("Featured")) return await _fetchFeaturesMovies(page: 2);
+    if (await _needsRefresh()) {
+      if (type.contains("Popular")) return await _fetchPopularMovies();
+      if (type.contains("Trending")) return await _fetchTrendingMovies();
+      if (type.contains("Featured")) return await _fetchFeaturesMovies(page: 2);
 //    if (type == "Recomended for you") return await getRecomendedMovies();
-    await _fetchPopularMovies(page: 3);
+      await _fetchPopularMovies(page: 3);
+      preferences.setLastRefresh();
+    } else {
+      print('no needs to fetch featured movies');
+    }
   }
 
   Future<HomePageModel> getHomePageModel() async {
+//    await _movieStore.delete(await db);
     var futures = [
       "Featured",
       "Recomended movies for you",
@@ -129,12 +132,16 @@ class MoviesRepository {
     var featured = await read(Finder(
       filter: Filter.equals("origin", "featured"),
     ));
-    var featuredViews = featured.map((mov) => mov.getFeaturedView());
+    var featuredViews =
+    featured.map<FeaturedView>((mov) => mov.getFeaturedView()).toList();
+
     var movies =
         await read(Finder(filter: Filter.notEquals("origin", "featured")));
-    var posterViews = movies.map((mov) => mov.getPosterView());
 
-    return HomePageModel(posterViews, featuredViews);
+    var posterViews =
+    movies.map<PosterView>((mov) => mov.getPosterView()).toList();
+
+    return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
   }
 
   Future<MovieView> getMovieDetails(String slug) async {

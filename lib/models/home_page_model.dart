@@ -1,17 +1,38 @@
+import "package:collection/collection.dart";
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 
 class HomePageModel {
-  final List<PosterView> movies;
-  final List<FeaturedView> featuredMovies;
+  List<MapEntry<String, List<PosterView>>> _movies;
+  List<FeaturedView> _featuredMovies;
 
-  HomePageModel(this.movies, this.featuredMovies);
 
-  List<FeaturedView> getFeaturedMovies() {
-    return featuredMovies;
+  HomePageModel({List<PosterView> movies, List<FeaturedView> featuredMovies}) {
+    this._movies = groupBy(
+        movies, (mov) => _transformOriginToUIName((mov as PosterView).origin))
+        .entries.toList();
+    this._featuredMovies = featuredMovies;
   }
 
-  List<PosterView> getAllMovies() {
-    return movies;
+  String _transformOriginToUIName(String origin) {
+    switch (origin) {
+      case "popular":
+        return "Popular ";
+      case "trending":
+        return "Trending ";
+      case "recommended":
+        return "Recomended for you";
+      default:
+        return "Other";
+    }
+  }
+
+
+  List<FeaturedView> getFeaturedMovies() {
+    return _featuredMovies;
+  }
+
+  List<MapEntry<String, List<PosterView>>> getAllMovies() {
+    return _movies;
   }
 }

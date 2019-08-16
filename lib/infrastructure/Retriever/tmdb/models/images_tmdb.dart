@@ -26,8 +26,13 @@ class ImagesTmdb {
     if (size == BackdropSize.original) {
       sizeUrl = 'original';
     }
-    return 'https://image.tmdb.org/t/p/$sizeUrl/${this?.backdrops?.first
-        ?.filePath}';
+    try {
+      return 'https://image.tmdb.org/t/p/$sizeUrl/${this?.backdrops?.first
+          ?.filePath}';
+    } catch (e) {
+      print('get backdrop image - $e');
+      return null;
+    }
   }
 
   getBestPoster({PosterSize size = PosterSize.w185}) {
@@ -53,8 +58,13 @@ class ImagesTmdb {
     if (size == PosterSize.original) {
       sizeUrl = 'original';
     }
-    return 'https://image.tmdb.org/t/p/$sizeUrl/${this?.posters?.first
-        ?.filePath}';
+    try {
+      return 'https://image.tmdb.org/t/p/$sizeUrl/${this?.posters?.first
+          ?.filePath}';
+    } catch (e) {
+      print('get poster image - $e');
+      return null;
+    }
   }
 
   ImagesTmdb({this.id, this.backdrops, this.posters});

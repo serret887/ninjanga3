@@ -128,7 +128,7 @@ class TracktTvMoviesAPI {
     return response.map((model) => MovieTrackTV.fromJson(model)).toList();
   }
 
-  Future<MovieTrackTV> fillCrewData(MovieTrackTV movieTrackTV) {}
+// Future<MovieTrackTV> fillCrewData(MovieTrackTV movieTrackTV) {}
 }
 
 main(List<String> args) async {

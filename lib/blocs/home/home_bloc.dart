@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:ninjanga3/models/home_page_model.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
-import 'package:ninjanga3/repositories/series_repository.dart';
 
 import './bloc.dart';
 

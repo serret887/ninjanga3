@@ -5,10 +5,8 @@ import 'package:ninjanga3/ui/components/poster_item.dart';
 
 class MovieScrollRow extends StatelessWidget {
   final List<PosterView> posters;
-  final bool isMovie;
 
-  const MovieScrollRow(
-      {@required Key key, @required this.posters, this.isMovie})
+  const MovieScrollRow({@required Key key, @required this.posters})
       : super(key: key);
 
   @override

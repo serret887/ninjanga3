@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
+import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/home_page_model.dart';
 import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
 
@@ -31,8 +31,8 @@ class HomeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<MovieView> featuredMovies = homePageModel.getFeaturedMovies() ?? [];
-    List<MapEntry<String, List<MovieView>>> allMovieList =
+    var featuredMovies = homePageModel.getFeaturedMovies() ?? [];
+    List<MapEntry<String, List<PosterView>>> allMovieList =
         homePageModel.getAllMovies() ?? [];
     final Size screenSize = MediaQuery.of(context).size;
     return CustomScrollView(slivers: <Widget>[
@@ -68,24 +68,24 @@ class HomeListView extends StatelessWidget {
     ]);
   }
 
-  Widget _buildRowView(MapEntry<String, List<MovieView>> movieList) {
-    var posters = movieList.value.map((mov) => mov.getPosterView()).toList();
+  Widget _buildRowView(MapEntry<String, List<PosterView>> posters) {
     return Column(children: <Widget>[
-      _ListSectionTitleView(movieList: movieList),
+      _ListSectionTitleView(title: posters.key),
       Container(
           height: 140.0,
           child: MovieScrollRow(
-            key: PageStorageKey(movieList.key),
-            posters: posters,
+            key: PageStorageKey(posters.key),
+            posters: posters.value,
+
           )),
     ]);
   }
 }
 
 class _ListSectionTitleView extends StatelessWidget {
-  final MapEntry<String, List<MovieView>> movieList;
+  final String title;
 
-  const _ListSectionTitleView({Key key, @required this.movieList})
+  const _ListSectionTitleView({Key key, @required this.title})
       : super(key: key);
 
   @override
@@ -110,7 +110,7 @@ class _ListSectionTitleView extends StatelessWidget {
         children: <Widget>[
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(movieList.key,
+              child: Text(title,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,

@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
+import 'package:ninjanga3/models/View/featured_view.dart';
 
 import 'home_buttons.dart';
 import 'home_feature.dart';
 import 'home_feature_title.dart';
 
 class HomeFeaturedRow extends StatefulWidget {
-  final List<MovieView> movies;
+  final List<FeaturedView> movies;
 
   const HomeFeaturedRow({Key key, @required this.movies}) : super(key: key);
 
   @override
-  _HomeFeaturedRowState createState() => _HomeFeaturedRowState(this.movies);
+  _HomeFeaturedRowState createState() => _HomeFeaturedRowState();
 }
 
 class _HomeFeaturedRowState extends State<HomeFeaturedRow>
     with AutomaticKeepAliveClientMixin<HomeFeaturedRow> {
-  final List<MovieView> movies;
   int _currentPage = 0;
   static const String _pageStorageKey = "_HomeFeaturedRowState";
 
-  _HomeFeaturedRowState(this.movies);
+  _HomeFeaturedRowState();
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +28,13 @@ class _HomeFeaturedRowState extends State<HomeFeaturedRow>
 
     var pageView = PageView.builder(
       key: PageStorageKey(_pageStorageKey),
-      itemCount: movies.length,
+      itemCount: widget.movies.length,
       controller: pageController,
       itemBuilder: (context, index) {
         return _PageItemView(
-            movie: movies[index], totalPage: movies.length, currentPage: index);
+            movie: widget.movies[index],
+            totalPage: widget.movies.length,
+            currentPage: index);
       },
       onPageChanged: (page) {
         setState(() {
@@ -47,11 +48,11 @@ class _HomeFeaturedRowState extends State<HomeFeaturedRow>
       pageView,
       Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
         HomeFeatureTitle(
-          genres: movies[_currentPage].genres,
-          name: movies[_currentPage].title,
+          genres: widget.movies[_currentPage].genres,
+          name: widget.movies[_currentPage].title,
         ),
         HomeButtons(
-          slug: movies[_currentPage].ids.slug,
+          slug: widget.movies[_currentPage].poster.slug,
         )
       ]),
     ]));
@@ -62,7 +63,7 @@ class _HomeFeaturedRowState extends State<HomeFeaturedRow>
 }
 
 class _PageItemView extends StatelessWidget {
-  final MovieView movie;
+  final FeaturedView movie;
   final int totalPage;
   final int currentPage;
 
@@ -79,7 +80,7 @@ class _PageItemView extends StatelessWidget {
         onTap: () {},
         child: Stack(children: <Widget>[
           HomeFeature(
-            imageUrl: movie.backdrop,
+            imageUrl: movie.getImage(),
           ),
           Align(
               alignment: Alignment.bottomCenter,

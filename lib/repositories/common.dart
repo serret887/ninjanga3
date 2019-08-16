@@ -1,9 +1,6 @@
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/models/images_tmdb.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Movie/movie_trackt_tv.dart';
-import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/season.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
-import 'package:ninjanga3/models/View/seasonView.dart';
 import 'package:ninjanga3/models/db/movieDb.dart';
 
 class Common {
