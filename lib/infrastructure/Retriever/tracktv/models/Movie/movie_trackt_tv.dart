@@ -44,51 +44,7 @@ class MovieTrackTV {
     this.certification,
   });
 
-  factory MovieTrackTV.fromJson(Map<String, dynamic> json) {
-    return MovieTrackTV(
-      title: json['title'],
-      year: json['year'],
-      ids: json['ids'] != null ? new Ids.fromJson(json['ids']) : null,
-      tagline: json['tagline'],
-      overview: json['overview'],
-      released: json['released'],
-      runtime: json['runtime'],
-      country: json['country'],
-      updatedAt: json['updated_at'],
-      trailer: json['trailer'],
-      homepage: json['homepage'],
-      rating: json['rating'],
-      votes: json['votes'],
-      commentCount: json['comment_count'],
-      language: json['language'],
-      availableTranslations: json['available_translations']?.cast<String>(),
-      genres: json['genres']?.cast<String>(),
-      certification: json['certification'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['year'] = this.year;
-    if (this.ids != null) {
-      data['ids'] = this.ids.toJson();
-    }
-    data['tagline'] = this.tagline;
-    data['overview'] = this.overview;
-    data['released'] = this.released;
-    data['runtime'] = this.runtime;
-    data['country'] = this.country;
-    data['updated_at'] = this.updatedAt;
-    data['trailer'] = this.trailer;
-    data['homepage'] = this.homepage;
-    data['rating'] = this.rating;
-    data['votes'] = this.votes;
-    data['comment_count'] = this.commentCount;
-    data['language'] = this.language;
-    data['available_translations'] = this.availableTranslations;
-    data['genres'] = this.genres;
-    data['certification'] = this.certification;
-    return data;
-  }
+  factory MovieTrackTV.fromJson(Map<String, dynamic> json) =>
+      _$MovieTrackTVFromJson(json);
+  Map<String, dynamic> toJson() => _$MovieTrackTVToJson(this);
 }

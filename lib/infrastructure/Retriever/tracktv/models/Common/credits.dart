@@ -1,4 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import 'cast.dart';
+import 'crew.dart';
 part 'credits.g.dart';
 
 @JsonSerializable()
@@ -26,65 +29,6 @@ class Credits {
     if (this.crew != null) {
       data['crew'] = this.crew.toJson();
     }
-    return data;
-  }
-}
-
-class Cast {
-  List<String> characters;
-
-  Cast({
-    this.characters,
-  });
-
-  Cast.fromJson(Map<String, dynamic> json) {
-    characters = json['characters']?.cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['characters'] = this.characters;
-    return data;
-  }
-}
-
-class Crew {
-  List<Directing> directing;
-
-  Crew({this.directing});
-
-  Crew.fromJson(Map<String, dynamic> json) {
-    if (json['directing'] != null) {
-      directing = new List<Directing>();
-      json['directing'].forEach((v) {
-        directing.add(new Directing.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.directing != null) {
-      data['directing'] = this.directing.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Directing {
-  List<String> jobs;
-
-  Directing({
-    this.jobs,
-  });
-
-  Directing.fromJson(Map<String, dynamic> json) {
-    jobs = json['jobs']?.cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['jobs'] = this.jobs;
     return data;
   }
 }

@@ -32,6 +32,9 @@ class MoviesRepository {
     return DateTime.now().difference(lastRefresh) > Duration(days: 1);
   }
 
+  Future update(MovieDb movie) async =>
+      await _movieStore.record(movie.ids.slug).update(await db, movie.toJson());
+
   Future insert(MovieDb movie) async =>
       await _movieStore.record(movie.ids.slug).add(await db, movie.toJson());
 
@@ -71,11 +74,6 @@ class MoviesRepository {
           moviesTrackt, tmdbClient, "popular");
       await insertAll(movies);
     }
-
-    // return await read(Finder(
-    //   filter: Filter.equals("origin", "popular"),
-    //   //   sortOrders: [SortOrder('rating')]
-    // ));
   }
 
   Future _fetchTrendingMovies(
@@ -85,13 +83,8 @@ class MoviesRepository {
           extended: extended, page: page, pageLimit: pageLimit);
       var movies = await Common.completeMovieDataFromTracktList(
           moviesTrackt, tmdbClient, "trending");
-      insertAll(movies);
+      await insertAll(movies);
     }
-
-    return await read(Finder(
-      filter: Filter.equals("origin", "popular"),
-      //   sortOrders: [SortOrder('rating')]
-    ));
   }
 
   Future _fetchRecommendedMovies(
@@ -111,7 +104,7 @@ class MoviesRepository {
           extended: extended, page: page, pageLimit: pageLimit);
       var movies = await Common.completeMovieDataFromTracktList(
           moviesTrackt, tmdbClient, "featured");
-      insertAll(movies);
+      await insertAll(movies);
     }
   }
 

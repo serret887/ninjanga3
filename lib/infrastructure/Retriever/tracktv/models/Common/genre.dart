@@ -8,15 +8,6 @@ class Genre {
 
   Genre({this.name, this.slug});
 
-  Genre.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    slug = json['slug'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['slug'] = this.slug;
-    return data;
-  }
+  factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
+  Map<String, dynamic> toJson() => _$GenreToJson(this);
 }

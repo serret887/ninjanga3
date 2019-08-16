@@ -12,21 +12,7 @@ class Trending {
 
   Trending({this.watchers, this.movie, this.serie});
 
-  factory Trending.fromJson(
-    Map<String, dynamic> json,
-  ) {
-    return new Trending(
-        watchers: json['watchers'],
-        movie:
-            json['movie'] != null ? MovieTrackTV.fromJson(json['movie']) : null,
-        serie: json['show'] != null ? Show.fromJson(json['show']) : null);
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['watchers'] = this.watchers;
-    data['movie'] = this.movie?.toJson();
-    data['show'] = this.serie?.toJson();
-    return data;
-  }
+  factory Trending.fromJson(Map<String, dynamic> json) =>
+      _$TrendingFromJson(json);
+  Map<String, dynamic> toJson() => _$TrendingToJson(this);
 }

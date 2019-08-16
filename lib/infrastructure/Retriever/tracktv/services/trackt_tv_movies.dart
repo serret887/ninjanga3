@@ -56,13 +56,10 @@ class TracktTvMoviesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    List<MovieTrackTV> a = response
-        .map((model) => Trending.fromJson(model))
-        .map<MovieTrackTV>((mov) => mov.movie)
-        .toList();
+
     return response
         .map((model) => Trending.fromJson(model))
-        .map<MovieTrackTV>((mov) => mov.movie)
+        .map<MovieTrackTV>((mov) => mov.movie as MovieTrackTV)
         .toList();
   }
 
