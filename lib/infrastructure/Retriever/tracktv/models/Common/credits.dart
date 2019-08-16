@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'credits.g.dart';
+
+@JsonSerializable()
 class Credits {
   List<Cast> cast;
   Crew crew;

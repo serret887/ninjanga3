@@ -57,8 +57,8 @@ class TracktTvSeriesAPI {
         .catchError((err) => print(err));
     //TODO save the state of the pagination
     return response
-        .map((model) => Trending.fromJson(model, movieType: false))
-        .map((mov) => mov.movie)
+        .map((model) => Trending.fromJson(model))
+        .map((mov) => mov.serie)
         .toList();
   }
 

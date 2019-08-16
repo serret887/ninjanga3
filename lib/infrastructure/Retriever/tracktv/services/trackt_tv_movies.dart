@@ -44,7 +44,7 @@ class TracktTvMoviesAPI {
         : 'movies/trending?page=$page&limit=$pageLimit';
 
     Uri uri = Uri.parse(Constants.apiUrl + '$parameter');
-    Iterable response = await client
+    var response = await client
         .get(
           uri,
           headers: {
@@ -56,9 +56,13 @@ class TracktTvMoviesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
+    List<MovieTrackTV> a = response
+        .map((model) => Trending.fromJson(model))
+        .map<MovieTrackTV>((mov) => mov.movie)
+        .toList();
     return response
         .map((model) => Trending.fromJson(model))
-        .map((mov) => mov.movie)
+        .map<MovieTrackTV>((mov) => mov.movie)
         .toList();
   }
 

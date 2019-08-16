@@ -1,5 +1,9 @@
 import '../Common/id.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'movie_trackt_tv.g.dart';
+
+@JsonSerializable()
 class MovieTrackTV {
   String title;
   int year;
@@ -40,25 +44,27 @@ class MovieTrackTV {
     this.certification,
   });
 
-  MovieTrackTV.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    year = json['year'];
-    ids = json['ids'] != null ? new Ids.fromJson(json['ids']) : null;
-    tagline = json['tagline'];
-    overview = json['overview'];
-    released = json['released'];
-    runtime = json['runtime'];
-    country = json['country'];
-    updatedAt = json['updated_at'];
-    trailer = json['trailer'];
-    homepage = json['homepage'];
-    rating = json['rating'];
-    votes = json['votes'];
-    commentCount = json['comment_count'];
-    language = json['language'];
-    availableTranslations = json['available_translations']?.cast<String>();
-    genres = json['genres']?.cast<String>();
-    certification = json['certification'];
+  factory MovieTrackTV.fromJson(Map<String, dynamic> json) {
+    return MovieTrackTV(
+      title: json['title'],
+      year: json['year'],
+      ids: json['ids'] != null ? new Ids.fromJson(json['ids']) : null,
+      tagline: json['tagline'],
+      overview: json['overview'],
+      released: json['released'],
+      runtime: json['runtime'],
+      country: json['country'],
+      updatedAt: json['updated_at'],
+      trailer: json['trailer'],
+      homepage: json['homepage'],
+      rating: json['rating'],
+      votes: json['votes'],
+      commentCount: json['comment_count'],
+      language: json['language'],
+      availableTranslations: json['available_translations']?.cast<String>(),
+      genres: json['genres']?.cast<String>(),
+      certification: json['certification'],
+    );
   }
 
   Map<String, dynamic> toJson() {

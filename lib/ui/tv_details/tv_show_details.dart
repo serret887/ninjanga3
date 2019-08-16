@@ -51,8 +51,8 @@ class _TvShowDetailsState extends State<TvShowDetails> {
                         if (state is MovieDetailsStateLoaded) {
                           final movie = state.data;
                           return TvShowDetailsAppBar(
-                            season: movie,
-                          );
+                              // season: movie,
+                              );
                         } else {
                           return Container();
                         }

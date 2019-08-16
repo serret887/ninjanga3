@@ -105,7 +105,7 @@ class MoviesRepository {
   }
 
   Future _fetchFeaturesMovies(
-      {int page = 0, int pageLimit = 10, extended: false}) async {
+      {int page = 0, int pageLimit = 10, extended: true}) async {
     if (await _needsRefresh()) {
       var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
           extended: extended, page: page, pageLimit: pageLimit);

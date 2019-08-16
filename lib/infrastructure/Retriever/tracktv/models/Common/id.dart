@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'id.g.dart';
+
+@JsonSerializable()
 class Ids {
   int trakt;
   String slug;

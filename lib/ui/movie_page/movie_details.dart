@@ -38,7 +38,6 @@ class _MovieDetailsState extends State<MovieDetails> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: CustomScrollView(
@@ -83,7 +82,7 @@ class _MovieDetailsState extends State<MovieDetails> {
       if (state.movies.isEmpty) {
         return Container();
       }
-      var posters = state.movies.map((mov) => mov.getPosterView()).toList();
+      var posters = state.movies;
       return Column(children: <Widget>[
         Align(
           alignment: Alignment.topLeft,

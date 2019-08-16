@@ -9,9 +9,11 @@ import './bloc.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final MoviesRepository repo;
-  final SeriesRepository seriesRepo;
+  // final SeriesRepository seriesRepo;
 
-  HomeBloc(this.repo, this.seriesRepo);
+  HomeBloc(
+    this.repo,
+  ); // this.seriesRepo);
 
   @override
   HomeState get initialState => InitialHomeState();

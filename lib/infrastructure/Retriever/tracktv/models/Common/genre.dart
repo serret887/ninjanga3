@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'genre.g.dart';
+
+@JsonSerializable()
 class Genre {
   String name;
   String slug;

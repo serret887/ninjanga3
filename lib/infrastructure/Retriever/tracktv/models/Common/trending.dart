@@ -1,31 +1,32 @@
 import '../Movie/movie_trackt_tv.dart';
 import '../TvShow/show.dart';
 
-class Trending<T> {
+import 'package:json_annotation/json_annotation.dart';
+part 'trending.g.dart';
+
+@JsonSerializable()
+class Trending {
   int watchers;
-  T movie;
+  MovieTrackTV movie;
+  Show serie;
 
-  Trending({this.watchers});
+  Trending({this.watchers, this.movie, this.serie});
 
-  Trending.fromJson(Map<String, dynamic> json, {bool movieType = true}) {
-    watchers = json['watchers'];
-    var type = "";
-    if (T is MovieTrackTV) {
-      movie =
-          json['movie'] != null ? MovieTrackTV.fromJson(json[type]) as T : null;
-    } else if (T is Show) {
-      movie = json['show'] != null ? Show.fromJson(json[type]) as T : null;
-    }
+  factory Trending.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return new Trending(
+        watchers: json['watchers'],
+        movie:
+            json['movie'] != null ? MovieTrackTV.fromJson(json['movie']) : null,
+        serie: json['show'] != null ? Show.fromJson(json['show']) : null);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['watchers'] = this.watchers;
-    if (this.movie is MovieTrackTV) {
-      data['movie'] = (this.movie as MovieTrackTV).toJson();
-    } else if (this.movie is Show) {
-      data['show'] = (this.movie as Show).toJson();
-    }
+    data['movie'] = this.movie?.toJson();
+    data['show'] = this.serie?.toJson();
     return data;
   }
 }
