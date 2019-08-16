@@ -1,9 +1,10 @@
 import 'package:ninjanga3/config/shared_preferences.dart';
+import 'package:ninjanga3/models/db/baseDb.dart';
 import 'package:sembast/sembast.dart';
 
 import 'authentication_repository.dart';
 
-class Repository<T> {
+class Repository<T extends BaseDb> {
   final AuthenticationRepository authRepo;
   final Preferences preferences;
   final Future<Database> db;
@@ -20,11 +21,11 @@ class Repository<T> {
   }
 
   Future insert(T movie) async =>
-      await _movieStore.record(movie.ids.slug).add(await db, movie.toJson());
+      await _store.record(movie.ids.slug).add(await db, movie.toJson());
 
-  Future insertAll(List<MovieView> movies) async {
+  Future insertAll(List<T> movies) async {
     await (await db).transaction((txn) async {
-      var futures = movies.map((mov) async => await _movieStore
+      var futures = movies.map((mov) async => await _store
           .record(mov.ids.slug)
           .add(txn, mov.toJson())
           .catchError((error) => print(error)));
@@ -32,8 +33,8 @@ class Repository<T> {
     });
   }
 
-  Future<List<MovieView>> read([Finder finder]) async {
-    var data = await _movieStore.find(await db, finder: finder);
-    return data.map((mov) => MovieView.fromJson(mov.value)).toList();
+  Future<List<T>> read([Finder finder]) async {
+    var data = await _store.find(await db, finder: finder);
+    return data.map((mov) => mov.fromJson(mov.value)).toList();
   }
 }

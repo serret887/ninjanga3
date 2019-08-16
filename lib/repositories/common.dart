@@ -4,11 +4,12 @@ import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Movie/movie_tr
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/season.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/seasonView.dart';
+import 'package:ninjanga3/models/db/movieDb.dart';
 
 class Common {
-  static MovieView convertFrom(
+  static MovieDb convertFrom(
       MovieTrackTV trackt, ImagesTmdb tmdb, String origin) {
-    return MovieView(
+    return MovieDb(
         backdrop: tmdb.getBestBackdrop(),
         certification: trackt.certification,
         genres: trackt.genres,
@@ -21,7 +22,6 @@ class Common {
         trailer: trackt.trailer,
         year: trackt.year,
         duration: trackt.runtime,
-        isMovie: true,
         origin: origin);
   }
 
@@ -32,7 +32,7 @@ class Common {
     return await Future.wait(futures);
   }
 
-  static Future<List<MovieView>> completeMovieDataFromTracktList(
+  static Future<List<MovieDb>> completeMovieDataFromTracktList(
       Iterable<MovieTrackTV> moviesTrackt,
       TmdbClient tmdbClient,
       String origin) async {
@@ -41,7 +41,7 @@ class Common {
     return Future.wait(futures);
   }
 
-  static Future<MovieView> completeMovieDataFromTrackt(
+  static Future<MovieDb> completeMovieDataFromTrackt(
       MovieTrackTV movieTrackt, TmdbClient tmdbClient, String origin) async {
     var tmdbId = movieTrackt.ids.tmdb;
     var tmdbMovies = await tmdbClient.getImagesFromMovieId(tmdbId);
@@ -50,35 +50,35 @@ class Common {
 
 // end movie
 // show
-  static Future<SeasonView> retriveShowImagesFromTrackt(
-      Season seasonTracktv, TmdbClient tmdbClient, String origin) async {
-    var tmdbId = seasonTracktv.ids.tmdb;
-    var tmdbImages = await tmdbClient.getImagesForShow(tvId: tmdbId);
-    return Common.convertFrom(seasonTracktv, tmdbImages, origin);
-  }
+  // static Future<SeasonView> retriveShowImagesFromTrackt(
+  //     Season seasonTracktv, TmdbClient tmdbClient, String origin) async {
+  //   var tmdbId = seasonTracktv.ids.tmdb;
+  //   var tmdbImages = await tmdbClient.getImagesForShow(tvId: tmdbId);
+  //   return Common.convertFrom(seasonTracktv, tmdbImages, origin);
+  // }
 
-  static Future<List<SeasonView>> completeSeasonImagesFromTracktList(
-      Iterable<Season> season, TmdbClient tmdbClient, String origin) async {
-    var futures = season
-        .map((mov) => retriveShowImagesFromTrackt(mov, tmdbClient, origin));
-    return Future.wait(futures);
-  }
+  // static Future<List<SeasonView>> completeSeasonImagesFromTracktList(
+  //     Iterable<Season> season, TmdbClient tmdbClient, String origin) async {
+  //   var futures = season
+  //       .map((mov) => retriveShowImagesFromTrackt(mov, tmdbClient, origin));
+  //   return Future.wait(futures);
+  // }
 
-  static Future<SeasonView> completeSeasonImagesFromTrackt(
-      Season seasonTrackt, TmdbClient tmdbClient) async {
-    var tmdbMovies = await tmdbClient.getImagesForSeason(
-        seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
-    return Common.convertFrom(seasonTrackt, tmdbMovies);
-  }
+  // static Future<SeasonView> completeSeasonImagesFromTrackt(
+  //     Season seasonTrackt, TmdbClient tmdbClient) async {
+  //   var tmdbMovies = await tmdbClient.getImagesForSeason(
+  //       seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
+  //   return Common.convertFrom(seasonTrackt, tmdbMovies);
+  // }
 
-  static convertFromSeasonToSeasonView(
-          Season season, ImagesTmdb tmdb, String origin) =>
-      SeasonView(
-          backdrop: tmdb.getBestBackdrop(),
-          ids: season.ids,
-          posterImage: tmdb.getBestPoster(),
-          isMovie: true,
-          origin: origin);
+  // static convertFromSeasonToSeasonView(
+  //         Season season, ImagesTmdb tmdb, String origin) =>
+  //     SeasonView(
+  //         backdrop: tmdb.getBestBackdrop(),
+  //         ids: season.ids,
+  //         posterImage: tmdb.getBestPoster(),
+  //         isMovie: true,
+  //         origin: origin);
 
   // end show
 }

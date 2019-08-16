@@ -24,9 +24,7 @@ dependencies:
   equatable: ^0.4.0
   flutter_bloc: ^0.20.1
   flutter_secure_storage: ^3.2.1+1
-  font_awesome_flutter: ^8.5.0
   get_it: ^1.0.3+2
-  flutter_svg: ^0.14.0
   clipboard_manager: ^0.0.1
   bloc: ^0.14.4
   cached_network_image: ^1.1.1
@@ -42,6 +40,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  json_serializable: ^3.2.0
+  build_runner:
+  mockito:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

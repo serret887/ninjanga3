@@ -17,8 +17,7 @@ class TmdbClient extends ResilientService {
     var response = await getWithResilience(uri);
     if (response.statusCode != 200) {
       print(
-          'retrieving images for movie status code: ${response
-              .statusCode} - url:$uri');
+          'retrieving images for movie status code: ${response.statusCode} - url:$uri');
       return ImagesTmdb();
     }
     //TODO when the response is not 200
@@ -29,13 +28,11 @@ class TmdbClient extends ResilientService {
     int tvId,
   }) async {
     var uri = Uri.parse(
-        'https://api.themoviedb.org/3/tv/$tvId/images?api_key=${Constants
-            .tmdbKey}');
+        'https://api.themoviedb.org/3/tv/$tvId/images?api_key=${Constants.tmdbKey}');
     var response = await getWithResilience(uri);
     if (response.statusCode != 200) {
       print(
-          'retrieving images for episode status code: ${response
-              .statusCode} - url:$uri');
+          'retrieving images for episode status code: ${response.statusCode} - url:$uri');
       return ImagesTmdb();
     }
     //TODO when the response is not 200
@@ -45,13 +42,11 @@ class TmdbClient extends ResilientService {
   Future<ImagesTmdb> getImagesForEpisode(
       {int tvId, int seasonNumber, int episodeId}) async {
     var uri = Uri.parse(
-        'https://api.themoviedb.org/3/tv/$tvId/season/$seasonNumber/episode/$episodeId/images?api_key=${Constants
-            .tmdbKey}');
+        'https://api.themoviedb.org/3/tv/$tvId/season/$seasonNumber/episode/$episodeId/images?api_key=${Constants.tmdbKey}');
     var response = await getWithResilience(uri);
     if (response.statusCode != 200) {
       print(
-          'retrieving images for episode status code: ${response
-              .statusCode} - url:$uri');
+          'retrieving images for episode status code: ${response.statusCode} - url:$uri');
       return ImagesTmdb();
     }
     //TODO when the response is not 200
@@ -60,13 +55,11 @@ class TmdbClient extends ResilientService {
 
   Future<ImagesTmdb> getImagesForSeason({int tvId, int seasonNumber}) async {
     var uri = Uri.parse(
-        'https://api.themoviedb.org/3/tv/$tvId/season/$seasonNumber/images?api_key=${Constants
-            .tmdbKey}');
+        'https://api.themoviedb.org/3/tv/$tvId/season/$seasonNumber/images?api_key=${Constants.tmdbKey}');
     var response = await getWithResilience(uri);
     if (response.statusCode != 200) {
       print(
-          'retrieving images for season status code: ${response
-              .statusCode} - url:$uri');
+          'retrieving images for season status code: ${response.statusCode} - url:$uri');
       return ImagesTmdb();
     }
     //TODO when the response is not 200

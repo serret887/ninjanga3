@@ -19,27 +19,26 @@ class MovieTrackTV {
   List<String> availableTranslations;
   List<String> genres;
   String certification;
-  int airedEpisodes;
-  MovieTrackTV(
-      {this.title,
-      this.year,
-      this.ids,
-      this.tagline,
-      this.overview,
-      this.released,
-      this.runtime,
-      this.country,
-      this.updatedAt,
-      this.trailer,
-      this.homepage,
-      this.rating,
-      this.votes,
-      this.commentCount,
-      this.language,
-      this.availableTranslations,
-      this.genres,
-      this.certification,
-      this.airedEpisodes});
+  MovieTrackTV({
+    this.title,
+    this.year,
+    this.ids,
+    this.tagline,
+    this.overview,
+    this.released,
+    this.runtime,
+    this.country,
+    this.updatedAt,
+    this.trailer,
+    this.homepage,
+    this.rating,
+    this.votes,
+    this.commentCount,
+    this.language,
+    this.availableTranslations,
+    this.genres,
+    this.certification,
+  });
 
   MovieTrackTV.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -60,7 +59,6 @@ class MovieTrackTV {
     availableTranslations = json['available_translations']?.cast<String>();
     genres = json['genres']?.cast<String>();
     certification = json['certification'];
-    airedEpisodes = json['aired_episodes'];
   }
 
   Map<String, dynamic> toJson() {
