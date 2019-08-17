@@ -64,7 +64,14 @@ class HomeButtons extends StatelessWidget {
                 ),
               ],
             ),
-            onPressed: () => print("Go to the show page detail"),
+            onPressed: () =>
+                sl.get<Router>().navigateTo(
+                  context,
+                  Routes.setDetailRouter(slug, isMovie),
+                  transition: TransitionType.nativeModal,
+                  transitionDuration: const Duration(milliseconds: 200),
+                )
+            ,
           ),
         ],
       ),

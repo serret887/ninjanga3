@@ -42,12 +42,14 @@ void setup() {
   sl.registerSingleton(TracktTvMoviesAPI(sl.get<http.Client>()));
   sl.registerSingleton(TracktTvSeriesAPI(sl.get<http.Client>()));
   sl.registerSingleton<MoviesRepository>(MoviesRepository(
-      sl.get<TracktTvMoviesAPI>(),
-      sl.get<TracktTvSeriesAPI>(),
-      sl.get<TmdbClient>(),
-      sl.get<AuthenticationRepository>(),
-      sl.get<Preferences>(),
-      sl.get<Future<Database>>()));
+      tracktTvMovieClient: sl.get<TracktTvMoviesAPI>(),
+      tracktTvSerieClient: sl.get<TracktTvSeriesAPI>(),
+      tmdbClient: sl.get<TmdbClient>(),
+      authRepo: sl.get<AuthenticationRepository>(),
+      preferences: sl.get<Preferences>(),
+      db: sl.get<Future<Database>>(),
+      storeName: "movies"
+  ));
   sl.registerSingleton<HomeBloc>(HomeBloc(sl.get<MoviesRepository>()));
 
 // end home

@@ -23,7 +23,7 @@ class HomePageModel {
       case "recommended":
         return "Recomended for you";
       default:
-        return "Other";
+        return "Other that you have check before";
     }
   }
 

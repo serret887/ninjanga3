@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
@@ -10,9 +9,6 @@ part 'movieDb.g.dart';
 
 @JsonSerializable()
 class MovieDb extends BaseDb {
-  final String title;
-  final int year;
-  final Ids ids;
   final String tagline; //TODO put it below the title
   final String overview;
   final String certification;
@@ -24,9 +20,9 @@ class MovieDb extends BaseDb {
   final int duration;
   final String origin;
 
-  MovieDb({this.title,
-    this.year,
-    this.ids,
+  MovieDb({title,
+    year,
+    ids,
     this.tagline,
     this.overview,
     this.certification,
