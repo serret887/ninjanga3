@@ -1,21 +1,22 @@
 import '../Common/id.dart';
 
 class Episode {
-  int season;
-  int number;
-  String title;
-  Ids ids;
-  int numberAbs;
-  String overview;
-  double rating;
-  int votes;
-  int commentCount;
-  DateTime firstAired;
-  DateTime updatedAt;
-  List<String> availableTranslations;
-  int runtime;
+  final int season;
+  final int number;
+  final String title;
+  final Ids ids;
+  final int numberAbs;
+  final String overview;
+  final double rating;
+  final int votes;
+  final int commentCount;
+  final DateTime firstAired;
+  final DateTime updatedAt;
+  final List<String> availableTranslations;
+  final int runtime;
+  final String poster;
 
-  Episode({
+  Episode({this.poster,
     this.season,
     this.number,
     this.title,

@@ -1,16 +1,16 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
-  final key = 'refresh_key';
+  final baseKey = 'refresh_key';
 
-  Future<DateTime> getLastRefresh() async {
+  Future<DateTime> getLastRefresh(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    final value = prefs.getString(key) ?? "";
+    final value = prefs.getString('$baseKey/$key') ?? "";
     return value == "" ? DateTime(1900) : DateTime.parse(value);
   }
 
-  setLastRefresh() async {
+  setLastRefresh(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, DateTime.now().toIso8601String());
+    prefs.setString('$baseKey/$key', DateTime.now().toIso8601String());
   }
 }

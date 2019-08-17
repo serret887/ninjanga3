@@ -10,20 +10,14 @@ part 'show_db.g.dart';
 
 @JsonSerializable()
 class ShowDb extends BaseDb {
-  final DateTime firstAired;
   final String overview;
   final Airs airs;
   final int runtime;
   final String certification;
   final String network;
-  final String country;
   final String trailer;
-  final String homepage;
   final String status;
   final double rating;
-  final int votes;
-  final int commentCount;
-  final DateTime updatedAt;
   final String language;
   final List<String> availableTranslations;
   final List<String> genres;
@@ -31,25 +25,20 @@ class ShowDb extends BaseDb {
   final String origin;
   final String posterImage;
   final String backdrop;
+  final int duration;
 
   ShowDb({
     title,
     year,
     ids,
     this.overview,
-    this.firstAired,
     this.airs,
     this.runtime,
     this.certification,
     this.network,
-    this.country,
     this.trailer,
-    this.homepage,
     this.status,
     this.rating,
-    this.votes,
-    this.commentCount,
-    this.updatedAt,
     this.language,
     this.availableTranslations,
     this.genres,
@@ -57,6 +46,7 @@ class ShowDb extends BaseDb {
     this.backdrop,
     this.posterImage,
     this.origin,
+    this.duration
   }) : super(title, year, ids);
 
   PosterView getPosterView() => PosterView(

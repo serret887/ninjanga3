@@ -2,10 +2,10 @@ import 'package:ninjanga3/config/shared_preferences.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_series.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/View/video_view.dart';
 import 'package:ninjanga3/models/db/movieDb.dart';
+import 'package:ninjanga3/models/db/show_db.dart';
 import 'package:ninjanga3/models/home_page_model.dart';
 import 'package:ninjanga3/repositories/common.dart';
 import 'package:sembast/sembast.dart';
@@ -13,7 +13,7 @@ import 'package:sembast/sembast.dart';
 import 'authentication_repository.dart';
 import 'repository.dart';
 
-class ShowRepository extends Repository<MovieDb> {
+class ShowRepository extends Repository<ShowDb> {
   final TracktTvSeriesAPI tracktTvSerieClient;
   final TmdbClient tmdbClient;
 
@@ -39,7 +39,7 @@ class ShowRepository extends Repository<MovieDb> {
   }) async {
     final moviesTrackt =
         await tracktTvSerieClient.getRelatedShows(slug: slug, extended: false);
-    final related = await Common.completeMovieDataFromTracktList(
+    final related = await Common.completeShowsImagesFromTracktList(
         moviesTrackt, tmdbClient, "related");
     List<PosterView> posters =
         related.map<PosterView>((mov) => mov.getPosterView()).toList();
@@ -50,7 +50,7 @@ class ShowRepository extends Repository<MovieDb> {
       {int page = 0, int pageLimit = 10, extended: true}) async {
     var moviesTrackt = await tracktTvSerieClient.getPopularTvShowList(
         extended: extended, page: page, pageLimit: pageLimit);
-    var movies = await Common.completeMovieDataFromTracktList(
+    var movies = await Common.completeShowsImagesFromTracktList(
         moviesTrackt, tmdbClient, "popular");
     await insertAll(movies);
   }
@@ -59,7 +59,7 @@ class ShowRepository extends Repository<MovieDb> {
       {int page = 0, int pageLimit = 10, extended: true}) async {
     var moviesTrackt = await tracktTvSerieClient.getTrendingTvShowList(
         extended: extended, page: page, pageLimit: pageLimit);
-    var movies = await Common.completeMovieDataFromTracktList(
+    var movies = await Common.completeShowsImagesFromTracktList(
         moviesTrackt, tmdbClient, "trending");
     await insertAll(movies);
   }
@@ -68,32 +68,32 @@ class ShowRepository extends Repository<MovieDb> {
       {int page = 0, int pageLimit = 10, extended: true}) async {
     var moviesTrackt = await tracktTvSerieClient.getTrendingTvShowList(
         extended: extended, page: page, pageLimit: pageLimit);
-    var movies = await Common.completeMovieDataFromTracktList(
+    var movies = await Common.completeShowsImagesFromTracktList(
         moviesTrackt, tmdbClient, "featured");
     await insertAll(movies);
   }
 
-  Future _fetchMoviesList(String type) async {
+  Future _fetchShowList(String type) async {
     if (await needsRefresh()) {
       if (type.contains("Popular")) return await _fetchPopularShows();
       if (type.contains("Trending")) return await _fetchTrendingShows();
       if (type.contains("Featured")) return await _fetchFeaturesShows(page: 2);
 //    if (type == "Recomended for you") return await getRecomendedMovies();
       await _fetchPopularShows(page: 3);
-      preferences.setLastRefresh();
+      await setRefresh();
     } else {
       print('no needs to fetch featured movies');
     }
   }
 
   Future<HomePageModel> getHomePageModel() async {
-//    await _movieStore.delete(await db);
+    await store.delete(await db);
     var futures = [
       "Featured",
       "Recomended movies for you",
       "Popular movies",
       "Trending movies",
-    ].map((type) async => {type: await _fetchMoviesList(type)}).toList();
+    ].map((type) async => {type: await _fetchShowList(type)}).toList();
 
     await Future.wait(futures);
 
@@ -112,16 +112,16 @@ class ShowRepository extends Repository<MovieDb> {
     return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
   }
 
-  Future<VideoView> getVideoView({String slug}) async {
+  Future<VideoView> getTrailerVideoView({String slug}) async {
     var movie = await store.record(slug).get(await db);
-    return MovieDb.fromJson(movie).getTrailerVideo();
+    return ShowDb.fromJson(movie).getTrailerVideo();
   }
 
-  Future<MovieView> getMovieDetails(String slug) async {
-    var movieTrackt = await tracktTvSerieClient.getShowData(slug: slug);
-    var movie = await Common.completeMovieDataFromTrackt(
-        movieTrackt, tmdbClient, "details");
-    await insert(movie);
-    return movie.getMovieView();
-  }
+//  Future<MovieView> getMovieDetails(String slug) async {
+//    var movieTrackt = await tracktTvSerieClient.getShowData(slug: slug);
+//    var movie = await Common.completeMovieDataFromTrackt(
+//        movieTrackt, tmdbClient, "details");
+//    await insert(movie);
+//    return movie.getMovieView();
+//  }
 }

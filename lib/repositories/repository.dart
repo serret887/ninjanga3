@@ -8,16 +8,20 @@ class Repository<T extends BaseDb> {
   final AuthenticationRepository authRepo;
   final Preferences preferences;
   final Future<Database> db;
-
+  final String storeName;
   StoreRef<String, Map<String, dynamic>> store;
 
-  Repository(this.authRepo, this.preferences, this.db, storeName) {
+  Repository(this.authRepo, this.preferences, this.db, this.storeName) {
     store = stringMapStoreFactory.store(storeName);
   }
 
   Future<bool> needsRefresh() async {
-    var lastRefresh = await preferences.getLastRefresh();
+    var lastRefresh = await preferences.getLastRefresh(storeName);
     return DateTime.now().difference(lastRefresh) > Duration(days: 1);
+  }
+
+  Future setRefresh() async {
+    await preferences.setLastRefresh(storeName);
   }
 
   Future insert(T movie) async =>

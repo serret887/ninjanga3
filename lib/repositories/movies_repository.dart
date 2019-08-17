@@ -1,7 +1,6 @@
 import 'package:ninjanga3/config/shared_preferences.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_movies.dart';
-import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_series.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
@@ -16,7 +15,6 @@ import 'repository.dart';
 
 class MoviesRepository extends Repository<MovieDb> {
   final TracktTvMoviesAPI tracktTvMovieClient;
-  final TracktTvSeriesAPI tracktTvSerieClient;
   final TmdbClient tmdbClient;
 
 
@@ -25,7 +23,6 @@ class MoviesRepository extends Repository<MovieDb> {
     Future<Database> db,
     storeName,
     this.tracktTvMovieClient,
-    this.tracktTvSerieClient,
     this.tmdbClient})
       : super(authRepo, preferences, db, storeName);
 
@@ -95,7 +92,7 @@ class MoviesRepository extends Repository<MovieDb> {
       if (type.contains("Featured")) return await _fetchFeaturesMovies(page: 2);
 //    if (type == "Recomended for you") return await getRecomendedMovies();
       await _fetchPopularMovies(page: 3);
-      preferences.setLastRefresh();
+      await setRefresh();
     } else {
       print('no needs to fetch featured movies');
     }

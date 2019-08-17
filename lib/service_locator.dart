@@ -14,6 +14,7 @@ import 'config/database.dart';
 import 'config/shared_preferences.dart';
 import 'infrastructure/Retriever/tracktv/services/oauth_device.dart';
 import 'repositories/authentication_repository.dart';
+import 'repositories/show_repository.dart';
 import 'ui/route/routes.dart';
 
 GetIt sl = new GetIt();
@@ -43,14 +44,24 @@ void setup() {
   sl.registerSingleton(TracktTvSeriesAPI(sl.get<http.Client>()));
   sl.registerSingleton<MoviesRepository>(MoviesRepository(
       tracktTvMovieClient: sl.get<TracktTvMoviesAPI>(),
-      tracktTvSerieClient: sl.get<TracktTvSeriesAPI>(),
       tmdbClient: sl.get<TmdbClient>(),
       authRepo: sl.get<AuthenticationRepository>(),
       preferences: sl.get<Preferences>(),
       db: sl.get<Future<Database>>(),
       storeName: "movies"
   ));
-  sl.registerSingleton<HomeBloc>(HomeBloc(sl.get<MoviesRepository>()));
+  sl.registerSingleton<ShowRepository>(ShowRepository(
+      tracktTvSerieClient: sl.get<TracktTvSeriesAPI>(),
+      tmdbClient: sl.get<TmdbClient>(),
+      authRepo: sl.get<AuthenticationRepository>(),
+      preferences: sl.get<Preferences>(),
+      db: sl.get<Future<Database>>(),
+      storeName: "series"
+  ));
+  sl.registerSingleton<HomeBloc>(HomeBloc(
+    sl.get<MoviesRepository>(),
+    sl.get<ShowRepository>(),
+  ));
 
 // end home
 
