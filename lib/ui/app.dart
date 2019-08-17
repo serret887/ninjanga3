@@ -20,7 +20,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    sl.get<HomeBloc>().dispatch(FetchHomePage());
+
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
         .copyWith(statusBarColor: Colors.transparent));
@@ -39,6 +39,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
 
   Widget _buildGateKeeper(AuthenticationState state) {
     if (state is AuthenticationAuthenticated) {
+      sl.get<HomeBloc>().dispatch(FetchHomePage());
       return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         bottomNavigationBar: TabBar(

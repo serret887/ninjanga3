@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/airs.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
@@ -10,6 +11,9 @@ part 'show_db.g.dart';
 
 @JsonSerializable()
 class ShowDb extends BaseDb {
+  final String title;
+  final int year;
+  final Ids ids;
   final String overview;
   final Airs airs;
   final int runtime;
@@ -28,9 +32,9 @@ class ShowDb extends BaseDb {
   final int duration;
 
   ShowDb({
-    title,
-    year,
-    ids,
+    this.title,
+    this.year,
+    this.ids,
     this.overview,
     this.airs,
     this.runtime,
