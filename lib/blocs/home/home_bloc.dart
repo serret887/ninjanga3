@@ -24,7 +24,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is FetchHomePage) {
       yield HomeLoading();
       try {
-        final HomePageModel homePageModel = await movieRepo.getHomePageModel();
+        final HomePageModel homePageModel = await showRepo.getHomePageModel();
         yield HomeLoaded(model: homePageModel);
       } catch (e) {
         print(e);

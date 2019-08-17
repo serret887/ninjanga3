@@ -56,9 +56,17 @@ class TracktTvSeriesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
+
+    var c = response
+        .map((model) => Trending.fromJson(model)).toList()
+    ;
+    var a = response
+        .map((model) => Trending.fromJson(model))
+        .map<Show>((mov) => mov.serie)
+        .toList();
     return response
         .map((model) => Trending.fromJson(model))
-        .map((mov) => mov.serie)
+        .map<Show>((mov) => mov.serie)
         .toList();
   }
 

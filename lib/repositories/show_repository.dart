@@ -4,7 +4,6 @@ import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_se
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/View/video_view.dart';
-import 'package:ninjanga3/models/db/movieDb.dart';
 import 'package:ninjanga3/models/db/show_db.dart';
 import 'package:ninjanga3/models/home_page_model.dart';
 import 'package:ninjanga3/repositories/common.dart';
@@ -26,9 +25,9 @@ class ShowRepository extends Repository<ShowDb> {
       this.tmdbClient})
       : super(authRepo, preferences, db, storeName);
 
-  Future<List<MovieDb>> read([Finder finder]) async {
+  Future<List<ShowDb>> read([Finder finder]) async {
     var data = await store.find(await db, finder: finder);
-    return data.map((mov) => MovieDb.fromJson(mov.value)).toList();
+    return data.map((mov) => ShowDb.fromJson(mov.value)).toList();
   }
 
 //
@@ -74,15 +73,15 @@ class ShowRepository extends Repository<ShowDb> {
   }
 
   Future _fetchShowList(String type) async {
-    if (await needsRefresh()) {
+    if (true) { //await needsRefresh()) {
       if (type.contains("Popular")) return await _fetchPopularShows();
       if (type.contains("Trending")) return await _fetchTrendingShows();
       if (type.contains("Featured")) return await _fetchFeaturesShows(page: 2);
 //    if (type == "Recomended for you") return await getRecomendedMovies();
       await _fetchPopularShows(page: 3);
-      await setRefresh();
+
     } else {
-      print('no needs to fetch featured movies');
+      print('no needs to fetch series');
     }
   }
 
@@ -90,9 +89,9 @@ class ShowRepository extends Repository<ShowDb> {
     await store.delete(await db);
     var futures = [
       "Featured",
-      "Recomended movies for you",
-      "Popular movies",
-      "Trending movies",
+//      "Recomended movies for you",
+//      "Popular movies",
+//      "Trending movies",
     ].map((type) async => {type: await _fetchShowList(type)}).toList();
 
     await Future.wait(futures);
@@ -108,7 +107,7 @@ class ShowRepository extends Repository<ShowDb> {
 
     var posterViews =
         movies.map<PosterView>((mov) => mov.getPosterView()).toList();
-
+    await setRefresh();
     return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
   }
 
