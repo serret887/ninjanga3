@@ -62,11 +62,11 @@ class TracktTvSeriesAPI {
     ;
     var a = response
         .map((model) => Trending.fromJson(model))
-        .map<Show>((mov) => mov.serie)
+        .map<Show>((mov) => mov.show)
         .toList();
     return response
         .map((model) => Trending.fromJson(model))
-        .map<Show>((mov) => mov.serie)
+        .map<Show>((mov) => mov.show)
         .toList();
   }
 
