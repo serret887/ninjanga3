@@ -7,6 +7,7 @@ import 'package:ninjanga3/blocs/video/bloc.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
 import 'package:ninjanga3/ui/components/alert_dispatcher.dart';
 import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../service_locator.dart';
 import 'player_control.dart';
@@ -41,6 +42,10 @@ class _VideoState extends State<Video> {
     ));
     super.initState();
     autoHide();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
 
   @override
@@ -82,32 +87,49 @@ class _VideoState extends State<Video> {
         bloc: _videoBloc,
         builder: (_, VideoState state) {
           if (state is VideoLoaded) {
-            vcontroller = VideoPlayerController.network(state.video.url);
-            return Scaffold(
-              backgroundColor: Colors.black,
-              body: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  PlayerLifeCycle(
-                    controller: vcontroller,
-                    childBuilder: (BuildContext context,
-                        VideoPlayerController controller) =>
-                        AspectRatio(
-                          aspectRatio: aspectRatio,
-                          child: VideoPlayer(vcontroller),
-                        ),
-                  ),
-                  GestureDetector(
-                    child: PlayerControl(
-                      controller: vcontroller,
-                      visible: controlVisible,
-                      title: state.video.title,
+            if (state.video.url.contains("youtube")) {
+              var videoId = YoutubePlayer.convertUrlToId(state.video.url)
+                  ?? state.video.url.split("=")[1];
+              return Scaffold(
+                  backgroundColor: Colors.black,
+                  body: YoutubePlayer(
+                    context: context,
+                    inFullScreen: true,
+                    videoId: videoId,
+                    flags: YoutubePlayerFlags(
+                      autoPlay: true,
+
+                      showVideoProgressIndicator: true,
                     ),
-                    onTap: handlerGesture,
-                  ),
-                ],
-              ),
-            );
+                  ));
+            } else {
+              vcontroller = VideoPlayerController.network(state.video.url);
+              return Scaffold(
+                backgroundColor: Colors.black,
+                body: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    PlayerLifeCycle(
+                      controller: vcontroller,
+                      childBuilder: (BuildContext context,
+                          VideoPlayerController controller) =>
+                          AspectRatio(
+                            aspectRatio: aspectRatio,
+                            child: VideoPlayer(vcontroller),
+                          ),
+                    ),
+                    GestureDetector(
+                      child: PlayerControl(
+                        controller: vcontroller,
+                        visible: controlVisible,
+                        title: state.video.title,
+                      ),
+                      onTap: handlerGesture,
+                    ),
+                  ],
+                ),
+              );
+            }
           } else if (state is VideoError) {
             return AlertDispather(
               dispatch: () =>

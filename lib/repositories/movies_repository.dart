@@ -62,27 +62,29 @@ class MoviesRepository {
   }) async {
     final moviesTrackt =
         await tracktTvMovieClient.getRelatedMovies(slug: slug, extended: false);
-    var related = await Common.completeMovieDataFromTracktList(
+    final related = await Common.completeMovieDataFromTracktList(
         moviesTrackt, tmdbClient, "related");
-    return related.map((mov) => mov.getPosterView());
+    List<PosterView> posters =
+    related.map<PosterView>((mov) => mov.getPosterView()).toList();
+    return posters.toList();
   }
 
   Future _fetchPopularMovies(
       {int page = 0, int pageLimit = 10, extended: true}) async {
-      var moviesTrackt = await tracktTvMovieClient.getPopularMoviesList(
-          extended: extended, page: page, pageLimit: pageLimit);
-      var movies = await Common.completeMovieDataFromTracktList(
-          moviesTrackt, tmdbClient, "popular");
-      await insertAll(movies);
+    var moviesTrackt = await tracktTvMovieClient.getPopularMoviesList(
+        extended: extended, page: page, pageLimit: pageLimit);
+    var movies = await Common.completeMovieDataFromTracktList(
+        moviesTrackt, tmdbClient, "popular");
+    await insertAll(movies);
   }
 
   Future _fetchTrendingMovies(
       {int page = 0, int pageLimit = 10, extended: true}) async {
-      var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
-          extended: extended, page: page, pageLimit: pageLimit);
-      var movies = await Common.completeMovieDataFromTracktList(
-          moviesTrackt, tmdbClient, "trending");
-      await insertAll(movies);
+    var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
+        extended: extended, page: page, pageLimit: pageLimit);
+    var movies = await Common.completeMovieDataFromTracktList(
+        moviesTrackt, tmdbClient, "trending");
+    await insertAll(movies);
   }
 
 //  Future _fetchRecommendedMovies(
@@ -97,13 +99,11 @@ class MoviesRepository {
 
   Future _fetchFeaturesMovies(
       {int page = 0, int pageLimit = 10, extended: true}) async {
-
-      var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
-          extended: extended, page: page, pageLimit: pageLimit);
-      var movies = await Common.completeMovieDataFromTracktList(
-          moviesTrackt, tmdbClient, "featured");
-      await insertAll(movies);
-
+    var moviesTrackt = await tracktTvMovieClient.getTrendingMoviesList(
+        extended: extended, page: page, pageLimit: pageLimit);
+    var movies = await Common.completeMovieDataFromTracktList(
+        moviesTrackt, tmdbClient, "featured");
+    await insertAll(movies);
   }
 
   Future _fetchMoviesList(String type) async {
@@ -149,7 +149,6 @@ class MoviesRepository {
     var movie = await _movieStore.record(slug).get(await db);
     return MovieDb.fromJson(movie).getTrailerVideo();
   }
-
 
   Future<MovieView> getMovieDetails(String slug) async {
     var movieTrackt = await tracktTvMovieClient.getMovieData(slug: slug);

@@ -95,7 +95,9 @@ class _MovieDetailsState extends State<MovieDetails> {
         Container(
             margin: EdgeInsets.only(top: 20),
             height: 200,
-            child: MovieScrollRow(posters: posters, key: UniqueKey()))
+            child: MovieScrollRow(
+                posters: posters,
+                key: UniqueKey()))
       ]);
     }
 
