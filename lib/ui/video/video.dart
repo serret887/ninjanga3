@@ -2,16 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ninjanga3/blocs/video/bloc.dart';
+import 'package:ninjanga3/repositories/movies_repository.dart';
+import 'package:ninjanga3/ui/components/alert_dispatcher.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../service_locator.dart';
 import 'player_control.dart';
 import 'player_lifecycle.dart';
 
 class Video extends StatefulWidget {
-  final String title;
-  final String url;
+  final String slug;
+  final bool isMovie;
 
-  const Video({Key key, this.title, this.url}) : super(key: key);
+  const Video({Key key, this.slug, this.isMovie}) : super(key: key);
 
   @override
   _VideoState createState() => _VideoState();
@@ -21,11 +26,16 @@ class _VideoState extends State<Video> {
   VideoPlayerController vcontroller;
   bool controlVisible;
   Timer timer;
+  String trailerUrl;
+  String title;
+  VideoBloc _videoBloc;
 
   @override
-  void initState() {
+  initState() {
+    var repo = sl.get<MoviesRepository>();
+    _videoBloc = VideoBloc(repository: repo, slug: widget.slug);
+    _videoBloc.dispatch(FetchVideoTrailerMoviesEvent());
     controlVisible = true;
-    vcontroller = VideoPlayerController.network(widget.url);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       statusBarColor: Colors.transparent,
     ));
@@ -68,30 +78,44 @@ class _VideoState extends State<Video> {
   @override
   Widget build(BuildContext context) {
     final aspectRatio = 0.75;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          PlayerLifeCycle(
-            controller: vcontroller,
-            childBuilder:
-                (BuildContext context, VideoPlayerController controller) =>
-                    AspectRatio(
-              aspectRatio: aspectRatio,
-              child: VideoPlayer(vcontroller),
-            ),
-          ),
-          GestureDetector(
-            child: PlayerControl(
-              controller: vcontroller,
-              visible: controlVisible,
-              title: widget.title,
-            ),
-            onTap: handlerGesture,
-          ),
-        ],
-      ),
-    );
+    return BlocBuilder(
+        bloc: _videoBloc,
+        builder: (_, VideoState state) {
+          if (state is VideoLoaded) {
+            vcontroller = VideoPlayerController.network(state.video.url);
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  PlayerLifeCycle(
+                    controller: vcontroller,
+                    childBuilder: (BuildContext context,
+                        VideoPlayerController controller) =>
+                        AspectRatio(
+                          aspectRatio: aspectRatio,
+                          child: VideoPlayer(vcontroller),
+                        ),
+                  ),
+                  GestureDetector(
+                    child: PlayerControl(
+                      controller: vcontroller,
+                      visible: controlVisible,
+                      title: state.video.title,
+                    ),
+                    onTap: handlerGesture,
+                  ),
+                ],
+              ),
+            );
+          } else if (state is VideoError) {
+            return AlertDispather(
+              dispatch: () =>
+                  _videoBloc.dispatch(FetchVideoTrailerMoviesEvent()),
+            );
+          }
+
+          return Center(child: CircularProgressIndicator());
+        });
   }
 }

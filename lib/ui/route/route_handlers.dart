@@ -30,21 +30,22 @@ var detailRouteHandler = Handler(handlerFunc: (
   Map<String, List<String>> params,
 ) {
   print(params);
-  if (Routes.getDetailRouterIsMovie(params) == true) {
+  if (Routes.getRouterIsMovie(params) == true) {
     return MovieDetails(
-      slug: Routes.getDetailRouterSlug(params),
+      slug: Routes.getRouterSlug(params),
     );
   } else {
-    return TvShowDetails(slug: Routes.getDetailRouterSlug(params));
+    return TvShowDetails(slug: Routes.getRouterSlug(params));
   }
 });
 
 var trailerRouteHandler = Handler(
   handlerFunc: (BuildContext context,
       Map<String, List<String>> params,) {
+
     return Video(
-        title: Routes.getVideoRouterTitle(params),
-        url: Routes.getVideoRouterUrl(params));
+        slug: Routes.getRouterSlug(params),
+        isMovie: Routes.getRouterIsMovie(params));
   },
 );
 var filterRouteHandler = Handler(

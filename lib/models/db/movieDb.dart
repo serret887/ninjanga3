@@ -3,6 +3,7 @@ import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
+import 'package:ninjanga3/models/View/video_view.dart';
 import 'package:ninjanga3/models/db/baseDb.dart';
 
 part 'movieDb.g.dart';
@@ -60,8 +61,10 @@ class MovieDb extends BaseDb {
       slug: this.ids.slug,
       rating: this.rating,
       isMovie: true,
-      origin: this.origin
-  );
+      origin: this.origin);
+
+  VideoView getTrailerVideo() =>
+      VideoView(title: this.title, url: this.trailer);
 
   FeaturedView getFeaturedView() =>
       FeaturedView(

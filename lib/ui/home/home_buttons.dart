@@ -6,11 +6,9 @@ import '../../service_locator.dart';
 
 class HomeButtons extends StatelessWidget {
   final String slug;
-  final String trailer;
-  final String title;
+  final bool isMovie;
 
-  const HomeButtons({Key key, this.slug, this.trailer, this.title})
-      : super(key: key);
+  const HomeButtons({Key key, this.slug, this.isMovie}) : super(key: key);
 
 
   @override
@@ -51,7 +49,7 @@ class HomeButtons extends StatelessWidget {
               ),
               onPressed: () =>
                   sl.get<Router>().navigateTo(context,
-                    Routes.setVideoRouter(title, trailer),
+                    Routes.setVideoRouter(slug, isMovie),
                     transition: TransitionType.inFromBottom,
                     transitionDuration: const Duration(milliseconds: 200),)
           ),

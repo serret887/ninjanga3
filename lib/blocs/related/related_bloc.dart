@@ -20,7 +20,6 @@ class RelatedBloc extends Bloc<RelatedEvent, RelatedState> {
   ) async* {
     if (event is FetchRelatedMoviesEvent) {
       yield RelatedLoading();
-
       try {
         final movies = await repository.getRelatedMovies(slug: id);
         yield RelatedLoaded(movies: movies);

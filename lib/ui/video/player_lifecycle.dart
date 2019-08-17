@@ -23,7 +23,8 @@ class _PlayerLifeCycleState extends State<PlayerLifeCycle> {
     super.initState();
     controller.addListener(() {
       if (controller.value.hasError) {
-        print(controller.value.errorDescription);
+        print(
+            "Error in the video player - ${controller.value.errorDescription}");
       }
     });
     controller.initialize();

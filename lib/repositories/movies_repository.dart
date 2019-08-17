@@ -5,6 +5,7 @@ import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_se
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
+import 'package:ninjanga3/models/View/video_view.dart';
 import 'package:ninjanga3/models/db/movieDb.dart';
 import 'package:ninjanga3/models/home_page_model.dart';
 import 'package:ninjanga3/repositories/common.dart';
@@ -143,6 +144,12 @@ class MoviesRepository {
 
     return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
   }
+
+  Future<VideoView> getVideoView({String slug}) async {
+    var movie = await _movieStore.record(slug).get(await db);
+    return MovieDb.fromJson(movie).getTrailerVideo();
+  }
+
 
   Future<MovieView> getMovieDetails(String slug) async {
     var movieTrackt = await tracktTvMovieClient.getMovieData(slug: slug);

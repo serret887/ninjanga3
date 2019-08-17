@@ -8,7 +8,7 @@ class Routes {
   static String summary = '/summary';
   static String detail = '/detail/:isMovie/:slug';
   static String filter = '/filter';
-  static String video = '/video/:title:url';
+  static String video = '/video/:isMovie/:slug';
 
   //  detail route
   static String setDetailRouter(String slug, bool isMovie) {
@@ -16,29 +16,22 @@ class Routes {
     return '$route$isMovie/$slug';
   }
 
-  static String getDetailRouterSlug(Map<String, List<String>> params) {
+  static String getRouterSlug(Map<String, List<String>> params) {
     return params['slug'][0];
   }
 
-  static bool getDetailRouterIsMovie(Map<String, List<dynamic>> params) {
+  static bool getRouterIsMovie(Map<String, List<dynamic>> params) {
     return toBool(params['isMovie'][0]);
   }
 
   //  end detail route
 
   //  video route
-  static String setVideoRouter(String title, String url) {
+  static String setVideoRouter(String slug, bool isMovie) {
     final route = video.split(':')[0];
-    return '$route$title/$url';
+    return '$route$isMovie/$slug';
   }
 
-  static String getVideoRouterTitle(Map<String, List<String>> params) {
-    return params['title'][0];
-  }
-
-  static String getVideoRouterUrl(Map<String, List<dynamic>> params) {
-    return params['url'][0];
-  }
 
   //  end video  route
 
