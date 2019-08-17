@@ -67,31 +67,31 @@ class ShowRepository extends Repository<ShowDb> {
       {int page = 0, int pageLimit = 10, extended: true}) async {
     var moviesTrackt = await tracktTvSerieClient.getTrendingTvShowList(
         extended: extended, page: page, pageLimit: pageLimit);
+
     var movies = await Common.completeShowsImagesFromTracktList(
         moviesTrackt, tmdbClient, "featured");
     await insertAll(movies);
   }
 
   Future _fetchShowList(String type) async {
-    if (true) { //await needsRefresh()) {
+    if (true) { //(await needsRefresh()) {
       if (type.contains("Popular")) return await _fetchPopularShows();
       if (type.contains("Trending")) return await _fetchTrendingShows();
       if (type.contains("Featured")) return await _fetchFeaturesShows(page: 2);
 //    if (type == "Recomended for you") return await getRecomendedMovies();
       await _fetchPopularShows(page: 3);
-
+      await setRefresh();
     } else {
       print('no needs to fetch series');
     }
   }
 
   Future<HomePageModel> getHomePageModel() async {
-    await store.delete(await db);
     var futures = [
       "Featured",
-//      "Recomended movies for you",
-//      "Popular movies",
-//      "Trending movies",
+      "Recomended movies for you",
+      "Popular movies",
+      "Trending movies",
     ].map((type) async => {type: await _fetchShowList(type)}).toList();
 
     await Future.wait(futures);
@@ -107,7 +107,7 @@ class ShowRepository extends Repository<ShowDb> {
 
     var posterViews =
         movies.map<PosterView>((mov) => mov.getPosterView()).toList();
-    await setRefresh();
+
     return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
   }
 
@@ -116,11 +116,16 @@ class ShowRepository extends Repository<ShowDb> {
     return ShowDb.fromJson(movie).getTrailerVideo();
   }
 
-//  Future<MovieView> getMovieDetails(String slug) async {
-//    var movieTrackt = await tracktTvSerieClient.getShowData(slug: slug);
-//    var movie = await Common.completeMovieDataFromTrackt(
-//        movieTrackt, tmdbClient, "details");
-//    await insert(movie);
-//    return movie.getMovieView();
-//  }
+  Future<ShowDb> getShowDetails(String slug) async {
+    var show = await store.record(slug).get(await db);
+
+    if (show != null)
+      return ShowDb.fromJson(show);
+
+    var showTrackt = await tracktTvSerieClient.getShowData(slug: slug);
+    var movie = await Common.completeShowsImagesFromTracktList(
+        [showTrackt], tmdbClient, "details");
+    await insert(movie.first);
+    return movie.first;
+  }
 }

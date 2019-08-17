@@ -24,6 +24,7 @@ class Show {
   List<String> availableTranslations;
   List<String> genres;
   int airedEpisodes;
+  int seasonAmount;
 
   Show({
     this.title,

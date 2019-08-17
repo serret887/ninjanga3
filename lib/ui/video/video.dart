@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/video/bloc.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
+import 'package:ninjanga3/repositories/show_repository.dart';
 import 'package:ninjanga3/ui/components/alert_dispatcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -33,8 +34,11 @@ class _VideoState extends State<Video> {
 
   @override
   initState() {
-    var repo = sl.get<MoviesRepository>();
-    _videoBloc = VideoBloc(repository: repo, slug: widget.slug);
+    _videoBloc = VideoBloc(
+        isMovie: widget.isMovie,
+        showRepository: sl.get<ShowRepository>(),
+        repository: sl.get<MoviesRepository>(),
+        slug: widget.slug);
     _videoBloc.dispatch(FetchVideoTrailerMoviesEvent());
     controlVisible = true;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(

@@ -30,6 +30,7 @@ class ShowDb extends BaseDb {
   final String posterImage;
   final String backdrop;
   final int duration;
+  int seasonAmount;
 
   ShowDb({
     this.title,
@@ -58,7 +59,7 @@ class ShowDb extends BaseDb {
       posterImage: this.posterImage,
       slug: this.ids.slug,
       rating: this.rating,
-      isMovie: true,
+      isMovie: false,
       origin: this.origin);
 
   VideoView getTrailerVideo() =>

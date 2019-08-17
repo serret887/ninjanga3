@@ -6,7 +6,10 @@ abstract class SeasonDetailsEvent extends Equatable {
   SeasonDetailsEvent([List props = const <dynamic>[]]) : super(props);
 }
 
-class SeasonDetailsEventFetch extends SeasonDetailsEvent {
+class SeasonDetailsFetchEvent extends SeasonDetailsEvent {
+  final int number;
+
+  SeasonDetailsFetchEvent({this.number});
   @override
-  String toString() => 'MovieDetailsEventFetch';
+  String toString() => 'SeasonDetailsFetchEvent ';
 }

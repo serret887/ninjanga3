@@ -15,16 +15,7 @@ var rootHandler = Handler(
     return Home();
   },
 );
-var summaryRouteHandler = Handler(
-  handlerFunc: (BuildContext context, Map<String, List<String>> params,
-      [dynamic object]) {
-    return Container(
-      child: Center(
-        child: Text("summary of movie"),
-      ),
-    ); //Summary();;
-  },
-);
+
 var detailRouteHandler = Handler(handlerFunc: (
   BuildContext context,
   Map<String, List<String>> params,

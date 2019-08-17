@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ninjanga3/blocs/movie_details/bloc.dart';
-import 'package:ninjanga3/repositories/movies_repository.dart';
+import 'package:ninjanga3/blocs/season_details/bloc.dart';
+import 'package:ninjanga3/repositories/season_repository.dart';
+import 'package:ninjanga3/repositories/show_repository.dart';
 
 import '../../service_locator.dart';
 import 'tv_show_details_app_bar.dart';
@@ -19,17 +20,17 @@ class TvShowDetails extends StatefulWidget {
 }
 
 class _TvShowDetailsState extends State<TvShowDetails> {
-  String get movieSlug => widget.slug;
-  MovieDetailsBloc _movieDetailsBloc;
-
+  String get slug => widget.slug;
+  SeasonDetailsBloc _seasonDetailsBloc;
   @override
   void initState() {
     super.initState();
 
-    var repo = sl.get<MoviesRepository>();
-
-    _movieDetailsBloc = MovieDetailsBloc(movieSlug, repo);
-    _movieDetailsBloc.dispatch(MovieDetailsEventFetch());
+    var repo = sl.get<ShowRepository>();
+    var seasonRepo = sl.get<SeasonRepository>();
+    _seasonDetailsBloc =
+        SeasonDetailsBloc(slug: slug, seasonRepo: seasonRepo, showRepo: repo);
+    _seasonDetailsBloc.dispatch(SeasonDetailsFetchEvent(number: 1));
   }
 
   @override
@@ -46,13 +47,14 @@ class _TvShowDetailsState extends State<TvShowDetails> {
                 collapseMode: CollapseMode.pin,
                 background: Container(
                   child: BlocBuilder(
-                      bloc: _movieDetailsBloc,
+                      bloc: _seasonDetailsBloc,
                       builder: (context, state) {
-                        if (state is MovieDetailsStateLoaded) {
-                          final movie = state.data;
+                        if (state is SeasonDetailsStateLoaded) {
                           return TvShowDetailsAppBar(
-                              // season: movie,
+                            season: state.data,
                               );
+                        } else if (state is SeasonDetailsStateLoading) {
+                          return Container(child: CircularProgressIndicator(),);
                         } else {
                           return Container();
                         }

@@ -96,7 +96,7 @@ class Common {
 
     return SeasonDb(
         backdrop: tmdbImagesSeason.getBestBackdrop(),
-        episodes: episodes,
+        episodes: episodes.toSet(),
         ids: seasonTrackt.ids,
         number: seasonTrackt.number,
         posterImage: tmdbImagesSeason.getBestPoster());

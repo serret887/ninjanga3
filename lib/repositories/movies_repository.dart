@@ -99,7 +99,6 @@ class MoviesRepository extends Repository<MovieDb> {
   }
 
   Future<HomePageModel> getHomePageModel() async {
-//    await _movieStore.delete(await db);
     var futures = [
       "Featured",
       "Recomended movies for you",
@@ -125,7 +124,7 @@ class MoviesRepository extends Repository<MovieDb> {
     return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
   }
 
-  Future<VideoView> getVideoView({String slug}) async {
+  Future<VideoView> getTrailerVideoView({String slug}) async {
     var movie = await store.record(slug).get(await db);
     return MovieDb.fromJson(movie).getTrailerVideo();
   }

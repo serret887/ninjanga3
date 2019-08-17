@@ -1,6 +1,8 @@
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
+import 'package:ninjanga3/models/db/season_db.dart';
+import 'package:ninjanga3/models/db/show_db.dart';
 
-import 'poster_view.dart';
+import 'episode_poster_view.dart';
 
 class SeasonView {
   final String title;
@@ -14,67 +16,41 @@ class SeasonView {
   final String posterImage;
   final String backdrop;
   final int duration;
-  final bool isMovie;
-  final String origin;
+  final List<EpisodePosterView> episodesPosterView;
+  final int seasonAmount;
 
-  SeasonView(
-      {this.title,
-      this.year,
-      this.ids,
-      this.overview,
-      this.certification,
-      this.rating,
-      this.trailer,
-      this.genres,
-      this.posterImage,
-      this.backdrop,
-      this.duration,
-      this.isMovie,
-      this.origin});
+  SeasonView({
+    this.seasonAmount,
+    this.title,
+    this.year,
+    this.ids,
+    this.overview,
+    this.certification,
+    this.rating,
+    this.trailer,
+    this.genres,
+    this.posterImage,
+    this.backdrop,
+    this.duration,
+    this.episodesPosterView,
+  });
 
-  PosterView getPosterView() {
-    return PosterView(
-        posterImage: this.posterImage,
-        slug: this.ids.slug,
-        rating: this.rating,
-        isMovie: this.isMovie);
-  }
-
-  static SeasonView fromJson(Map<String, dynamic> map) {
-    return SeasonView(
-      title: map['title'],
-      year: map['year'],
-      ids: Ids.fromJson(map['ids']),
-      overview: map['overview'],
-      certification: map['certification'],
-      rating: map['rating'],
-      trailer: map['trailer'],
-      genres: List<String>.from(
-        map['genres'].map((x) => x),
-      ),
-      posterImage: map['posterImage'],
-      backdrop: map['backdrop'],
-      duration: map['duration'],
-      origin: map['origin'],
-      isMovie: map['isMovie'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'year': year,
-      'ids': ids.toJson(),
-      'overview': overview,
-      'certification': certification,
-      'rating': rating,
-      'trailer': trailer,
-      'genres': List<dynamic>.from(genres.map((x) => x)),
-      'posterImage': posterImage,
-      'backdrop': backdrop,
-      'duration': duration,
-      'origin': origin,
-      'isMovie': isMovie,
-    };
-  }
+  factory SeasonView.fromDb(ShowDb show, SeasonDb season) =>
+      SeasonView(
+        overview: show.overview,
+        title: show.title,
+        posterImage: show.posterImage,
+        ids: season.ids,
+        genres: show.genres,
+        backdrop: show.backdrop,
+        certification: show.certification,
+        duration: show.duration,
+        episodesPosterView: season.episodes
+            .map<EpisodePosterView>((e) => e.getEpisodePosterView())
+            .toList(),
+        rating: show.rating,
+        trailer: show.trailer,
+        year: show.year,
+        seasonAmount: show.seasonAmount,
+      );
 }

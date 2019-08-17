@@ -1,10 +1,12 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
+import 'package:ninjanga3/models/View/episode_poster_view.dart';
 
 part 'episode_db.g.dart';
 
 @JsonSerializable()
-class EpisodeDb {
+class EpisodeDb extends Equatable {
   final int season;
   final int number;
   final String title;
@@ -37,7 +39,32 @@ class EpisodeDb {
     this.updatedAt,
     this.availableTranslations,
     this.runtime,
-  });
+  }) : super([
+    posterImage,
+    backdrop,
+    season,
+    number,
+    title,
+    ids,
+    numberAbs,
+    overview,
+    rating,
+    votes,
+    commentCount,
+    firstAired,
+    updatedAt,
+    availableTranslations,
+    runtime,
+  ]);
+
+  EpisodePosterView getEpisodePosterView() {
+    return EpisodePosterView(
+        number: number,
+        title: title,
+        overview: overview,
+        poster: backdrop,
+        raiting: rating);
+  }
 
   factory EpisodeDb.fromJson(Map<String, dynamic> json) =>
       _$EpisodeDbFromJson(json);

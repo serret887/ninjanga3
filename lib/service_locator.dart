@@ -14,6 +14,7 @@ import 'config/database.dart';
 import 'config/shared_preferences.dart';
 import 'infrastructure/Retriever/tracktv/services/oauth_device.dart';
 import 'repositories/authentication_repository.dart';
+import 'repositories/season_repository.dart';
 import 'repositories/show_repository.dart';
 import 'ui/route/routes.dart';
 
@@ -37,6 +38,7 @@ void setup() {
   sl.registerSingleton<AuthenticationBloc>(
       AuthenticationBloc(sl.get<AuthenticationRepository>()));
 // end authentication
+
 
 // home
   sl.registerSingleton(TmdbClient(sl.get<http.Client>()));
@@ -64,6 +66,17 @@ void setup() {
   ));
 
 // end home
+
+  // season
+  sl.registerSingleton(SeasonRepository(
+    tracktTvSerieClient: sl.get<TracktTvSeriesAPI>(),
+    tmdbClient: sl.get<TmdbClient>(),
+    authRepo: sl.get<AuthenticationRepository>(),
+    preferences: sl.get<Preferences>(),
+    db: sl.get<Future<Database>>(),
+  ));
+  // end season
+
 
 // Routing
   final router = Router();

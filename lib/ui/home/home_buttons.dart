@@ -50,8 +50,8 @@ class HomeButtons extends StatelessWidget {
               onPressed: () =>
                   sl.get<Router>().navigateTo(context,
                     Routes.setVideoRouter(slug, isMovie),
-                    transition: TransitionType.inFromBottom,
-                    transitionDuration: const Duration(milliseconds: 200),)
+                    transition: TransitionType.fadeIn,
+                    transitionDuration: const Duration(milliseconds: 500),)
           ),
           FlatButton(
             textColor: Colors.white,
