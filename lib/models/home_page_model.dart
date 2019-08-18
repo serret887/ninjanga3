@@ -3,23 +3,30 @@ import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 
 class HomePageModel {
-  List<MapEntry<String, List<PosterView>>> _movies;
-  List<FeaturedView> _featuredMovies;
+  List<MapEntry<String, List<PosterView>>> _posters;
+  List<FeaturedView> _featured;
 
+  addFeaturedViews(List<FeaturedView> view) => _featured.addAll(view);
+  addPosterViews(List<MapEntry<String, List<PosterView>>> view) =>
+      _posters.addAll(view);
 
   HomePageModel({List<PosterView> movies, List<FeaturedView> featuredMovies}) {
-    this._movies = groupBy(
-        movies, (mov) => _transformOriginToUIName((mov as PosterView).origin))
-        .entries.toList();
-    this._featuredMovies = featuredMovies;
+    this._posters =
+        groupBy(movies, (mov) => _transformOriginToUIName(mov as PosterView))
+            .entries
+            .toList();
+    this._featured = featuredMovies;
   }
 
-  String _transformOriginToUIName(String origin) {
-    switch (origin) {
+  String tileTitle(String tileName, bool isMovie) =>
+      '$tileName ${(isMovie == true) ? "movies" : "series"}';
+
+  String _transformOriginToUIName(PosterView poster) {
+    switch (poster.origin) {
       case "popular":
-        return "Popular ";
+        return tileTitle("Popular", poster.isMovie);
       case "trending":
-        return "Trending ";
+        return tileTitle("Trending", poster.isMovie);
       case "recommended":
         return "Recomended for you";
       default:
@@ -27,12 +34,11 @@ class HomePageModel {
     }
   }
 
-
-  List<FeaturedView> getFeaturedMovies() {
-    return _featuredMovies;
+  List<FeaturedView> getFeatured() {
+    return _featured;
   }
 
-  List<MapEntry<String, List<PosterView>>> getAllMovies() {
-    return _movies;
+  List<MapEntry<String, List<PosterView>>> getAllPostersByOrigin() {
+    return _posters;
   }
 }

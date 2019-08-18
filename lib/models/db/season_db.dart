@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 
@@ -15,13 +16,16 @@ class SeasonDb extends BaseDb {
   final String backdrop;
   final String posterImage;
   final Set<EpisodeDb> episodes;
+  int seasonAmount;
 
-  SeasonDb({this.title, this.year,
-    this.posterImage,
-    this.backdrop,
-    this.number,
-    this.ids,
-    this.episodes,
+  SeasonDb({
+    @required this.title,
+    @required this.year,
+    @required this.posterImage,
+    @required this.backdrop,
+    @required this.number,
+    @required this.ids,
+    @required this.episodes,
   }) : super(title, year, ids);
 
   factory SeasonDb.fromJson(Map<String, dynamic> json) =>

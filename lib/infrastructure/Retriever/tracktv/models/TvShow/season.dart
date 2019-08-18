@@ -1,6 +1,11 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import '../Common/id.dart';
 import '../TvShow/episode.dart';
 
+part "season.g.dart";
+
+@JsonSerializable()
 class Season {
   int number;
   Ids ids;
@@ -11,17 +16,7 @@ class Season {
     this.ids,
     this.episodes,
   });
+  factory Season.fromJson(Map<String, dynamic> json) => _$SeasonFromJson(json);
 
-  factory Season.fromJson(Map<String, dynamic> json) => new Season(
-        number: json["number"],
-        ids: Ids.fromJson(json["ids"]),
-        episodes: new List<Episode>.from(
-            json["episodes"].map((x) => Episode.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "number": number,
-        "ids": ids.toJson(),
-        "episodes": new List<dynamic>.from(episodes.map((x) => x.toJson())),
-      };
+  Map<String, dynamic> toJson() => _$SeasonToJson(this);
 }

@@ -1,11 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/airs.dart';
+import 'package:ninjanga3/models/View/episode_poster_view.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
+import 'package:ninjanga3/models/View/seasonView.dart';
 import 'package:ninjanga3/models/View/video_view.dart';
 
 import 'baseDb.dart';
+import 'episode_db.dart';
 
 part 'show_db.g.dart';
 
@@ -31,28 +34,56 @@ class ShowDb extends BaseDb {
   final String backdrop;
   final int duration;
   int seasonAmount;
+  Set<EpisodeDb> episodes;
 
-  ShowDb({
-    this.title,
-    this.year,
-    this.ids,
-    this.overview,
-    this.airs,
-    this.runtime,
-    this.certification,
-    this.network,
-    this.trailer,
-    this.status,
-    this.rating,
-    this.language,
-    this.availableTranslations,
-    this.genres,
-    this.airedEpisodes,
-    this.backdrop,
-    this.posterImage,
-    this.origin,
-    this.duration
-  }) : super(title, year, ids);
+  ShowDb(
+      {this.episodes,
+      this.title,
+      this.year,
+      this.ids,
+      this.overview,
+      this.airs,
+      this.runtime,
+      this.certification,
+      this.network,
+      this.trailer,
+      this.status,
+      this.rating,
+      this.language,
+      this.availableTranslations,
+      this.genres,
+      this.airedEpisodes,
+      this.backdrop,
+      this.posterImage,
+      this.origin,
+      this.duration})
+      : super(title, year, ids) {
+    episodes = Set<EpisodeDb>();
+  }
+
+  bool containsEpisodesForSeason(int number) {
+//    if (episodes == null) return false;
+    return episodes.any((e) => e.season == number);
+  }
+
+  SeasonView getSeasonView({int number}) => SeasonView(
+        number: number,
+        overview: overview,
+        title: title,
+        posterImage: posterImage,
+        ids: ids,
+        genres: genres,
+        backdrop: backdrop,
+        certification: certification,
+        duration: duration,
+        episodesPosterView: episodes
+            .map<EpisodePosterView>((e) => e.getEpisodePosterView(posterImage))
+            .toList(),
+        rating: rating,
+        trailer: trailer,
+        year: year,
+        seasonAmount: seasonAmount,
+      );
 
   PosterView getPosterView() => PosterView(
       backDropImage: this.backdrop,

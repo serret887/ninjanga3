@@ -22,7 +22,13 @@ class TvShowDetailsAppBar extends StatelessWidget {
               width: 64.0,
               child: OutlineButton(
                 padding: EdgeInsets.all(0.0),
-                onPressed: () => print('play'),
+                onPressed: () => print("hashdflasldfhlahsdflashdf"),
+//                    sl.get<Router>().navigateTo(
+//                      context,
+//                      Routes.setVideoRouter(season.ids.slug, false),
+//                      transition: TransitionType.fadeIn,
+//                      transitionDuration: const Duration(milliseconds: 500),
+//                    ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(32.0),
@@ -95,7 +101,7 @@ class TvShowDetailsAppBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 SmoothStarRating(
-                    allowHalfRating: false,
+                    allowHalfRating: true,
                     starCount: 10,
                     rating: season.rating,
                     size: 15.0,
@@ -257,6 +263,52 @@ class TvShowDetailsAppBar extends StatelessWidget {
                           ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    child: Text(
+                      'EPISODIOS',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 0.8),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ),
+                ),
+                FlatButton(
+                  padding: EdgeInsets.all(0.0),
+                  onPressed: season.seasonAmount > 1
+                      ? () => print('cambiando temporada')
+                      : null,
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'Temporada ${season.number}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 0.6),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                      (season.seasonAmount > 1
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Icon(
+                                Icons.arrow_drop_down,
+                                color: Color.fromRGBO(255, 255, 255, 0.6),
+                              ),
+                            )
+                          : Container())
                     ],
                   ),
                 ),

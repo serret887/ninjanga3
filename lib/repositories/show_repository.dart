@@ -4,6 +4,7 @@ import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_se
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/View/video_view.dart';
+import 'package:ninjanga3/models/db/episode_db.dart';
 import 'package:ninjanga3/models/db/show_db.dart';
 import 'package:ninjanga3/models/home_page_model.dart';
 import 'package:ninjanga3/repositories/common.dart';
@@ -74,7 +75,8 @@ class ShowRepository extends Repository<ShowDb> {
   }
 
   Future _fetchShowList(String type) async {
-    if (true) { //(await needsRefresh()) {
+    if (true) {
+      //await needsRefresh()) {
       if (type.contains("Popular")) return await _fetchPopularShows();
       if (type.contains("Trending")) return await _fetchTrendingShows();
       if (type.contains("Featured")) return await _fetchFeaturesShows(page: 2);
@@ -87,6 +89,7 @@ class ShowRepository extends Repository<ShowDb> {
   }
 
   Future<HomePageModel> getHomePageModel() async {
+    await store.delete(await db);
     var futures = [
       "Featured",
       "Recomended movies for you",
@@ -116,16 +119,39 @@ class ShowRepository extends Repository<ShowDb> {
     return ShowDb.fromJson(movie).getTrailerVideo();
   }
 
-  Future<ShowDb> getShowDetails(String slug) async {
-    var show = await store.record(slug).get(await db);
+  Future<ShowDb> getShowDetails({String slug, int number}) async {
+    var showDb = await store.record(slug).get(await db);
 
-    if (show != null)
-      return ShowDb.fromJson(show);
+    if (showDb != null) {
+      var show = ShowDb.fromJson(showDb);
+      if (show.containsEpisodesForSeason(number)) {
+        return show;
+      } else {
+        var episodes =
+            await _retrieveShowEpisodeDetails(slug: slug, seasonNumber: number);
+        show.episodes.addAll(episodes);
+        if (show.seasonAmount == null)
+          show.seasonAmount =
+              await tracktTvSerieClient.getAmountOfSeasonsForShow(slug: slug);
+        await update(show);
+        return show;
+      }
+    }
 
     var showTrackt = await tracktTvSerieClient.getShowData(slug: slug);
     var movie = await Common.completeShowsImagesFromTracktList(
         [showTrackt], tmdbClient, "details");
+    var episodes =
+        await _retrieveShowEpisodeDetails(slug: slug, seasonNumber: number);
+    movie[0].episodes = episodes.toSet();
     await insert(movie.first);
     return movie.first;
+  }
+
+  Future<List<EpisodeDb>> _retrieveShowEpisodeDetails(
+      {String slug, int seasonNumber}) async {
+    var episodes = await tracktTvSerieClient.getAllEpisodesOfSeason(
+        slug: slug, number: seasonNumber, extended: true);
+    return await Common.completeEpisodeImagesFromTrackt(episodes, tmdbClient);
   }
 }

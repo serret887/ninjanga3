@@ -13,7 +13,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc(this.movieRepo, this.showRepo);
 
-
   @override
   HomeState get initialState => InitialHomeState();
 
@@ -24,7 +23,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is FetchHomePage) {
       yield HomeLoading();
       try {
+        final HomePageModel homemoviePageModel =
+            await movieRepo.getHomePageModel();
         final HomePageModel homePageModel = await showRepo.getHomePageModel();
+        homePageModel.addFeaturedViews(homemoviePageModel.getFeatured());
+        homePageModel
+            .addPosterViews(homemoviePageModel.getAllPostersByOrigin());
         yield HomeLoaded(model: homePageModel);
       } catch (e) {
         print(e);

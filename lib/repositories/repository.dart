@@ -26,16 +26,15 @@ class Repository<T extends BaseDb> {
 
   Future insert(T movie) async =>
       await store.record(movie.ids.slug).add(await db, movie.toJson());
-
+  Future update(T movie) async =>
+      await store.record(movie.ids.slug).put(await db, movie.toJson());
   Future insertAll(List<T> movies) async {
     await (await db).transaction((txn) async {
-      var futures = movies.map((mov) async =>
-      await store
+      var futures = movies.map((mov) async => await store
           .record(mov.ids.slug)
           .add(txn, mov.toJson())
           .catchError((error) => print(error)));
       await Future.wait(futures);
     });
   }
-
 }

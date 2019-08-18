@@ -33,13 +33,7 @@ class TracktTvSeriesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     //TODO save the state of the pagination
-    var results = await response.map<Future<Show>>((show) async {
-      var tvShow = Show.fromJson(show);
-      tvShow.seasonAmount =
-      await getAmountOfSeasonsForShow(slug: tvShow.ids.slug);
-      return show;
-    }).toList();
-    return await Future.wait(results);
+    return await response.map<Show>((show) => Show.fromJson(show)).toList();
   }
 
   /// type can be changed for
@@ -64,14 +58,10 @@ class TracktTvSeriesAPI {
         .catchError((err) => print(err));
     //TODO save the state of the pagination
 
-    var results = await response
+    return await response
         .map((model) => Trending.fromJson(model))
-        .map<Future<Show>>((mov) async {
-      var show = mov.show;
-      show.seasonAmount = await getAmountOfSeasonsForShow(slug: show.ids.slug);
-      return show;
-    }).toList();
-    return await Future.wait(results);
+        .map<Show>((mov) => mov.show)
+        .toList();
   }
 
   Future<Show> getShowData({slug, extended = true}) async {
@@ -91,7 +81,7 @@ class TracktTvSeriesAPI {
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
     var show = Show.fromJson(response);
-    show.seasonAmount = await getAmountOfSeasonsForShow(slug: show.ids.slug);
+    show.seasonAmount = await getAmountOfSeasonsForShow(slug: slug);
     return show;
   }
 
@@ -118,12 +108,7 @@ class TracktTvSeriesAPI {
           "Can't fetch recomended movies ${response.statusCode}  ${response.body}");
     }
     var resp = json.decode(response.body);
-    var results = await resp.map<Future<Show>>((mov) async {
-      var show = Show.fromJson(mov);
-      show.seasonAmount = await getAmountOfSeasonsForShow(slug: show.ids.slug);
-      return show;
-    }).toList();
-    return await Future.wait(results);
+    return resp.map<Show>((mov) => Show.fromJson(mov)).toList();
   }
 
   Future<List<Show>> getRelatedShows({String slug, extended = false}) async {
@@ -141,12 +126,7 @@ class TracktTvSeriesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    var results = await response.map<Future<Show>>((mov) async {
-      var show = Show.fromJson(mov);
-      show.seasonAmount = await getAmountOfSeasonsForShow(slug: show.ids.slug);
-      return show;
-    }).toList();
-    return await Future.wait(results);
+    return response.map<Show>((mov) => Show.fromJson(mov)).toList();
   }
 
   Future<List<Season>> getAllSeasonsForShow(
@@ -165,35 +145,36 @@ class TracktTvSeriesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    return response.map((model) => Season.fromJson(model)).toList();
+    return response.map<Season>((model) => Season.fromJson(model)).toList();
   }
 
   Future<int> getAmountOfSeasonsForShow({
     String slug,
   }) async {
-    return getAllSeasonsForShow()
-        .then((val) => val.map((s) => s.episodes.first.season).reduce(max));
+    var allSeason = await getAllSeasonsForShow(slug: slug);
+    var seasonNumber = allSeason.map((s) => s.number).reduce(max);
+    return seasonNumber;
   }
 
-  Future<Season> getSingleSeasonsForShow(
-      {String slug, extended = true, number = 1}) async {
-    final parameter = (extended == true)
-        ? '$slug/seasons/$number?extended=full'
-        : '$slug/seasons/$number';
-    Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
-    var response = await client
-        .get(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'trakt-api-version': Constants.apiVersionHeaderKey,
-        'trakt-api-key': Constants.apiClientIdHeaderKey
-      },
-    )
-        .then(((resp) => json.decode(resp.body)))
-        .catchError((err) => print(err));
-    return Season.fromJson(response);
-  }
+//  Future<List<Episode>> getSingleSeasonsForShow(
+//      {String slug, extended = true, number = 1}) async {
+//    final parameter = (extended == true)
+//        ? '$slug/seasons/$number?extended=full'
+//        : '$slug/seasons/$number';
+//    Uri uri = Uri.parse(Constants.apiUrl + 'shows/$parameter');
+//Iterable response = await client
+//        .get(
+//          uri,
+//          headers: {
+//            'Content-Type': 'application/json',
+//            'trakt-api-version': Constants.apiVersionHeaderKey,
+//            'trakt-api-key': Constants.apiClientIdHeaderKey
+//          },
+//        )
+//        .then((resp) => json.decode(resp.body))
+//        .catchError((err) => print('error single season  - $err'));
+//    return response.map((resp)=> Episode.fromJson(resp));
+//  }
 
   Future<List<Episode>> getAllEpisodesOfSeason(
       {String slug, int number, extended = false}) async {
@@ -213,7 +194,7 @@ class TracktTvSeriesAPI {
         .then((resp) => json.decode(resp.body))
         .catchError((err) => print(err));
 
-    return response.map((model) => Episode.fromJson(model)).toList();
+    return response.map<Episode>((model) => Episode.fromJson(model)).toList();
   }
 }
 
@@ -224,7 +205,9 @@ main(List<String> args) async {
   //   slug: 'tron-legacy-2010',
   //   extended: true,
   // );
-  var resp = await a.getShowData(slug: 'elementary', extended: true);
+  var resp = await a.getAmountOfSeasonsForShow(
+    slug: 'elementary',
+  );
   print(resp);
 //  resp.forEach((f) => print(f.toJson()));
 }

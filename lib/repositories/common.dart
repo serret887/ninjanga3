@@ -1,6 +1,7 @@
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/models/images_tmdb.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Movie/movie_trackt_tv.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/episode.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/season.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/show.dart';
 import 'package:ninjanga3/models/db/episode_db.dart';
@@ -52,8 +53,8 @@ class Common {
 
 // end movie
 // show
-  static Future<ShowDb> retriveShowImagesFromTrackt(Show seasonTracktv,
-      TmdbClient tmdbClient, String origin) async {
+  static Future<ShowDb> retriveShowImagesFromTrackt(
+      Show seasonTracktv, TmdbClient tmdbClient, String origin) async {
     var tmdbId = seasonTracktv.ids.tmdb;
     var tmdbImages = await tmdbClient.getImagesForShow(tvId: tmdbId);
     return Common.convertFromShow(seasonTracktv, tmdbImages, origin);
@@ -66,13 +67,16 @@ class Common {
     return Future.wait(futures);
   }
 
-  static Future<SeasonDb> completeSeasonImagesFromTrackt(Season seasonTrackt,
-      TmdbClient tmdbClient) async {
+  static Future<SeasonDb> completeSeasonImagesFromTrackt(
+      Season seasonTrackt, TmdbClient tmdbClient) async {
     var tmdbImagesSeason = await tmdbClient.getImagesForSeason(
         seasonNumber: seasonTrackt.number, tvId: seasonTrackt.ids.tmdb);
 
     var episodeDbfutures = seasonTrackt.episodes.map((episode) async {
-      var images = await tmdbClient.getImagesForEpisode();
+      var images = await tmdbClient.getImagesForEpisode(
+          tvId: episode.ids.tmdb,
+          seasonNumber: episode.season,
+          episodeId: episode.number);
       return EpisodeDb(
         season: episode.season,
         number: episode.number,
@@ -100,6 +104,35 @@ class Common {
         ids: seasonTrackt.ids,
         number: seasonTrackt.number,
         posterImage: tmdbImagesSeason.getBestPoster());
+  }
+
+  static Future<List<EpisodeDb>> completeEpisodeImagesFromTrackt(
+      List<Episode> episodes, TmdbClient tmdbClient) async {
+    var episodeDbfutures = episodes.map((episode) async {
+      var images = await tmdbClient.getImagesForEpisode(
+          episodeId: episode.number,
+          seasonNumber: episode.season,
+          tvId: episode.ids.tmdb);
+      return EpisodeDb(
+        season: episode.season,
+        number: episode.number,
+        title: episode.title,
+        ids: episode.ids,
+        numberAbs: episode.numberAbs,
+        overview: episode.overview,
+        rating: episode.rating,
+        votes: episode.votes,
+        commentCount: episode.commentCount,
+        firstAired: episode.firstAired,
+        updatedAt: episode.updatedAt,
+        availableTranslations: episode.availableTranslations,
+        runtime: episode.runtime,
+        posterImage: images.getBestPoster(),
+        backdrop: images.getBestBackdrop(),
+      );
+    }).toList();
+
+    return await Future.wait(episodeDbfutures);
   }
 
   static ShowDb convertFromShow(Show show, ImagesTmdb tmdb, String origin) =>

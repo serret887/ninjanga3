@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 
 import 'poster_view.dart';
@@ -19,11 +20,25 @@ class MovieView {
   final String origin;
 
   MovieView(
-      {this.title, this.year, this.ids, this.tagline, this.overview, this.certification, this.rating, this.trailer, this.genres, this.posterImage, this.backdrop, this.duration, this.isMovie, this.origin});
-
+      {@required this.title,
+      @required this.year,
+      @required this.ids,
+      @required this.tagline,
+      @required this.overview,
+      @required this.certification,
+      @required this.rating,
+      @required this.trailer,
+      @required this.genres,
+      @required this.posterImage,
+      @required this.backdrop,
+      @required this.duration,
+      @required this.isMovie,
+      @required this.origin});
 
   PosterView getPosterView() {
     return PosterView(
+        origin: origin,
+        backDropImage: backdrop,
         posterImage: this.posterImage,
         slug: this.ids.slug,
         rating: this.rating,
@@ -40,7 +55,9 @@ class MovieView {
       certification: map['certification'],
       rating: map['rating'],
       trailer: map['trailer'],
-      genres: List<String>.from(map['genres'].map((x) => x),),
+      genres: List<String>.from(
+        map['genres'].map((x) => x),
+      ),
       posterImage: map['posterImage'],
       backdrop: map['backdrop'],
       duration: map['duration'],

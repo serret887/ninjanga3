@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
@@ -24,37 +25,38 @@ class MovieDb extends BaseDb {
   final int duration;
   final String origin;
 
-  MovieDb({
-    this.title,
-    this.year,
-    this.ids,
-    this.tagline,
-    this.overview,
-    this.certification,
-    this.rating,
-    this.trailer,
-    this.genres,
-    this.posterImage,
-    this.backdrop,
-    this.duration,
-    this.origin})
+  MovieDb(
+      {@required this.title,
+      @required this.year,
+      @required this.ids,
+      @required this.tagline,
+      @required this.overview,
+      @required this.certification,
+      @required this.rating,
+      @required this.trailer,
+      @required this.genres,
+      @required this.posterImage,
+      @required this.backdrop,
+      @required this.duration,
+      @required this.origin})
       : super(title, year, ids);
 
   MovieView getMovieView() => MovieView(
-    backdrop: backdrop,
-    certification: certification,
-    genres: genres,
-    ids: ids,
-    overview: overview,
-    posterImage: posterImage,
-    rating: rating,
-    tagline: tagline,
-    title: title,
-    trailer: trailer,
-    year: year,
-    duration: duration,
-    origin: origin,
-  );
+        isMovie: true,
+        backdrop: backdrop,
+        certification: certification,
+        genres: genres,
+        ids: ids,
+        overview: overview,
+        posterImage: posterImage,
+        rating: rating,
+        tagline: tagline,
+        title: title,
+        trailer: trailer,
+        year: year,
+        duration: duration,
+        origin: origin,
+      );
 
   PosterView getPosterView() => PosterView(
       backDropImage: this.backdrop,
@@ -67,12 +69,8 @@ class MovieDb extends BaseDb {
   VideoView getTrailerVideo() =>
       VideoView(title: this.title, url: this.trailer);
 
-  FeaturedView getFeaturedView() =>
-      FeaturedView(
-          genres: genres,
-          trailer: trailer,
-          poster: getPosterView(),
-          title: title);
+  FeaturedView getFeaturedView() => FeaturedView(
+      genres: genres, trailer: trailer, poster: getPosterView(), title: title);
 
   factory MovieDb.fromJson(Map<String, dynamic> json) =>
       _$MovieDbFromJson(json);

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 import 'package:ninjanga3/models/View/episode_poster_view.dart';
@@ -24,46 +25,51 @@ class EpisodeDb extends Equatable {
   final String backdrop;
 
   EpisodeDb({
-    this.posterImage,
-    this.backdrop,
-    this.season,
-    this.number,
-    this.title,
-    this.ids,
-    this.numberAbs,
-    this.overview,
-    this.rating,
-    this.votes,
-    this.commentCount,
-    this.firstAired,
-    this.updatedAt,
-    this.availableTranslations,
-    this.runtime,
+    @required this.posterImage,
+    @required this.backdrop,
+    @required this.season,
+    @required this.number,
+    @required this.title,
+    @required this.ids,
+    @required this.numberAbs,
+    @required this.overview,
+    @required this.rating,
+    @required this.votes,
+    @required this.commentCount,
+    @required this.firstAired,
+    @required this.updatedAt,
+    @required this.availableTranslations,
+    @required this.runtime,
   }) : super([
-    posterImage,
-    backdrop,
-    season,
-    number,
-    title,
-    ids,
-    numberAbs,
-    overview,
-    rating,
-    votes,
-    commentCount,
-    firstAired,
-    updatedAt,
-    availableTranslations,
-    runtime,
-  ]);
+          posterImage,
+          backdrop,
+          season,
+          number,
+          title,
+          ids,
+          numberAbs,
+          overview,
+          rating,
+          votes,
+          commentCount,
+          firstAired,
+          updatedAt,
+          availableTranslations,
+          runtime,
+        ]);
 
-  EpisodePosterView getEpisodePosterView() {
+  EpisodePosterView getEpisodePosterView(String poster) {
+    String image = poster;
+    if (!posterImage.contains("null"))
+      image = posterImage;
+    else if (!backdrop.contains("null")) image = backdrop;
     return EpisodePosterView(
         number: number,
         title: title,
         overview: overview,
-        poster: backdrop,
-        raiting: rating);
+        poster: image,
+        raiting: rating,
+        duration: runtime);
   }
 
   factory EpisodeDb.fromJson(Map<String, dynamic> json) =>
