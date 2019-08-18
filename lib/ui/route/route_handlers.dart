@@ -26,14 +26,17 @@ var detailRouteHandler = Handler(handlerFunc: (
       slug: Routes.getRouterSlug(params),
     );
   } else {
-    return TvShowDetails(slug: Routes.getRouterSlug(params));
+    return TvShowDetails(
+        slug: Routes.getRouterSlug(params),
+        season: Routes.getRouterSeason(params));
   }
 });
 
 var trailerRouteHandler = Handler(
-  handlerFunc: (BuildContext context,
-      Map<String, List<String>> params,) {
-
+  handlerFunc: (
+    BuildContext context,
+    Map<String, List<String>> params,
+  ) {
     return Video(
         slug: Routes.getRouterSlug(params),
         isMovie: Routes.getRouterIsMovie(params));

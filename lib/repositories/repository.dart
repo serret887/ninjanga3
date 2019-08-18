@@ -26,8 +26,18 @@ class Repository<T extends BaseDb> {
 
   Future insert(T movie) async =>
       await store.record(movie.ids.slug).add(await db, movie.toJson());
-  Future update(T movie) async =>
-      await store.record(movie.ids.slug).put(await db, movie.toJson());
+  Future update(T movie) async {
+    var c = await db;
+    var a = await store.delete(await db,
+        finder: Finder(filter: Filter.byKey(movie.ids.slug)));
+    var w = await store.record(movie.ids.slug).get(c);
+    await store
+        .record(movie.ids.slug)
+        .put(await db, movie.toJson(), merge: true);
+    var w1 = await store.record(movie.ids.slug).get(c);
+    print("helloasd");
+  }
+
   Future insertAll(List<T> movies) async {
     await (await db).transaction((txn) async {
       var futures = movies.map((mov) async => await store

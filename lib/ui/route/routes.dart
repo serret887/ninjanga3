@@ -5,14 +5,17 @@ import 'route_handlers.dart';
 
 class Routes {
   static String root = '/';
-  static String detail = '/detail/:isMovie/:slug';
+  static String detail = '/detail/:isMovie/:slug/:season';
   static String filter = '/filter';
   static String video = '/video/:isMovie/:slug';
 
   //  detail route
-  static String setDetailRouter(String slug, bool isMovie) {
+  static String setDetailRouter(String slug, bool isMovie, [int season = 1]) {
     final route = detail.split(':')[0];
-    return '$route$isMovie/$slug';
+    String result = isMovie == false
+        ? '$route$isMovie/$slug'
+        : '$route$isMovie/$slug/$season';
+    return result;
   }
 
   static String getRouterSlug(Map<String, List<String>> params) {
@@ -23,6 +26,10 @@ class Routes {
     return toBool(params['isMovie'][0]);
   }
 
+  static int getRouterSeason(Map<String, List<dynamic>> params) {
+    return int.parse(params['season'][0]);
+  }
+
   //  end detail route
 
   //  video route
@@ -30,7 +37,6 @@ class Routes {
     final route = video.split(':')[0];
     return '$route$isMovie/$slug';
   }
-
 
   //  end video  route
 

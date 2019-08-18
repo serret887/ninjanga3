@@ -75,8 +75,7 @@ class ShowRepository extends Repository<ShowDb> {
   }
 
   Future _fetchShowList(String type) async {
-    if (true) {
-      //await needsRefresh()) {
+    if (await needsRefresh()) {
       if (type.contains("Popular")) return await _fetchPopularShows();
       if (type.contains("Trending")) return await _fetchTrendingShows();
       if (type.contains("Featured")) return await _fetchFeaturesShows(page: 2);
@@ -89,7 +88,7 @@ class ShowRepository extends Repository<ShowDb> {
   }
 
   Future<HomePageModel> getHomePageModel() async {
-    await store.delete(await db);
+    //await store.delete(await db);
     var futures = [
       "Featured",
       "Recomended movies for you",
@@ -119,6 +118,13 @@ class ShowRepository extends Repository<ShowDb> {
     return ShowDb.fromJson(movie).getTrailerVideo();
   }
 
+  Future<List<EpisodeDb>> _retrieveShowEpisodeDetails(
+      {String slug, int seasonNumber}) async {
+    var episodes = await tracktTvSerieClient.getAllEpisodesOfSeason(
+        slug: slug, number: seasonNumber, extended: true);
+    return await Common.completeEpisodeImagesFromTrackt(episodes, tmdbClient);
+  }
+
   Future<ShowDb> getShowDetails({String slug, int number}) async {
     var showDb = await store.record(slug).get(await db);
 
@@ -130,6 +136,7 @@ class ShowRepository extends Repository<ShowDb> {
         var episodes =
             await _retrieveShowEpisodeDetails(slug: slug, seasonNumber: number);
         show.episodes.addAll(episodes);
+
         if (show.seasonAmount == null)
           show.seasonAmount =
               await tracktTvSerieClient.getAmountOfSeasonsForShow(slug: slug);
@@ -146,12 +153,5 @@ class ShowRepository extends Repository<ShowDb> {
     movie[0].episodes = episodes.toSet();
     await insert(movie.first);
     return movie.first;
-  }
-
-  Future<List<EpisodeDb>> _retrieveShowEpisodeDetails(
-      {String slug, int seasonNumber}) async {
-    var episodes = await tracktTvSerieClient.getAllEpisodesOfSeason(
-        slug: slug, number: seasonNumber, extended: true);
-    return await Common.completeEpisodeImagesFromTrackt(episodes, tmdbClient);
   }
 }

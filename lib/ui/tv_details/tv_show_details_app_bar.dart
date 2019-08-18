@@ -1,11 +1,27 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/models/View/seasonView.dart';
+import 'package:ninjanga3/ui/route/routes.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-class TvShowDetailsAppBar extends StatelessWidget {
+import '../../service_locator.dart';
+
+class TvShowDetailsAppBar extends StatefulWidget {
   final SeasonView season;
 
   const TvShowDetailsAppBar({Key key, this.season}) : super(key: key);
+
+  @override
+  _TvShowDetailsAppBarState createState() => _TvShowDetailsAppBarState();
+}
+
+class _TvShowDetailsAppBarState extends State<TvShowDetailsAppBar> {
+  bool _showOverview = false;
+  SeasonView get season => widget.season;
+
+  toggleOverview() => setState(() {
+        _showOverview = !_showOverview;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -142,11 +158,12 @@ class TvShowDetailsAppBar extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 8.0),
-                  child: Container(
+                  child: InkWell(
+                    onTap: toggleOverview,
                     child: Text(
                       season.overview,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
+                      overflow: _showOverview ? null : TextOverflow.ellipsis,
+                      maxLines: _showOverview ? null : 3,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Color.fromRGBO(255, 255, 255, 0.8),
@@ -289,26 +306,38 @@ class TvShowDetailsAppBar extends StatelessWidget {
                       : null,
                   child: Row(
                     children: <Widget>[
-                      Text(
-                        'Temporada ${season.number}',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, 0.6),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      (season.seasonAmount > 1
-                          ? Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Icon(
-                                Icons.arrow_drop_down,
+                      (season.seasonAmount == 1
+                          ? Text(
+                              'Temporada ${season.number}',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
                                 color: Color.fromRGBO(255, 255, 255, 0.6),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15.0,
                               ),
                             )
-                          : Container())
+                          : DropdownButton<String>(
+                              value: 'Temporada ${season.number}',
+                              onChanged: (String newValue) =>
+                                  sl.get<Router>().navigateTo(
+                                        context,
+                                        Routes.setDetailRouter(
+                                            season.ids.slug, false),
+                                        transition: TransitionType.nativeModal,
+                                        transitionDuration:
+                                            const Duration(milliseconds: 200),
+                                      ))),
+//
+//                          ? Padding(
+//                              padding: EdgeInsets.only(left: 8.0),
+//                              child: Icon(
+//                                Icons.arrow_drop_down,
+//                                color: Color.fromRGBO(255, 255, 255, 0.6),
+//                              ),
+//                            )
+//                          : Container())
                     ],
                   ),
                 ),

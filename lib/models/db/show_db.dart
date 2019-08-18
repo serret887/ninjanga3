@@ -57,9 +57,7 @@ class ShowDb extends BaseDb {
       this.posterImage,
       this.origin,
       this.duration})
-      : super(title, year, ids) {
-    episodes = Set<EpisodeDb>();
-  }
+      : super(title, year, ids) {}
 
   bool containsEpisodesForSeason(int number) {
 //    if (episodes == null) return false;

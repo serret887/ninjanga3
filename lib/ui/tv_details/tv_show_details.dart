@@ -9,11 +9,9 @@ import 'tv_show_episode_row.dart';
 
 class TvShowDetails extends StatefulWidget {
   final String slug;
+  final int season;
 
-  const TvShowDetails({
-    Key key,
-    this.slug,
-  }) : super(key: key);
+  const TvShowDetails({Key key, this.slug, this.season}) : super(key: key);
 
   @override
   _TvShowDetailsState createState() => _TvShowDetailsState();
@@ -28,7 +26,7 @@ class _TvShowDetailsState extends State<TvShowDetails> {
 
     var repo = sl.get<ShowRepository>();
     _seasonDetailsBloc = SeasonDetailsBloc(slug: slug, showRepo: repo);
-    _seasonDetailsBloc.dispatch(SeasonDetailsFetchEvent(number: 1));
+    _seasonDetailsBloc.dispatch(SeasonDetailsFetchEvent(number: widget.season));
   }
 
   @override
@@ -42,7 +40,7 @@ class _TvShowDetailsState extends State<TvShowDetails> {
                 return CustomScrollView(slivers: <Widget>[
                   SliverAppBar(
                       primary: true,
-                      expandedHeight: 500,
+                      expandedHeight: 550,
                       backgroundColor: Theme.of(context).backgroundColor,
                       flexibleSpace: FlexibleSpaceBar(
                           collapseMode: CollapseMode.pin,

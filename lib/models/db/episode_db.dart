@@ -60,6 +60,7 @@ class EpisodeDb extends Equatable {
 
   EpisodePosterView getEpisodePosterView(String poster) {
     String image = poster;
+
     if (!posterImage.contains("null"))
       image = posterImage;
     else if (!backdrop.contains("null")) image = backdrop;
