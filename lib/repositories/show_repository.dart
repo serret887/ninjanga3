@@ -118,40 +118,44 @@ class ShowRepository extends Repository<ShowDb> {
     return ShowDb.fromJson(movie).getTrailerVideo();
   }
 
-  Future<List<EpisodeDb>> _retrieveShowEpisodeDetails(
+  Future<List<EpisodeDb>> getShowEpisodeDetails(
       {String slug, int seasonNumber}) async {
+    var showDb = await store.record(slug).get(await db);
+    ShowDb show;
+    if (showDb == null) {
+      show = await getShowDetails(slug: slug, number: seasonNumber);
+    } else {
+      show = ShowDb.fromJson(showDb);
+    }
+    if (show.containsEpisodesForSeason(seasonNumber)) {
+      return show.episodes.toList();
+    }
+
     var episodes = await tracktTvSerieClient.getAllEpisodesOfSeason(
         slug: slug, number: seasonNumber, extended: true);
-    return await Common.completeEpisodeImagesFromTrackt(episodes, tmdbClient);
+    var episodesDb =
+        await Common.completeEpisodeImagesFromTrackt(episodes, tmdbClient);
+    show.addEpisodes(episodesDb);
+    await update(show);
+    return episodesDb;
   }
 
   Future<ShowDb> getShowDetails({String slug, int number}) async {
     var showDb = await store.record(slug).get(await db);
 
     if (showDb != null) {
-      var show = ShowDb.fromJson(showDb);
-      if (show.containsEpisodesForSeason(number)) {
-        return show;
-      } else {
-        var episodes =
-            await _retrieveShowEpisodeDetails(slug: slug, seasonNumber: number);
-        show.episodes.addAll(episodes);
-
-        if (show.seasonAmount == null)
-          show.seasonAmount =
-              await tracktTvSerieClient.getAmountOfSeasonsForShow(slug: slug);
-        await update(show);
-        return show;
-      }
+      return ShowDb.fromJson(showDb);
     }
 
     var showTrackt = await tracktTvSerieClient.getShowData(slug: slug);
-    var movie = await Common.completeShowsImagesFromTracktList(
+    var shows = await Common.completeShowsImagesFromTracktList(
         [showTrackt], tmdbClient, "details");
-    var episodes =
-        await _retrieveShowEpisodeDetails(slug: slug, seasonNumber: number);
-    movie[0].episodes = episodes.toSet();
-    await insert(movie.first);
-    return movie.first;
+    var show = shows.first;
+    if (show.seasonAmount == null)
+      show.seasonAmount =
+          await tracktTvSerieClient.getAmountOfSeasonsForShow(slug: slug);
+
+    await insert(shows.first);
+    return show;
   }
 }

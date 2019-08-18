@@ -12,7 +12,7 @@ class Routes {
   //  detail route
   static String setDetailRouter(String slug, bool isMovie, [int season = 1]) {
     final route = detail.split(':')[0];
-    String result = isMovie == false
+    String result = isMovie == true
         ? '$route$isMovie/$slug'
         : '$route$isMovie/$slug/$season';
     return result;

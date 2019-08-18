@@ -1,15 +1,15 @@
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/models/View/seasonView.dart';
-import 'package:ninjanga3/ui/route/routes.dart';
+import 'package:ninjanga3/ui/components/dropdown_menu.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
-
-import '../../service_locator.dart';
 
 class TvShowDetailsAppBar extends StatefulWidget {
   final SeasonView season;
+  final Function dispatchSeasonChange;
 
-  const TvShowDetailsAppBar({Key key, this.season}) : super(key: key);
+  const TvShowDetailsAppBar(
+      {Key key, @required this.season, @required this.dispatchSeasonChange})
+      : super(key: key);
 
   @override
   _TvShowDetailsAppBarState createState() => _TvShowDetailsAppBarState();
@@ -18,6 +18,7 @@ class TvShowDetailsAppBar extends StatefulWidget {
 class _TvShowDetailsAppBarState extends State<TvShowDetailsAppBar> {
   bool _showOverview = false;
   SeasonView get season => widget.season;
+  Function get dispatchSeasonChange => widget.dispatchSeasonChange;
 
   toggleOverview() => setState(() {
         _showOverview = !_showOverview;
@@ -283,63 +284,35 @@ class _TvShowDetailsAppBarState extends State<TvShowDetailsAppBar> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Container(
-                    child: Text(
-                      'EPISODIOS',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color.fromRGBO(255, 255, 255, 0.8),
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15.0,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        child: Text(
+                          'EPISODIOS',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color.fromRGBO(255, 255, 255, 0.8),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15.0,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                FlatButton(
-                  padding: EdgeInsets.all(0.0),
-                  onPressed: season.seasonAmount > 1
-                      ? () => print('cambiando temporada')
-                      : null,
-                  child: Row(
-                    children: <Widget>[
-                      (season.seasonAmount == 1
-                          ? Text(
-                              'Temporada ${season.number}',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Color.fromRGBO(255, 255, 255, 0.6),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15.0,
-                              ),
-                            )
-                          : DropdownButton<String>(
-                              value: 'Temporada ${season.number}',
-                              onChanged: (String newValue) =>
-                                  sl.get<Router>().navigateTo(
-                                        context,
-                                        Routes.setDetailRouter(
-                                            season.ids.slug, false),
-                                        transition: TransitionType.nativeModal,
-                                        transitionDuration:
-                                            const Duration(milliseconds: 200),
-                                      ))),
-//
-//                          ? Padding(
-//                              padding: EdgeInsets.only(left: 8.0),
-//                              child: Icon(
-//                                Icons.arrow_drop_down,
-//                                color: Color.fromRGBO(255, 255, 255, 0.6),
-//                              ),
-//                            )
-//                          : Container())
-                    ],
-                  ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: DropDownMenu(
+                          currentValue: seasonNameConstructor(season.number),
+                          dispatch: dispatchSeasonChange,
+                          values: Iterable<String>.generate(season.seasonAmount,
+                                  (number) => seasonNameConstructor(number + 1))
+                              .toList(),
+                        )),
+                  ],
                 ),
               ],
             ),
@@ -348,6 +321,8 @@ class _TvShowDetailsAppBarState extends State<TvShowDetailsAppBar> {
       ],
     );
   }
+
+  String seasonNameConstructor(int number) => 'Temporada $number';
 
   Widget _ratingText(String value) {
     return (value == null)

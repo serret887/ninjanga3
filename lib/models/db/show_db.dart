@@ -60,7 +60,7 @@ class ShowDb extends BaseDb {
       : super(title, year, ids) {}
 
   bool containsEpisodesForSeason(int number) {
-//    if (episodes == null) return false;
+    if (episodes == null) return false;
     return episodes.any((e) => e.season == number);
   }
 
@@ -90,6 +90,12 @@ class ShowDb extends BaseDb {
       rating: this.rating,
       isMovie: false,
       origin: this.origin);
+
+  addEpisodes(List<EpisodeDb> epdisodes) {
+    if (this.episodes != null) this.episodes.addAll(episodes);
+
+    this.episodes = Set.of(epdisodes);
+  }
 
   VideoView getTrailerVideo() =>
       VideoView(title: this.title, url: this.trailer);

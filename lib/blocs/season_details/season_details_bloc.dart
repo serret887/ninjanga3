@@ -27,7 +27,7 @@ class SeasonDetailsBloc extends Bloc<SeasonDetailsEvent, SeasonDetailsState> {
         final show =
             await showRepo.getShowDetails(number: event.number, slug: slug);
         final seasonView = show.getSeasonView(number: event.number);
-        yield SeasonDetailsStateLoaded(data: seasonView);
+        yield SeasonDetailsSummaryStateLoaded(data: seasonView);
       } catch (e) {
         print(e);
         yield SeasonDetailsStateError(error: e);

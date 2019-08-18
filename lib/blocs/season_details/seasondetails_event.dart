@@ -13,3 +13,11 @@ class SeasonDetailsFetchEvent extends SeasonDetailsEvent {
   @override
   String toString() => 'SeasonDetailsFetchEvent ';
 }
+
+class SeasonDetailsChangeEvent extends SeasonDetailsEvent {
+  final int number;
+
+  SeasonDetailsChangeEvent({this.number});
+  @override
+  String toString() => 'SeasonDetailsFetchEvent ';
+}
