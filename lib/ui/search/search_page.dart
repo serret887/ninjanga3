@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/search/bloc.dart';
-import 'package:ninjanga3/ui/components/poster_item.dart';
 
 import '../../service_locator.dart';
 
@@ -22,12 +21,17 @@ class _SearchPageState extends State<SearchPage> {
     return Container(
       margin: EdgeInsets.only(left: 10.0),
       child: TextField(
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.search,
         controller: _controller,
         cursorColor: Theme.of(context).accentColor,
         autofocus: true,
-        enabled: true,
+        enabled: false,
         maxLines: 3,
         decoration: InputDecoration(
+          border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white)
+          ),
           labelText: "Search",
           focusColor: Theme.of(context).primaryColor,
         ),
@@ -79,7 +83,9 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                                 itemCount: state.movies.length,
                                 itemBuilder: (context, index) {
-                                  return PosterItem(model: state.movies[index]);
+//                                  return PosterItem(model: state.movies[index]);
+                                  return Container(
+                                    child: Center(child: Text(""),),);
                                 },
                                 padding: EdgeInsets.only(left: 14.0),
                                 scrollDirection: Axis.vertical,
