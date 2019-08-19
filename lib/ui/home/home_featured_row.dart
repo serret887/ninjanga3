@@ -49,7 +49,7 @@ class _HomeFeaturedRowState extends State<HomeFeaturedRow>
       Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
         HomeFeatureTitle(
           genres: widget.movies[_currentPage].genres,
-          name: widget.movies[_currentPage].title,
+          name: widget.movies[_currentPage].getTitle(),
         ),
         HomeButtons(
           slug: widget.movies[_currentPage].poster.slug,

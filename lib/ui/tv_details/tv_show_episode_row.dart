@@ -59,7 +59,7 @@ class TvShowEpisodeRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '${episode.number}. ${episode.title}',
+                      '${episode.number}. ${episode.getTitle()}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -86,7 +86,7 @@ class TvShowEpisodeRow extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      episode.overview,
+                      episode.getOverView(),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

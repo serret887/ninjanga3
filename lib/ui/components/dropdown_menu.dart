@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 
-class DropDownMenu extends StatelessWidget {
+class DropDownMenu extends StatefulWidget {
   final List<String> values;
   final Function dispatch;
-  final String currentValue;
+  final String initialValue;
 
-  const DropDownMenu(
-      {Key key,
-      @required this.values,
-      @required this.dispatch,
-      @required this.currentValue})
+  const DropDownMenu({Key key, this.values, this.dispatch, this.initialValue})
       : super(key: key);
+
+  @override
+  _DropDownMenuState createState() => _DropDownMenuState();
+}
+
+class _DropDownMenuState extends State<DropDownMenu> {
+  String currentValue;
+  initState() {
+    currentValue = widget.initialValue;
+    super.initState();
+  }
 
   generateItem(String text) => Text(
         text,
@@ -24,7 +31,7 @@ class DropDownMenu extends StatelessWidget {
         ),
       );
 
-  List<DropdownMenuItem<String>> generateDropdownMenuItem() => values
+  List<DropdownMenuItem<String>> generateDropdownMenuItem() => widget.values
       .map<DropdownMenuItem<String>>((val) => DropdownMenuItem(
             child: generateItem(val),
             value: val,
@@ -33,8 +40,8 @@ class DropDownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (values.length == 0) return Container();
-    if (values.length == 1) return generateItem(values[0]);
+    if (widget.values.length == 0) return Container();
+    if (widget.values.length == 1) return generateItem(widget.values[0]);
     var theme = Theme.of(context);
     //TODO the color of the dropdown is not entirely black
     return DropdownButton<String>(
@@ -44,6 +51,11 @@ class DropDownMenu extends StatelessWidget {
         ),
         value: currentValue,
         items: generateDropdownMenuItem(),
-        onChanged: (String newValue) => dispatch(newValue));
+        onChanged: (String newValue) {
+          setState(() {
+            currentValue = newValue;
+          });
+          widget.dispatch(newValue);
+        });
   }
 }

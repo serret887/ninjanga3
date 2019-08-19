@@ -7,6 +7,10 @@ class FeaturedView {
   final PosterView poster;
   final String title;
 
+  String getTitle() {
+    return this.title == null ? "" : this.title;
+  }
+
   FeaturedView(
       {@required this.trailer,
       @required this.genres,

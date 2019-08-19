@@ -17,16 +17,14 @@ class MoviesRepository extends Repository<MovieDb> {
   final TracktTvMoviesAPI tracktTvMovieClient;
   final TmdbClient tmdbClient;
 
-
-  MoviesRepository({AuthenticationRepository authRepo,
-    Preferences preferences,
-    Future<Database> db,
-    storeName,
-    this.tracktTvMovieClient,
-    this.tmdbClient})
+  MoviesRepository(
+      {AuthenticationRepository authRepo,
+      Preferences preferences,
+      Future<Database> db,
+      storeName,
+      this.tracktTvMovieClient,
+      this.tmdbClient})
       : super(authRepo, preferences, db, storeName);
-
-
 
   Future<List<MovieDb>> read([Finder finder]) async {
     var data = await store.find(await db, finder: finder);
@@ -44,7 +42,7 @@ class MoviesRepository extends Repository<MovieDb> {
     final related = await Common.completeMovieDataFromTracktList(
         moviesTrackt, tmdbClient, "related");
     List<PosterView> posters =
-    related.map<PosterView>((mov) => mov.getPosterView()).toList();
+        related.map<PosterView>((mov) => mov.getPosterView()).toList();
     return posters.toList();
   }
 
@@ -86,42 +84,39 @@ class MoviesRepository extends Repository<MovieDb> {
   }
 
   Future _fetchMoviesList(String type) async {
-    if (await needsRefresh()) {
-      if (type.contains("Popular")) return await _fetchPopularMovies();
-      if (type.contains("Trending")) return await _fetchTrendingMovies();
-      if (type.contains("Featured")) return await _fetchFeaturesMovies(page: 2);
+    if (type.contains("Popular")) return await _fetchPopularMovies();
+    if (type.contains("Trending")) return await _fetchTrendingMovies();
+    if (type.contains("Featured")) return await _fetchFeaturesMovies(page: 2);
 //    if (type == "Recomended for you") return await getRecomendedMovies();
-      await _fetchPopularMovies(page: 3);
+    await _fetchPopularMovies(page: 3);
+  }
+
+  Future<HomePageModel> fetchHomeData() async {
+    if (await needsRefresh()) {
+      var futures = [
+        "Featured",
+        "Recomended movies for you",
+        "Popular movies",
+        "Trending movies",
+      ].map((type) async => {type: await _fetchMoviesList(type)}).toList();
+
+      await Future.wait(futures);
       await setRefresh();
-    } else {
-      print('no needs to fetch featured movies');
     }
   }
 
-  Future<HomePageModel> getHomePageModel() async {
-    var futures = [
-      "Featured",
-      "Recomended movies for you",
-      "Popular movies",
-      "Trending movies",
-    ].map((type) async => {type: await _fetchMoviesList(type)}).toList();
-
-    await Future.wait(futures);
-
-    var featured = await read(Finder(
-      filter: Filter.equals("origin", "featured"),
-    ));
-    var featuredViews =
-    featured.map<FeaturedView>((mov) => mov.getFeaturedView()).toList();
-
+  Future<List<PosterView>> getAllPosters() async {
     var movies =
         await read(Finder(filter: Filter.notEquals("origin", "featured")));
 
-    var posterViews =
-    movies
-        .map<PosterView>((mov) => mov.getPosterView()).toList();
+    return movies.map<PosterView>((mov) => mov.getPosterView()).toList();
+  }
 
-    return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
+  Future<List<FeaturedView>> getFeaturedViews() async {
+    var featured = await read(Finder(
+      filter: Filter.equals("origin", "featured"),
+    ));
+    return featured.map<FeaturedView>((mov) => mov.getFeaturedView()).toList();
   }
 
   Future<VideoView> getTrailerVideoView({String slug}) async {

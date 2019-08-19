@@ -34,7 +34,7 @@ class ShowDb extends BaseDb {
   final String backdrop;
   final int duration;
   int seasonAmount;
-  Set<EpisodeDb> episodes;
+  List<EpisodeDb> episodes;
 
   ShowDb(
       {this.episodes,
@@ -92,9 +92,37 @@ class ShowDb extends BaseDb {
       origin: this.origin);
 
   addEpisodes(List<EpisodeDb> epdisodes) {
-    if (this.episodes != null) this.episodes.addAll(episodes);
+    if (this.episodes != null) {
+      var temp = List<EpisodeDb>();
+      temp.addAll(epdisodes);
+      temp.addAll(this.episodes);
+      this.episodes = temp;
+    } else
+      this.episodes = epdisodes;
+  }
 
-    this.episodes = Set.of(epdisodes);
+  ShowDb clone() {
+    return ShowDb(
+        episodes: this.episodes,
+        title: this.title,
+        year: this.year,
+        ids: this.ids,
+        overview: this.overview,
+        airs: this.airs,
+        runtime: this.runtime,
+        certification: this.certification,
+        network: this.network,
+        trailer: this.trailer,
+        status: this.status,
+        rating: this.rating,
+        language: this.language,
+        availableTranslations: this.availableTranslations,
+        genres: this.genres,
+        airedEpisodes: this.airedEpisodes,
+        backdrop: this.backdrop,
+        posterImage: this.posterImage,
+        origin: this.origin,
+        duration: this.duration);
   }
 
   VideoView getTrailerVideo() =>

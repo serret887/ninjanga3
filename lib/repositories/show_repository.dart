@@ -6,7 +6,6 @@ import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/View/video_view.dart';
 import 'package:ninjanga3/models/db/episode_db.dart';
 import 'package:ninjanga3/models/db/show_db.dart';
-import 'package:ninjanga3/models/home_page_model.dart';
 import 'package:ninjanga3/repositories/common.dart';
 import 'package:sembast/sembast.dart';
 
@@ -75,42 +74,42 @@ class ShowRepository extends Repository<ShowDb> {
   }
 
   Future _fetchShowList(String type) async {
-    if (await needsRefresh()) {
-      if (type.contains("Popular")) return await _fetchPopularShows();
-      if (type.contains("Trending")) return await _fetchTrendingShows();
-      if (type.contains("Featured")) return await _fetchFeaturesShows(page: 2);
+    if (type.contains("Popular")) return await _fetchPopularShows();
+    if (type.contains("Trending")) return await _fetchTrendingShows();
+    if (type.contains("Featured")) return await _fetchFeaturesShows(page: 2);
 //    if (type == "Recomended for you") return await getRecomendedMovies();
-      await _fetchPopularShows(page: 3);
+    await _fetchPopularShows(page: 3);
+  }
+
+  Future fetchHomeData() async {
+    //await store.delete(await db);
+    if (await needsRefresh()) {
+      var futures = [
+        "Featured",
+        "Recomended movies for you",
+        "Popular movies",
+        "Trending movies",
+      ].map((type) async => {type: await _fetchShowList(type)}).toList();
+
+      await Future.wait(futures);
       await setRefresh();
     } else {
       print('no needs to fetch series');
     }
   }
 
-  Future<HomePageModel> getHomePageModel() async {
-    //await store.delete(await db);
-    var futures = [
-      "Featured",
-      "Recomended movies for you",
-      "Popular movies",
-      "Trending movies",
-    ].map((type) async => {type: await _fetchShowList(type)}).toList();
-
-    await Future.wait(futures);
-
-    var featured = await read(Finder(
-      filter: Filter.equals("origin", "featured"),
-    ));
-    var featuredViews =
-        featured.map<FeaturedView>((mov) => mov.getFeaturedView()).toList();
-
+  Future<List<PosterView>> getAllPosters() async {
     var movies =
         await read(Finder(filter: Filter.notEquals("origin", "featured")));
 
-    var posterViews =
-        movies.map<PosterView>((mov) => mov.getPosterView()).toList();
+    return movies.map<PosterView>((mov) => mov.getPosterView()).toList();
+  }
 
-    return HomePageModel(movies: posterViews, featuredMovies: featuredViews);
+  Future<List<FeaturedView>> getFeaturedViews() async {
+    var featured = await read(Finder(
+      filter: Filter.equals("origin", "featured"),
+    ));
+    return featured.map<FeaturedView>((mov) => mov.getFeaturedView()).toList();
   }
 
   Future<VideoView> getTrailerVideoView({String slug}) async {
@@ -135,27 +134,33 @@ class ShowRepository extends Repository<ShowDb> {
         slug: slug, number: seasonNumber, extended: true);
     var episodesDb =
         await Common.completeEpisodeImagesFromTrackt(episodes, tmdbClient);
-    show.addEpisodes(episodesDb);
-    await update(show);
+    print("heooasdfasdfasdfasdfasdfasfdasdf");
+    ShowDb showClone = show.clone();
+    print(showClone == show);
+    showClone.addEpisodes(episodesDb);
+    await update(showClone);
     return episodesDb;
   }
 
   Future<ShowDb> getShowDetails({String slug, int number}) async {
     var showDb = await store.record(slug).get(await db);
+    ShowDb show;
+    if (showDb == null) {
+      var showTrackt = await tracktTvSerieClient.getShowData(slug: slug);
+      var shows = await Common.completeShowsImagesFromTracktList(
+          [showTrackt], tmdbClient, "details");
+      show = shows.first;
+      await insert(show);
+    } else
+      show = ShowDb.fromJson(showDb);
 
-    if (showDb != null) {
-      return ShowDb.fromJson(showDb);
-    }
-
-    var showTrackt = await tracktTvSerieClient.getShowData(slug: slug);
-    var shows = await Common.completeShowsImagesFromTracktList(
-        [showTrackt], tmdbClient, "details");
-    var show = shows.first;
-    if (show.seasonAmount == null)
-      show.seasonAmount =
+    if (show.seasonAmount == null) {
+      ShowDb showClone = show.clone();
+      showClone.seasonAmount =
           await tracktTvSerieClient.getAmountOfSeasonsForShow(slug: slug);
-
-    await insert(shows.first);
+      update(showClone);
+      return showClone;
+    }
     return show;
   }
 }

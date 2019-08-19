@@ -8,6 +8,14 @@ class EpisodePosterView {
   final String overview;
   final int duration;
 
+  String getTitle() {
+    return this.title == null ? "" : this.title;
+  }
+
+  String getOverView() {
+    return this.overview == null ? "" : this.overview;
+  }
+
   EpisodePosterView(
       {@required this.title,
       @required this.number,

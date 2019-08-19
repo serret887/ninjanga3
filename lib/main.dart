@@ -8,11 +8,11 @@ import 'package:ninjanga3/service_locator.dart';
 
 import 'ui/app.dart';
 
-void main() {
+void main() async {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   setup();
   sl.get<AuthenticationBloc>().dispatch(AppStarted());
-
+//  await sl.get<Preferences>().hardReset();
   runApp(MyApp());
 }
 
@@ -25,9 +25,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
     return MaterialApp(
-        onGenerateRoute: sl
-            .get<Router>()
-            .generator,
+        onGenerateRoute: sl.get<Router>().generator,
         debugShowCheckedModeBanner: false,
         darkTheme: ThemeData.dark(),
         theme: ThemeData(

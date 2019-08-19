@@ -36,10 +36,7 @@ class _TvShowDetailsState extends State<TvShowDetails> {
   }
 
   dispatchSeasonChange(String val) {
-    final intRegex = RegExp(r'\s+(\d+)\s+', multiLine: true);
-    var n2umber = intRegex.firstMatch(val);
-    int number = 3;
-
+    int number = int.parse(val.split(" ")[1]);
     _seasonEpisodeBloc.dispatch(FetchSeasonEpisodesEvent(number));
   }
 
@@ -87,7 +84,7 @@ class _TvShowDetailsState extends State<TvShowDetails> {
                         childCount: state.episodes.length),
                   );
                 else if (state is SeasonEpisodesLoading) {
-                  return SliverToBoxAdapter(
+                  return SliverFillRemaining(
                       child: Center(
                     child: CircularProgressIndicator(),
                   ));

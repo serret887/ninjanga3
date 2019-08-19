@@ -34,4 +34,6 @@ class SeasonView {
     @required this.duration,
     @required this.episodesPosterView,
   });
+
+  int getSeasonAmount() => seasonAmount == null ? 1 : seasonAmount;
 }

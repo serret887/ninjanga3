@@ -1,7 +1,11 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:ninjanga3/models/View/seasonView.dart';
 import 'package:ninjanga3/ui/components/dropdown_menu.dart';
+import 'package:ninjanga3/ui/route/routes.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+
+import '../../service_locator.dart';
 
 class TvShowDetailsAppBar extends StatefulWidget {
   final SeasonView season;
@@ -39,13 +43,12 @@ class _TvShowDetailsAppBarState extends State<TvShowDetailsAppBar> {
               width: 64.0,
               child: OutlineButton(
                 padding: EdgeInsets.all(0.0),
-                onPressed: () => print("hashdflasldfhlahsdflashdf"),
-//                    sl.get<Router>().navigateTo(
-//                      context,
-//                      Routes.setVideoRouter(season.ids.slug, false),
-//                      transition: TransitionType.fadeIn,
-//                      transitionDuration: const Duration(milliseconds: 500),
-//                    ),
+                onPressed: () => sl.get<Router>().navigateTo(
+                      context,
+                      Routes.setVideoRouter(season.ids.slug, false),
+                      transition: TransitionType.fadeIn,
+                      transitionDuration: const Duration(milliseconds: 500),
+                    ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(32.0),
@@ -306,9 +309,10 @@ class _TvShowDetailsAppBarState extends State<TvShowDetailsAppBar> {
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
                         child: DropDownMenu(
-                          currentValue: seasonNameConstructor(season.number),
+                          initialValue: seasonNameConstructor(season.number),
                           dispatch: dispatchSeasonChange,
-                          values: Iterable<String>.generate(season.seasonAmount,
+                          values: Iterable<String>.generate(
+                                  season.getSeasonAmount(),
                                   (number) => seasonNameConstructor(number + 1))
                               .toList(),
                         )),

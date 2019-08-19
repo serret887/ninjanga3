@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import "package:collection/collection.dart";
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
@@ -5,10 +7,7 @@ import 'package:ninjanga3/models/View/poster_view.dart';
 class HomePageModel {
   List<MapEntry<String, List<PosterView>>> _posters;
   List<FeaturedView> _featured;
-
-  addFeaturedViews(List<FeaturedView> view) => _featured.addAll(view);
-  addPosterViews(List<MapEntry<String, List<PosterView>>> view) =>
-      _posters.addAll(view);
+  Random random = Random(67);
 
   HomePageModel({List<PosterView> movies, List<FeaturedView> featuredMovies}) {
     this._posters =
@@ -16,6 +15,8 @@ class HomePageModel {
             .entries
             .toList();
     this._featured = featuredMovies;
+    _posters.shuffle(random);
+    _featured.shuffle(random);
   }
 
   String tileTitle(String tileName, bool isMovie) =>

@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:ninjanga3/blocs/home/home_bloc.dart';
+import 'package:ninjanga3/config/constants.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_movies.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_series.dart';
@@ -42,20 +43,23 @@ void setup() {
   sl.registerSingleton(TmdbClient(sl.get<http.Client>()));
   sl.registerSingleton(TracktTvMoviesAPI(sl.get<http.Client>()));
   sl.registerSingleton(TracktTvSeriesAPI(sl.get<http.Client>()));
+
   sl.registerSingleton<MoviesRepository>(MoviesRepository(
       tracktTvMovieClient: sl.get<TracktTvMoviesAPI>(),
       tmdbClient: sl.get<TmdbClient>(),
       authRepo: sl.get<AuthenticationRepository>(),
       preferences: sl.get<Preferences>(),
       db: sl.get<Future<Database>>(),
-      storeName: "movies"));
+      storeName: Constants.MOVIES_DB));
+
   sl.registerSingleton<ShowRepository>(ShowRepository(
       tracktTvSerieClient: sl.get<TracktTvSeriesAPI>(),
       tmdbClient: sl.get<TmdbClient>(),
       authRepo: sl.get<AuthenticationRepository>(),
       preferences: sl.get<Preferences>(),
       db: sl.get<Future<Database>>(),
-      storeName: "series"));
+      storeName: Constants.SERIES_DB));
+
   sl.registerSingleton<HomeBloc>(HomeBloc(
     sl.get<MoviesRepository>(),
     sl.get<ShowRepository>(),
