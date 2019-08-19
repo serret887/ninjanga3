@@ -70,8 +70,8 @@ class TvShowEpisodeRow extends StatelessWidget {
                     ),
                     SmoothStarRating(
                         allowHalfRating: true,
-                        starCount: 10,
-                        rating: episode.raiting,
+                        starCount: 5,
+                        rating: episode.raiting / 2,
                         size: 15.0,
                         color: Color.fromRGBO(0, 255, 0, 0.8),
                         borderColor: Colors.green,

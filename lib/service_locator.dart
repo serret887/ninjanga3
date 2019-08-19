@@ -6,15 +6,18 @@ import 'package:ninjanga3/blocs/home/home_bloc.dart';
 import 'package:ninjanga3/config/constants.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_movies.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_search.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_series.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
 import 'package:sembast/sembast.dart';
 
 import 'blocs/authentication/authentication_bloc.dart';
+import 'blocs/search/search_bloc.dart';
 import 'config/database.dart';
 import 'config/shared_preferences.dart';
 import 'infrastructure/Retriever/tracktv/services/oauth_device.dart';
 import 'repositories/authentication_repository.dart';
+import 'repositories/search_repository.dart';
 import 'repositories/show_repository.dart';
 import 'ui/route/routes.dart';
 
@@ -66,7 +69,14 @@ void setup() {
   ));
 
 // end home
+// search
+  sl.registerSingleton<TrackTvSearchAPI>(
+      TrackTvSearchAPI(sl.get<http.Client>()));
+  sl.registerSingleton<SearchRepository>(
+      SearchRepository(sl.get<TrackTvSearchAPI>(), sl.get<TmdbClient>()));
+  sl.registerSingleton<SearchBloc>(SearchBloc(sl.get<SearchRepository>()));
 
+  // end search
 // Routing
   final router = Router();
   Routes.configureRoutes(router);

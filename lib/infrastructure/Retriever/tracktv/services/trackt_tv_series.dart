@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
-import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/SkinnyShow.dart';
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/skinny_show.dart';
 
 import '../config_constants.dart';
 import '../models/Common/trending.dart';

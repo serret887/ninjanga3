@@ -7,6 +7,7 @@ import 'package:ninjanga3/blocs/home/bloc.dart';
 
 import '../service_locator.dart';
 import 'home/home.dart';
+import 'search/search_page.dart';
 
 class App extends StatefulWidget {
   @override
@@ -55,7 +56,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           Home(),
-          Home(),
+          SearchPage(),
           Home(),
         ],
       ),

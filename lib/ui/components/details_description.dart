@@ -55,8 +55,8 @@ class DetailsDescription extends StatelessWidget {
           children: <Widget>[
             SmoothStarRating(
                 allowHalfRating: false,
-                starCount: 10,
-                rating: rating,
+                starCount: 5,
+                rating: rating / 2,
                 size: 15.0,
                 color: Color.fromRGBO(0, 255, 0, 0.8),
                 borderColor: Colors.green,
