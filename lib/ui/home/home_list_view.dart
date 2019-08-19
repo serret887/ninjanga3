@@ -35,7 +35,7 @@ class HomeListView extends StatelessWidget {
     List<MapEntry<String, List<PosterView>>> allMovieList =
         homePageModel.getAllPostersByOrigin() ?? [];
     final Size screenSize = MediaQuery.of(context).size;
-    return CustomScrollView(slivers: <Widget>[
+    return CustomScrollView(key: PageStorageKey(UniqueKey()), slivers: <Widget>[
       SliverAppBar(
         primary: true,
         expandedHeight: screenSize.height * ConstantsUi.expandedHeightAppBar,
