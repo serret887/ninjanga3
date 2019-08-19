@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/airs.dart';
-import 'package:ninjanga3/models/View/episode_poster_view.dart';
+import 'package:ninjanga3/models/View/detail_description_view.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/View/seasonView.dart';
@@ -66,20 +66,20 @@ class ShowDb extends BaseDb {
 
   SeasonView getSeasonView({int number}) => SeasonView(
         number: number,
-        overview: overview,
-        title: title,
-        posterImage: posterImage,
-        ids: ids,
-        genres: genres,
-        backdrop: backdrop,
-        certification: certification,
-        duration: duration,
-        episodesPosterView: episodes
-            .map<EpisodePosterView>((e) => e.getEpisodePosterView(posterImage))
-            .toList(),
-        rating: rating,
-        trailer: trailer,
-        year: year,
+        descriptionView: DetailDescriptionView(
+          overview: overview,
+          title: title,
+          posterImage: posterImage,
+          ids: ids,
+          genres: genres,
+          backdrop: backdrop,
+          certification: certification,
+          duration: duration,
+          rating: rating,
+          trailer: trailer,
+          year: year,
+          isMovie: false,
+        ),
         seasonAmount: seasonAmount,
       );
 

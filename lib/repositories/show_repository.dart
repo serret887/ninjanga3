@@ -127,7 +127,7 @@ class ShowRepository extends Repository<ShowDb> {
       show = ShowDb.fromJson(showDb);
     }
     if (show.containsEpisodesForSeason(seasonNumber)) {
-      return show.episodes.toList();
+      return show.episodes.where((e) => e.season == seasonNumber).toList();
     }
 
     var episodes = await tracktTvSerieClient.getAllEpisodesOfSeason(

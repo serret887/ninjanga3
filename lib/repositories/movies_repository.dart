@@ -1,8 +1,8 @@
 import 'package:ninjanga3/config/shared_preferences.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tmdb/tmdb_client.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/services/trackt_tv_movies.dart';
+import 'package:ninjanga3/models/View/detail_description_view.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/View/video_view.dart';
 import 'package:ninjanga3/models/db/movieDb.dart';
@@ -124,7 +124,7 @@ class MoviesRepository extends Repository<MovieDb> {
     return MovieDb.fromJson(movie).getTrailerVideo();
   }
 
-  Future<MovieView> getMovieDetails(String slug) async {
+  Future<DetailDescriptionView> getMovieDetails(String slug) async {
     var movieTrackt = await tracktTvMovieClient.getMovieData(slug: slug);
     var movie = await Common.completeMovieDataFromTrackt(
         movieTrackt, tmdbClient, "details");

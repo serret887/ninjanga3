@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:ninjanga3/ui/route/route_commands.dart';
 import 'package:ninjanga3/ui/route/routes.dart';
 
 import '../../service_locator.dart';
@@ -9,7 +10,6 @@ class HomeButtons extends StatelessWidget {
   final bool isMovie;
 
   const HomeButtons({Key key, this.slug, this.isMovie}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,25 +33,22 @@ class HomeButtons extends StatelessWidget {
             onPressed: () => print('mi lista'),
           ),
           RaisedButton(
-              textColor: Colors.black,
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.play_arrow),
-                  Text(
-                    'Reproducir Trailer',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                    ),
+            textColor: Colors.black,
+            color: Colors.white,
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.play_arrow),
+                Text(
+                  'Reproducir Trailer',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              onPressed: () =>
-                  sl.get<Router>().navigateTo(context,
-                    Routes.setVideoRouter(slug, isMovie),
-                    transition: TransitionType.fadeIn,
-                    transitionDuration: const Duration(milliseconds: 500),)
+                ),
+              ],
+            ),
+            onPressed: () => RouteCommands.goToVideoPlayer(
+                context: context, slug: slug, isMovie: isMovie),
           ),
           FlatButton(
             textColor: Colors.white,
@@ -64,14 +61,12 @@ class HomeButtons extends StatelessWidget {
                 ),
               ],
             ),
-            onPressed: () =>
-                sl.get<Router>().navigateTo(
+            onPressed: () => sl.get<Router>().navigateTo(
                   context,
                   Routes.setDetailRouter(slug, isMovie),
                   transition: TransitionType.nativeModal,
                   transitionDuration: const Duration(milliseconds: 200),
-                )
-            ,
+                ),
           ),
         ],
       ),

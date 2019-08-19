@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/movie_details/bloc.dart';
 import 'package:ninjanga3/blocs/related/bloc.dart';
 import 'package:ninjanga3/repositories/movies_repository.dart';
+import 'package:ninjanga3/ui/components/detail_view_description.dart';
 import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
-import 'package:ninjanga3/ui/movie_page/movie_details_app_bar.dart';
 
 import '../../service_locator.dart';
 
@@ -29,8 +29,8 @@ class _MovieDetailsState extends State<MovieDetails> {
     super.initState();
 
     var repo = sl.get<MoviesRepository>();
-    _relatedMoviesBloc = RelatedBloc(repo, movieSlug);
-    _relatedMoviesBloc.dispatch(FetchRelatedMoviesEvent());
+    _relatedMoviesBloc = RelatedBloc(movieSlug, repo);
+    _relatedMoviesBloc.dispatch(FetchRelatedEvent(true));
 
     _movieDetailsBloc = MovieDetailsBloc(movieSlug, repo);
     _movieDetailsBloc.dispatch(MovieDetailsEventFetch());
@@ -38,13 +38,14 @@ class _MovieDetailsState extends State<MovieDetails> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
               primary: true,
-              expandedHeight: 500,
+              expandedHeight: screenSize.height * .6,
               backgroundColor: Theme.of(context).backgroundColor,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
@@ -54,7 +55,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                       builder: (context, state) {
                         if (state is MovieDetailsStateLoaded) {
                           final movie = state.data;
-                          return MovieDetailsAppBar(
+                          return DetailDescription(
                             movie: movie,
                           );
                         } else {
@@ -95,9 +96,7 @@ class _MovieDetailsState extends State<MovieDetails> {
         Container(
             margin: EdgeInsets.only(top: 20),
             height: 200,
-            child: MovieScrollRow(
-                posters: posters,
-                key: UniqueKey()))
+            child: MovieScrollRow(posters: posters, key: UniqueKey()))
       ]);
     }
 

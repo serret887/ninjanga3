@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ninjanga3/blocs/related/bloc.dart';
 import 'package:ninjanga3/blocs/season_details/bloc.dart';
 import 'package:ninjanga3/blocs/season_episodes/bloc.dart';
 import 'package:ninjanga3/repositories/show_repository.dart';
+import 'package:ninjanga3/ui/components/movie_scroll_row.dart';
 
 import '../../service_locator.dart';
 import 'tv_show_details_app_bar.dart';
@@ -21,6 +23,8 @@ class TvShowDetails extends StatefulWidget {
 class _TvShowDetailsState extends State<TvShowDetails> {
   SeasonEpisodeBloc _seasonEpisodeBloc;
 
+  RelatedBloc _relatedBloc;
+
   String get slug => widget.slug;
   SeasonDetailsBloc _seasonDetailsBloc;
   @override
@@ -33,6 +37,9 @@ class _TvShowDetailsState extends State<TvShowDetails> {
 
     _seasonEpisodeBloc = SeasonEpisodeBloc(repository: repo, slug: slug);
     _seasonEpisodeBloc.dispatch(FetchSeasonEpisodesEvent(1));
+
+    _relatedBloc = RelatedBloc(slug, null, repo);
+    _relatedBloc.dispatch(FetchRelatedEvent(false));
   }
 
   dispatchSeasonChange(String val) {
@@ -42,12 +49,14 @@ class _TvShowDetailsState extends State<TvShowDetails> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         body: CustomScrollView(slivers: <Widget>[
           SliverAppBar(
               primary: true,
-              expandedHeight: 530,
+              expandedHeight: screenSize.height * .65,
               backgroundColor: Theme.of(context).backgroundColor,
               flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
@@ -97,7 +106,59 @@ class _TvShowDetailsState extends State<TvShowDetails> {
                     ),
                   ));
                 }
+              }),
+          BlocBuilder(
+              bloc: _relatedBloc,
+              builder: (BuildContext context, state) {
+                return SliverToBoxAdapter(
+                  child: _buildRelatedRow(state: state),
+                );
               })
         ]));
+  }
+
+  Widget _buildRelatedRow({@required RelatedState state}) {
+    if (state is RelatedLoaded) {
+      if (state.movies.isEmpty) {
+        return Container();
+      }
+      var posters = state.movies;
+      return Column(children: <Widget>[
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: EdgeInsets.only(left: 16, top: 16),
+            child: Text('You May Also Like',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          ),
+        ),
+        Container(
+            margin: EdgeInsets.only(top: 20),
+            height: 200,
+            child: MovieScrollRow(posters: posters, key: UniqueKey()))
+      ]);
+    }
+
+    if (state is RelatedError) {
+      return Container(
+        child: Center(
+          child: Text(
+            "There was an error loading related titles try later",
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
+      );
+    }
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 30.0),
+        child: Center(
+            child: Container(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.grey)))));
   }
 }

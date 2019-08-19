@@ -91,9 +91,14 @@ class _VideoState extends State<Video> {
         bloc: _videoBloc,
         builder: (_, VideoState state) {
           if (state is VideoLoaded) {
+            if (state.video.url == null)
+              return Container(
+                child: Center(
+                    child: Text("We couldn't find a trailer for this show")),
+              );
             if (state.video.url.contains("youtube")) {
-              var videoId = YoutubePlayer.convertUrlToId(state.video.url)
-                  ?? state.video.url.split("=")[1];
+              var videoId = YoutubePlayer.convertUrlToId(state.video.url) ??
+                  state.video.url.split("=")[1];
               return Scaffold(
                   backgroundColor: Colors.black,
                   body: YoutubePlayer(
@@ -102,7 +107,6 @@ class _VideoState extends State<Video> {
                     videoId: videoId,
                     flags: YoutubePlayerFlags(
                       autoPlay: true,
-
                       showVideoProgressIndicator: true,
                     ),
                   ));
@@ -116,11 +120,11 @@ class _VideoState extends State<Video> {
                     PlayerLifeCycle(
                       controller: vcontroller,
                       childBuilder: (BuildContext context,
-                          VideoPlayerController controller) =>
+                              VideoPlayerController controller) =>
                           AspectRatio(
-                            aspectRatio: aspectRatio,
-                            child: VideoPlayer(vcontroller),
-                          ),
+                        aspectRatio: aspectRatio,
+                        child: VideoPlayer(vcontroller),
+                      ),
                     ),
                     GestureDetector(
                       child: PlayerControl(

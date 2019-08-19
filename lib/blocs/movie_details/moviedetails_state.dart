@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
+import 'package:ninjanga3/models/View/detail_description_view.dart';
 
 @immutable
 abstract class MovieDetailsState extends Equatable {
@@ -18,7 +18,7 @@ class MovieDetailsStateLoading extends MovieDetailsState {
 }
 
 class MovieDetailsStateLoaded extends MovieDetailsState {
-  final MovieView data;
+  final DetailDescriptionView data;
   MovieDetailsStateLoaded({@required this.data});
 
   @override

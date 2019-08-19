@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
+import 'package:ninjanga3/models/View/detail_description_view.dart';
 
 class MovieCategoryPageArguments {
   static final routeName = "movieCategory";
   final String title;
-  final List<MovieView> movies;
+  final List<DetailDescriptionView> movies;
 
   MovieCategoryPageArguments({@required this.movies, @required this.title});
 }
 
 class MovieCategoryPage extends StatefulWidget {
-  final List<MovieView> movies;
+  final List<DetailDescriptionView> movies;
   final String title;
   final bool showAppBar;
 
@@ -26,7 +26,7 @@ class MovieCategoryPage extends StatefulWidget {
 }
 
 class _MovieCategoryPageState extends State<MovieCategoryPage> {
-  List<MovieView> get movies => widget.movies;
+  List<DetailDescriptionView> get movies => widget.movies;
   String get title => widget.title;
 
   @override
@@ -63,7 +63,7 @@ class _MovieCategoryPageState extends State<MovieCategoryPage> {
         ));
   }
 
-  Widget _buildGridItem(BuildContext context, MovieView movie) {
+  Widget _buildGridItem(BuildContext context, DetailDescriptionView movie) {
     return InkWell(
         onTap: () {
           print("fix me ");

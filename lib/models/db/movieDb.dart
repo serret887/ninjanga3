@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/Common/id.dart';
+import 'package:ninjanga3/models/View/detail_description_view.dart';
 import 'package:ninjanga3/models/View/featured_view.dart';
-import 'package:ninjanga3/models/View/movie_view.dart';
 import 'package:ninjanga3/models/View/poster_view.dart';
 import 'package:ninjanga3/models/View/video_view.dart';
 import 'package:ninjanga3/models/db/baseDb.dart';
@@ -41,7 +41,7 @@ class MovieDb extends BaseDb {
       @required this.origin})
       : super(title, year, ids);
 
-  MovieView getMovieView() => MovieView(
+  DetailDescriptionView getMovieView() => DetailDescriptionView(
         isMovie: true,
         backdrop: backdrop,
         certification: certification,

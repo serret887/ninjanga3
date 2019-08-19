@@ -40,7 +40,10 @@ class HomeListView extends StatelessWidget {
         primary: true,
         expandedHeight: screenSize.height * ConstantsUi.expandedHeightAppBar,
         backgroundColor: Colors.black,
-        leading: Image.asset('assets/images/netflix_icon.png'),
+        leading: Text(
+          "M",
+          style: TextStyle(color: Colors.orange, fontSize: 45.0),
+        ), //Image.asset('assets/images/netflix_icon.png'),
         titleSpacing: 20.0,
         title: Title(
           color: Colors.black,

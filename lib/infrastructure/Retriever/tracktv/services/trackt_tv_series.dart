@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
+import 'package:ninjanga3/infrastructure/Retriever/tracktv/models/TvShow/SkinnyShow.dart';
 
 import '../config_constants.dart';
 import '../models/Common/trending.dart';
@@ -126,7 +127,13 @@ class TracktTvSeriesAPI {
         )
         .then(((resp) => json.decode(resp.body)))
         .catchError((err) => print(err));
-    return response.map<Show>((mov) => Show.fromJson(mov)).toList();
+//    var a = response.map<Show>((mov) => Show.fromJson(mov)).toList();
+    var skinny =
+        response.map<SkinnyShow>((mov) => SkinnyShow.fromJson(mov)).toList();
+    return skinny
+        .map<Show>(
+            (mov) => Show(title: mov.title, year: mov.year, ids: mov.ids))
+        .toList();
   }
 
   Future<List<Season>> getAllSeasonsForShow(
