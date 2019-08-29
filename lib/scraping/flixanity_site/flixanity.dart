@@ -21,7 +21,7 @@ class Flixanity {
   getFilm(String slug) async {
     var newSlug = _parseSlug(slug);
     var uri = Uri.parse(baseUrl + "film/$newSlug");
-
+print ("something about a credit card IDK");
     var response = await client
         .get(uri)
         .then((r) => r.body)
