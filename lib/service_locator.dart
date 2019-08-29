@@ -16,6 +16,7 @@ import 'blocs/search/search_bloc.dart';
 import 'config/database.dart';
 import 'config/shared_preferences.dart';
 import 'infrastructure/Retriever/tracktv/services/oauth_device.dart';
+import 'infrastructure/casting/service_discover.dart';
 import 'repositories/authentication_repository.dart';
 import 'repositories/search_repository.dart';
 import 'repositories/show_repository.dart';
@@ -83,4 +84,8 @@ void setup() {
   sl.registerSingleton<Router>(router);
 
 // end routing
+
+// casting
+  sl.registerSingleton<ServiceDiscovery>(ServiceDiscovery());
+// end casting
 }

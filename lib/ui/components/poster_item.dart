@@ -19,11 +19,13 @@ class PosterItem extends StatelessWidget {
           child: CachedNetworkImage(
               placeholder: (context, url) {
                 return AspectRatio(
-                    aspectRatio: .68,
+                    aspectRatio: .9,
                     child: Image.asset("assets/icons/placeholder.png",
                         fit: BoxFit.cover));
               },
-              imageUrl: model.posterImage,
+              errorWidget: (context, val, a) =>
+                  Image.asset("assets/icons/placeholder.png"),
+              imageUrl: model.getImage(),
               fit: BoxFit.cover),
           onTap: () {
             sl.get<Router>().navigateTo(

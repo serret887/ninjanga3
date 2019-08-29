@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ninjanga3/blocs/search/bloc.dart';
+import 'package:ninjanga3/ui/components/poster_item.dart';
 
 import '../../service_locator.dart';
 
@@ -12,11 +13,6 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _controller = TextEditingController();
 
-  _dismissOnTap(BuildContext context, Function func) {
-    FocusScope.of(context).requestFocus(new FocusNode());
-    func();
-  }
-
   Widget _buildSearchText(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 10.0),
@@ -26,15 +22,16 @@ class _SearchPageState extends State<SearchPage> {
         controller: _controller,
         cursorColor: Theme.of(context).accentColor,
         autofocus: true,
-        enabled: false,
-        maxLines: 3,
+        enabled: true,
+        maxLines: 1,
         decoration: InputDecoration(
-          border: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)
-          ),
           labelText: "Search",
           focusColor: Theme.of(context).primaryColor,
         ),
+        onSubmitted: (val) {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          sl.get<SearchBloc>().dispatch(FetchSearchEvent(_controller.text));
+        },
       ),
     );
   }
@@ -50,9 +47,12 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         body: Container(
-            margin: EdgeInsets.only(top: 20.0),
+            margin: EdgeInsets.only(
+              top: 20.0,
+            ),
             child: CustomScrollView(slivers: <Widget>[
               SliverAppBar(
+                expandedHeight: 80.0,
                 backgroundColor: Theme.of(context).backgroundColor,
                 title: _buildSearchText(context),
                 automaticallyImplyLeading: true,
@@ -60,6 +60,7 @@ class _SearchPageState extends State<SearchPage> {
                   IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
+                        if (_controller.text.isEmpty) return;
                         FocusScope.of(context).requestFocus(new FocusNode());
                         sl
                             .get<SearchBloc>()
@@ -71,34 +72,36 @@ class _SearchPageState extends State<SearchPage> {
                 bloc: sl.get<SearchBloc>(),
                 builder: (BuildContext context, state) {
                   if (state is SearchLoaded)
-                    return SliverToBoxAdapter(
-                        child: Container(
-                            color: Colors.white,
-                            margin: EdgeInsets.all(10.0),
-                            width: MediaQuery.of(context).size.width,
-                            child: GridView.builder(
-                                gridDelegate:
-                                    new SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                ),
-                                itemCount: state.movies.length,
-                                itemBuilder: (context, index) {
-//                                  return PosterItem(model: state.movies[index]);
-                                  return Container(
-                                    child: Center(child: Text(""),),);
-                                },
-                                padding: EdgeInsets.only(left: 14.0),
-                                scrollDirection: Axis.vertical,
-                                physics: BouncingScrollPhysics())));
+                    return SliverFillRemaining(
+                        child: GridView.builder(
+                            gridDelegate:
+                                new SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                            ),
+                            itemCount: state.movies.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+//                                padding: EdgeInsets.only(
+//                                    right: 5,
+//                                    left: 5.0,
+//                                    bottom: 10.0,
+//                                    top: 5.0),
+                                child: PosterItem(model: state.movies[index]),
+                              );
+                            },
+                            padding: EdgeInsets.only(left: 14.0),
+                            scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics()));
                   else if (state is SearchLoading)
                     return SliverFillRemaining(
                         child: Center(
                       child: CircularProgressIndicator(),
                     ));
-                  else
-                    return SliverToBoxAdapter(
-                      child: Container(),
-                    );
+                  else if (state is SearchError)
+                    return SliverFillRemaining(
+                        child: Center(child: Text(state.error.toString())));
+                  return SliverFillRemaining(
+                      child: Center(child: Text("enter a term to search")));
                 },
               )
             ])));
