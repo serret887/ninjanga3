@@ -21,7 +21,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield SearchLoading();
       try {
         var posters = await repository.search(event.query);
-        yield SearchLoaded(movies: posters);
+        if (posters.length == 0)
+          yield SearchError(
+              error: Exception("Empty list of results, try another title"));
+        else
+          yield SearchLoaded(movies: posters);
       } catch (e) {
         print(e);
         yield SearchError(error: e);

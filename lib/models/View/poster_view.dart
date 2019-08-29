@@ -18,5 +18,8 @@ class PosterView {
 
   bool useBackDropImage() => posterImage == null ? true : false;
 
-  String getImage() => useBackDropImage() ? backDropImage : posterImage;
+  String getImage() {
+    var result = useBackDropImage() ? backDropImage : posterImage;
+    return result == null ? "" : result;
+  }
 }

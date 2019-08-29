@@ -53,6 +53,7 @@ class HomeListView extends StatelessWidget {
               renderTypeShowTitle('Series', 'Series'),
               renderTypeShowTitle('Películas', 'Películas'),
               renderTypeShowTitle('Mi-lista', 'Mi lista'),
+              Icon(Icons.add),
             ],
           ),
         ),
